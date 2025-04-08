@@ -40,16 +40,6 @@ PLL_CLK vga_clock(
 	.c0(VGA_CLK)
 );
 
-
-
-
-//	input	  clock;
-//	input	[3:0]  data;
-//	input	[16:0]  rdaddress;
-//	input	[16:0]  wraddress;
-//	input	  wren;
-//	output	[3:0]  q;
-
 PIXEL_BUFFER pixel_buff(
 	.data(write_value), //what we putting in wraddress when write enable is high
 	.clock(VGA_CLK),
@@ -58,17 +48,6 @@ PIXEL_BUFFER pixel_buff(
 	.wren(!KEY[0]), //write enable
 	.q(pixel_out)
 );
-
-
-//assign wraddress[7:0] = SW[9:2];
-//
-//assign LEDR[9] = VGA_CLK;
-//assign LEDR[8] = VGA_HS;
-//assign LEDR[7] = VGA_VS;
-//
-//assign LEDR[3:0] = SW[3:0];
-//assign write_value[3:2] = SW[1:0];
-
 
 
 
@@ -89,7 +68,6 @@ vga_controller vga_inst(
 
 Project project_nios(
 	.clk_clk          (CLOCK_50),
-//	.reset_reset_n    (KEY[0]),
 	.sdram_addr       (DRAM_ADDR),
 	.sdram_ba         (DRAM_BA),      			
 	.sdram_cas_n      (DRAM_CAS_N),
