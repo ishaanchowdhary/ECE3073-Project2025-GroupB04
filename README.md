@@ -4,7 +4,6 @@ Official Github Repository for B04
 
 ## Team Members: 
 - Ishaan Chowdhary (icho0011@student.monash.edu)
-- Jay Rawat (jraw0006@student.monash.edu)
 - Pranav Khatore (pkha0008@student.monash.edu)
 - Xiang Ji (xjii0020@student.monash.edu)
 - Zach Nabulsi (znab0001@student.monash.edu)
