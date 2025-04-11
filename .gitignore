@@ -70,7 +70,7 @@
 synthesis
 
 # Ignore Zips of skeleton code:
-*.zip
+#*.zip
 # Ignore PDFs:
 # *.pdf
 *.vo

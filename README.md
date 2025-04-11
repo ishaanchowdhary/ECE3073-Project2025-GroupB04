@@ -7,7 +7,7 @@ Official Github Repository for Team B04
 ### Team Members: 
 - Ishaan Chowdhary (icho0011@student.monash.edu): 33115303
 - Pranav Khatore (pkha0008@student.monash.edu): 33867860
-- Xiang Ji (xjii0020@student.monash.edu): 
+- Xiang Ji (xjii0020@student.monash.edu): 3311316
 - Zach Nabulsi (znab0001@student.monash.edu): 33893012
 
 ### Hyperlinks
