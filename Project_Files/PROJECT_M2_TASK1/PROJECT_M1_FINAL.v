@@ -45,8 +45,14 @@ module PROJECT_M1_FINAL(
 
 	output [16:0] wraddress,	// same as pixel address export
 	output wire [3:0] pixel_out, //output from the buffer to the VGA
-	output [3:0] write_value //value we are writing to the buffer
+	output [3:0] write_value, //value we are writing to the buffer
 	
+	// Accelerometer 
+	output GSENSOR_SCLK,
+	inout GSENSOR_SDI,
+	inout GSENSOR_SDO,
+	output GSENSOR_CS_N,
+	input [2:1] GSENSOR_INT
 
 	
 	
@@ -68,16 +74,26 @@ assign HEX3 = second_hex_data[7:0];    // Tens
 assign HEX4[7:0] = 8'b11111111; 
 assign HEX5[7:0] = 8'b11111111;
 
-// Assign GPIOs
-assign GPIO[10] = 1'bz;
-assign GPIO[6] = 1'bz;
-assign GPIO[4] = 1'bz;
-assign GPIO[3] = 1'bz;
+// Assign GPIOs 
+// Shared SPI lines for both ESP-CAM and Accelerometer 
+
+assign GSENSOR_SCLK = GPIO[9]; // SPI CLOCK 
+assign GSENSOR_SDI = GPIO[8]; // SPI MOSI 
+assign GSENSOR_SDO = GPIO[7]; // SPI MISSO, input from sensor 
+
+
+assign GSENSOR_CS_N = GPIO[6]; // accelerator CS active-low from GPIO[6]  
+
+// DRIVE CS for accelerometer and ESP  
 assign GPIO[1] = 1'bz;
 assign GPIO[0] = 1'bz;
+assign GPIO[10] = 1'bz;
+assign GPIO[3] = 1'bz;
+assign GPIO[4] = 1'bz;
 
+// Instantiate Modules 
 
-// Instantiate Modules
+assign gyro_int_export = GSENSOR_INT[2]; 
 
 PLL_CLK vga_clock(
 	.inclk0(CLOCK_50),
@@ -151,8 +167,8 @@ PROJECT_SYS_V2 project_nios(
 	.spi_external_MISO(GPIO[7]),
 	.spi_external_MOSI(GPIO[8]),    // .MOSI
 	.spi_external_SCLK(GPIO[9]),    // .SCLK
-	.spi_external_SS_n(GPIO[5]),    // .SS_n
-	
+	.spi_external_SS_n(GPIO[5]),    // .SS_n  // ESP-CAM CS
+	.gyro_int_export(gyro_int_export),
 	// COUNT
 	.time_display_export		(count_ext)			// 32 bit time display
 
