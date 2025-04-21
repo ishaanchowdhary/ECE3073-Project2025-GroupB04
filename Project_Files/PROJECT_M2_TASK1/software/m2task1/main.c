@@ -108,6 +108,8 @@ int main(void){
 	    int16_t z_axis = read_axis_data(READ_Z_AXIS);
 	    printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", x_axis, y_axis, z_axis);
 
+	    // checks if the double tap interrupt works
+	    // currently not working
 	    if (tap_flag) {
 	    	tap_flag = 0;
 	    	printf("Double tap detected!\n");
