@@ -113,6 +113,8 @@ int main(void){
 	    	printf("Double tap detected!\n");
 
 
+	    } else {
+	    	printf("Double tap not detected\n");
 	    }
 
 
