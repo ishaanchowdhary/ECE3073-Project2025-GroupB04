@@ -22,130 +22,347 @@ Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
 
 
 int main(void){
-	unsigned char image_buffer[IMAGE_SIZE];
+	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
+	alt_u8 sendBuffSmall = 0x16; //send buffer for packed data, small res
 
-	alt_u8 sendBuff = 0x14;
-	alt_u8 *sendBuffPtr = &sendBuff;
+	alt_u8 *sendBuffPtrFull = &sendBuffFull;
+	alt_u8 *sendBuffPtrSmall = &sendBuffSmall;
 	uint8_t rxArr[38400];
+	uint8_t rxArrSmall[9600];
+	uint8_t smallImgBuff1[9600];
 
-	int counter = 100;
-	int cameraReady = 0;
+	float  kernel[9] = {
+		    1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f,
+		    1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f,
+		    1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f
+		};
 
-    uint8_t *sdram_base_ptr = (uint8_t *) SDRAM_BASE_ADDRESS; // Cast base address to pointer
-    uint8_t *pixel_buffer_ptr = (uint8_t *) PIXEL_ADDRESS_BASE_val;
+	float  sobelX[9] = {
+		    1.0f, 0.0f, -1.0f,
+			2.0f, 0.0f, -2.0f,
+			1.0f, 0.0f, -1.0f
+		};
 
+	float  sobelY[9] = {
+		    1.0f, 2.0f, 1.0f,
+			0.0f, 0.0f, 0.0f,
+			-1.0f, -2.0f, -1.0f
+		};
 
-    cameraReady = IORD(CAM_READY_BASE,0);
+	//sobel filter varibles
+	uint8_t sobelArrX[38400];
+	uint8_t sobelArrY[38400];
+	uint8_t sobelArrCombined[38400];
 
-
-	IOWR(PIXEL_ADDRESS_BASE_val,0,1);
+	//======================================VALUES TO CHNAGE FOR DIFFERENT DISPLAY MODE================================
+	int quadImgMode = 0; //if 0 display single img, 1 if displaying four image
+	//NOTE THAT IF ON SINGLE DISPLY MODE ONLY 1 OF BELOW VALUE CAN BE ASSERTED
+	int blurStatus = 0; //if the image is being blurred
+	int edgeDectStatus = 1; // if sobel filter is being applied
+	int flipImg = 0;
 
 	while(1){
 		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
-	    int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtr,38400,&rxArr,0);
-	    display_image_from_array(&rxArr,PIXEL_ADDRESS_BASE_val);
+
+	    if(quadImgMode == 1){ //displaying 4 image
+	    	int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,9600,&rxArrSmall,0); //SPI for SMALL res
+		    if(blurStatus == 1){
+		    	int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+		    }
+
+		    if(edgeDectStatus==1){
+		    	//start edge detection
+		    	convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+		    	convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+		    	combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+
+		    }
+
+		    display_4_images(&rxArrSmall,&rxArrSmall,&smallImgBuff1,&sobelArrCombined,PIXEL_ADDRESS_BASE_val,2);
+//		    display_4_images(&rxArrSmall,&rxArrSmall,&rxArrSmall,&rxArrSmall,PIXEL_ADDRESS_BASE_val,4);
+
+	    }else{ //displaying 1 image
+	    	int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrFull,38400,&rxArr,0); //SPI for full res
+
+	    	if(blurStatus == 1){
+	    		int numOutPixel = convolve(&rxArr,&rxArr,kernel,320,240);
+
+	    	}else if(edgeDectStatus == 1){
+		    	convolve(&rxArr,&sobelArrX,sobelX,320,240);
+		    	convolve(&rxArr,&sobelArrY,sobelY,320,240);
+		    	combineSobelFilter(sobelArrX,sobelArrY,rxArr,320,240);
+
+	    	}
+	    	display_image_from_array_v3(240,320 ,&rxArr,PIXEL_ADDRESS_BASE_val,flipImg);
+
+	    }
+
+
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
 	    Run_Time(start, end); // Call Function to Display Benchmarking
 }
 }
 
+void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH){
 
-void generate_checkerboard(uint32_t base_address) {
-    // Loop through each pixel
-	int pixel_count = 320 * 240;
-	int counter = 1;
-	int pixelPos = 0;
+	int numPixel = imgH*imgW;
+	int threshold = 11;
+	int pixelIdx = 0;
+	uint8_t packedPixelVal = 0;
+	for(int i=0; i< numPixel; i = i+1){
+		//pixel 1
+		int pixelValue1 = ((sobelX[pixelIdx] & 0xF0)>>4) + ((sobelY[pixelIdx] & 0xF0)>>4);//combining x,y value after conv
 
-	uint8_t valuesToDisplay[8] = {0x8, 0xA, 0xB, 0xC, 0xD, 0xE, 0xF, 0x7};
-	uint32_t combined = 0;
+		if (pixelValue1 < threshold){
+			pixelValue1 = 0; //blacking out pixel value if they are smaller than threshold
+		}
+		//pixel 2
+		int pixelValue2 = ((sobelX[pixelIdx] & 0x0F))+((sobelY[pixelIdx] & 0x0F));
 
-	for (int i = 0; i<pixel_count/8; i++){
-
-		for(int j = 0; j<8; j++){
-			combined |= (valuesToDisplay[j] << (28 - j * 4));
+		if (pixelValue2 < threshold){
+			pixelValue2 = 0;
 		}
 
-        IOWR(base_address, pixelPos, combined);
+		packedPixelVal = (((uint8_t)pixelValue2)|0xF0) & (((uint8_t)pixelValue1<<4) | 0x0F); //packing 2 pixel value into 1 byte
+		resultImg[i] = packedPixelVal;
 
-
-        pixelPos = pixelPos + 1; //index the sdram by 1 word
+		pixelIdx = pixelIdx + 1;
 
 	}
 
 }
 
-void display_image(uint32_t image_base, uint32_t display_base) {
-    int pixel_count = 320 * 240;  // Total number of pixels (320x240)
-    int readAddressOffset = 0; //probs need to change this for muti-image
+void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx){
+	//function to display 4 smaller image
+	//input
+	//	img1: pointer to image top left
+	//	img2: pointer to image top right
+	//	img3: pointer to image bottom left
+	//	img4: pointer to image bottom right
+	//	display_base: base address for display
+	//	flipImgIdx: The image of which that need to be flipped (i.e if index is 1, top left image is flipped)
+	int displayW = 320;
+	int inputImgW = 160;
+	int intputImgH = 120;
+	int inputPixelAddress = 0;
 
-    // Loop through each pixel
-    for (int i = 0; i < pixel_count ; i = i+8) {
-    	int pixelValue = IORD(SDRAM_BASE_ADDRESS,readAddressOffset);
+	int pixelValue = 0;
+	//image 1
+	for(int h=0; h<120; h++){
+		for(int w=0; w<159; w++){
+			int displayAddress  = w+(displayW*h)-1;
 
-//    	IOWR(display_base, 0, pixelValue);
-    	for(int j=  0; j<8; j++){
+			if(flipImgIdx == 1){
+				inputPixelAddress = w+(inputImgW* (intputImgH-h-1))-1;
+
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
+			}
+
+			pixelValue = getPixelVal(0,0,inputPixelAddress,img1);
+
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
+		}
+	}
+	// image 2
+	for(int h=0; h<120; h++){
+		for(int w=159; w<319; w++){
+			int displayAddress  = w+(displayW*h)-1;
+
+			if(flipImgIdx == 2){
+				inputPixelAddress = w+(inputImgW* (intputImgH-h-2))-1;
+
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
+			}
+
+			pixelValue = getPixelVal(0,0,inputPixelAddress,img2);
+
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
+		}
+	}
+	// image 3
+	for(int h=120; h<240; h++){
+		for(int w=0; w<159; w++){
+			int displayAddress  = w+(displayW*h)-1;
+
+			if(flipImgIdx == 3){
+				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH) -2))-1;
+
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
+			}
+
+			pixelValue = getPixelVal(0,0,inputPixelAddress,img3);
+
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
+		}
+	}
+	//image 4
+	for(int h=120; h<240; h++){
+		for(int w=159; w<319; w++){
+			int displayAddress  = w+(displayW*h)-1;
+			if(flipImgIdx == 4){
+				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH)-2))-1;
+
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
+			}
+			pixelValue = getPixelVal(0,0,inputPixelAddress,img4);
+
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
+		}
+	}
 
 
-    		uint8_t unpackedValue = (pixelValue >> (28 - j * 4)) & 0xF;
-    		IOWR(PIXEL_ADDRESS_BASE_val, 0 , i+j);
-
-    		//specific the value to be displayed
-    		IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue);
-
-    	}
-
-    	//specific address of the pixel
 
 
-    	readAddressOffset = readAddressOffset + 1;
 
-
-    }
 }
 
-void display_image_from_array(uint32_t image_base, uint32_t display_base) {
-    int pixel_count = 320 * 240;  // Total number of pixels (320x240)
-    int readAddressOffset = 0; //probs need to change this for muti-image
 
-    // Loop through each pixel
-    for (int i = 0; i < pixel_count ; i = i+8) {
-    	int pixelValue = IORD(image_base,readAddressOffset);
-    	uint32_t mask = 0x0000000F;
+int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr){
+	//function to get pixel value from a packed array
+	int pixelOutput = 0;
+	int packedPixelVal = 0;
+	int decodedAddress;
 
+	if (rawAddress % 2 == 0) { //if the value is even we need to extract the top 4 bits
 
-    	for(int j=  0; j<8; j = j+2){
-    		int offesetVal = j+1;
+	    decodedAddress = rawAddress/2;
+	    packedPixelVal = packedImgArr[decodedAddress];
 
-//    		uint8_t unpackedValue = (pixelValue >> (28 - j * 4)) & 0xF;
-    		uint8_t unpackedValue = (pixelValue & mask)>>4*j;
-    		mask = mask << 4;
-    		uint8_t unpackedValue2 = (pixelValue & mask)>>4*(j+1);
-    		IOWR(PIXEL_ADDRESS_BASE_val, 0 , i+j);
-    		//specific the value to be displayed
-    		IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue2);
+	    pixelOutput = (packedPixelVal & 0xF0)>>4;
+	} else { //if the value is odd we need to extract the bottom 4 bits
+	    decodedAddress = (rawAddress-1)/2;
+	    packedPixelVal = packedImgArr[decodedAddress];
 
+	    pixelOutput = (packedPixelVal & 0x0F); //extracting the value for a single pixel from the packed storage
+	}
+	return pixelOutput;
+}
 
+int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height){
+	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	uint8_t convResiltBuff = 0;
 
+	for(int h=0; h<=height-1;h = h+1){
+		for(int w=0; w<=width-1;w = w + 1){
+			float convResult = 0;
+			float currentPixelVal = 0;
+			float currentKernelVal;
 
+			//looping through each offset pixel locations overlapped by the kernel
+			for(int kh = -1; kh<=1; kh++){
+				for(int kw = -1; kw<=1; kw++){
+					int kernelIdx = (kh+1)*3 +(kw+1);
+					int pixelAddress = (h+kh)*width + (w+kw);
+					currentKernelVal = kernel[kernelIdx]; //getting the current value of the kernel
+					currentPixelVal = getPixelVal(0,0,pixelAddress, inputImg); //getting the overlapping pixel location
 
+					convResult = convResult + (currentPixelVal*currentKernelVal);
+				}
+			}
+			pixelCount = pixelCount + 1;
 
-    		IOWR(PIXEL_ADDRESS_BASE_val, 0 , i+offesetVal);
-    		IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue);
+			if(pixelCount == 2){//once we have 2 pixel, we can store them to the output array
+				uint8_t finalResult = (((uint8_t)convResult)|0xF0) & convResiltBuff; //packing the value together
+				outputImg[outputPixelIdx] = finalResult;
 
-    		mask = mask << 4;
+				outputPixelIdx = outputPixelIdx + 1;
+				pixelCount = 0;
+			}else{
+				convResiltBuff = ((uint8_t)convResult<<4) | 0x0F; //padding the bottom 4 bits with 0
+			}
+		}
+	}
 
+return outputPixelIdx;
+}
 
-    	}
+void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg) {
+	// if flipImg is 1, the displayed img will be flipped
+	int pixelValue = 0;
+	int pixelAddress = 0;
+	for(int h = 0; h<=240; h=h+1){
+		for(int w = 0; w<=320; w=w+1){
 
+			if(flipImg){
+				pixelAddress = w+(imgW* (imgH-h-1))-1;
+			}else{
+				pixelAddress = w+(imgW*h);
 
-    	//specific address of the pixel
+			}
 
-    	readAddressOffset = readAddressOffset + 1;
+			int pixelAddressOpp = imgW-w+(imgW*h)-4;
 
+			if(h>imgH | w>imgW){
+				pixelValue = 15;
+			}else{
+				pixelValue = getPixelVal(imgH,imgW,pixelAddressOpp,image_base);
+			}
 
-    }
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , pixelAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
+
+		}
+	}
 
 }
+
+
+
+void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32_t display_base) {
+	//FASTER FUNCTION FOR DISPLAY, DO NOT USE TILL M3
+	int pixel_count = imgH*imgW;
+	int readAddressOffset = 0;
+	int pixel_idx = 0;
+//	int imgH = 238;
+//	int imgW = 318;
+
+	int pixelAddress_2 = 0;
+
+//	Address = Column + (Row * Width)
+	for(int h = 0; h<=imgH-1; h=h+1){
+		for(int w = imgW-1; w>=0; w=w-2){
+
+			int pixelAddress  = w+(imgW*h);
+			int pixelValue = image_base[pixel_idx];
+			pixel_idx = pixel_idx + 1;
+
+			int mask = 0x0F;
+
+			int unpackedValue1 = (pixelValue&mask);
+			mask = mask << 4;
+			int unpackedValue2 = (pixelValue&mask)>>4;
+
+
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , pixelAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue1);
+
+
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , pixelAddress+1);
+	    	IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue2);
+
+
+
+		}
+	}
+
+}
+
+
 
 void Run_Time(uint32_t before, uint32_t after){
 
