@@ -82,7 +82,7 @@ assign GSENSOR_SDI = GPIO[8]; // SPI MOSI
 assign GSENSOR_SDO = GPIO[7]; // SPI MISSO, input from sensor 
 
 wire [1:0] gyro_int_export; 
-assign GSENSOR_CS_N = GPIO[6]; // accelerator CS active-low from GPIO[6]  
+assign GPIO[6] = GSENSOR_CS_N; // accelerator CS active-low from GPIO[6]  
 
 // DRIVE CS for accelerometer and ESP  
 assign GPIO[1] = 1'bz;

@@ -70,6 +70,7 @@ volatile int tap_flag = 0; // Flag to indicate double tap
 void gyro_isr(void* context) {
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0); //clear interrupt
 	tap_flag = 1; //set the tap flag when an interrupt is triggered
+	printf("Triggered\n");
 }
 
 // FUNCTION to initialise the accelerometer for double tap detection
@@ -110,7 +111,7 @@ int main(void){
 	}
 
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0);
-	IOWR_ALTERA_AVALON_PIO_IRQ_MASK(GYRO_INT_BASE, 0x02); // Enable interrupt on INT2
+	IOWR_ALTERA_AVALON_PIO_IRQ_MASK(GYRO_INT_BASE, 0xFF); // Enable interrupt on INT2
 	alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, gyro_isr, NULL, 0);
 
 
@@ -141,9 +142,9 @@ int main(void){
 
 
 	    // read accelerometer rotation data
-	    uint8_t x_axis = read_axis_data(READ_X_AXIS);
-	    uint8_t y_axis = read_axis_data(READ_Y_AXIS);
-	    uint8_t z_axis = read_axis_data(READ_Z_AXIS);
+	    alt_u8 x_axis = read_axis_data(READ_X_AXIS);
+	    alt_u8 y_axis = read_axis_data(READ_Y_AXIS);
+	    alt_u8 z_axis = read_axis_data(READ_Z_AXIS);
 	    printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", x_axis, y_axis, z_axis);
 
 	    // checks if the double tap interrupt works
