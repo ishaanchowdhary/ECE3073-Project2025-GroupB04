@@ -26,50 +26,91 @@ Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
 #define HEX20_BASE 0x40410a0
 #define HEX53_BASE 0x4041090
 
-// Read values
-#define READ_X_AXIS (0xC0 | 0x32)
-#define READ_Y_AXIS (0xC0 | 0x34)
-#define READ_Z_AXIS (0xC0 | 0x36)
-#define INT_SOURCE (0x30 | 0xC0)
 
+// Gyro write Registers
+#define BW_RATE 0x2C
+#define POWER_CONTROL 0x2D
+#define DATA_FORMAT 0x31
+#define INT_ENABLE 0x2E
+#define INT_MAP 0x2F
+#define THRESH_ACT 0x24
+#define THRESH_INACT 0x25
+#define TIME_INACT 0x26
+#define ACT_INACT_CTL 0x27
+#define THRESH_FF 0x28
+#define TIME_FF 0x29
+#define TAP_AXES 0x2A
+#define TAP_THRES 0x1D
+#define DUR 0x21
+#define LATENT 0x22
+#define WINDOW 0x23
+
+// Gyro read register
+#define INT_SOURCE 0x30
+#define X_LB 0x32
+#define X_HB 0x33
+#define Y_LB 0x34
+#define Y_HB 0x35
+#define Z_LB 0x36
+#define Z_HB 0x37
+
+
+// Read values
+#define READ_X_AXIS (0xC0 | X_LB)
+#define READ_Y_AXIS (0xC0 | Y_LB)
+#define READ_Z_AXIS (0xC0 | Z_LB)
+
+// ----- SPI CHIP SELECTS --------
+#define CS_CAM 0
+#define CS_ACCEL 1
 
 //volatile int tap_flag = 1; // tap detected when i make tap_flag 1, but it is only detected once
 volatile int tap_flag = 0; // Flag to indicate double tap
 //interrupt service routine (ISR) for accelerometer interrupt
 void gyro_isr(void* context) {
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0); //clear interrupt
+	IOWR(GYRO_INT_BASE, 3, 0);
+	alt_u8* regData = (alt_u8 *) context;
+	alt_u8 targetAddress = INT_SOURCE | 0x80;
 	tap_flag = 1; //set the tap flag when an interrupt is triggered
+	printf("INT_SOURCE: %X\n", *regData);
 }
 
 // FUNCTION to initialise the accelerometer for double tap detection
-void init_accelerometer() {
-	alt_u8 config[] = {
-			0x31, 0x0B, // DATA_FORMAT: full res, +-16g
-			0x1D, 0x30, // THRESH_TAP: ~3g
-			0x21, 0x20,
-			0x22, 0x20,
-			0x23, 0x40,
-			0x2A, 0x07, // TAP_AXES: X, Y, Z
-			0x2E, 0x60,
-			0x2F, 0x00,
-			0x2D, 0x08
-	};
 
-	for (int i = 0; i < sizeof(config); i += 2) {
-		alt_avalon_spi_command(SPI_CONTROLLER_BASE, 1, 2, &config[i], 0, NULL, 0);
-	}
-}
+alt_u8 gyro_config[] = {
+    DATA_FORMAT, 0x0b,    // 4-wire SPI, full resolution, +/- 16g
+    THRESH_ACT, 0x04,
+    THRESH_INACT, 0x02,
+    TIME_INACT, 0x02,
+    ACT_INACT_CTL, 0xff,
+    THRESH_FF, 0x09,
+    TIME_FF, 0x46,
+    TAP_THRES, 0x10,
+    TAP_AXES, 0x07,
+    LATENT, 0x85,
+    DUR, 0x40,
+    WINDOW, 0xc0,
+    BW_RATE, 0x0a,
+    INT_ENABLE, 0x60,
+    INT_MAP, 0x20,
+    POWER_CONTROL, 0x08
+  };
 
 // Function to read axis data from accelerometer
 int16_t read_axis_data(alt_u8 register_address) {
 	alt_u8 readBuff[2];
-	alt_avalon_spi_command(SPI_CONTROLLER_BASE, 1, 1, &register_address, 1, readBuff, 2);
+	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &register_address, 0, readBuff, 2);
 	int16_t data = (readBuff[0]  << 8 | readBuff [1]);
 	return data;
 }
 int main(void){
 
-	init_accelerometer();
+
+	for (int i = 0; i < sizeof(gyro_config); i += 2) {
+		alt_u8 cmd[2] = {gyro_config[i], gyro_config[i + 1]};
+		alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 2, cmd, 0, NULL, 0);
+	}
 
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0);
 	IOWR_ALTERA_AVALON_PIO_IRQ_MASK(GYRO_INT_BASE, 0x02); // Enable interrupt on INT2
@@ -96,7 +137,7 @@ int main(void){
 
 	while(1){
 		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
-	    int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtr,38400,&rxArr,0);
+	    int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM ,1,sendBuffPtr,38400,&rxArr,0);
 	    display_image_from_array(&rxArr,PIXEL_ADDRESS_BASE_val);
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
 	    Run_Time(start, end); // Call Function to Display Benchmarking
@@ -111,19 +152,18 @@ int main(void){
 	    // checks if the double tap interrupt works
 	    // currently not working
 	    if (tap_flag) {
-	    	tap_flag = 0;
+
 	    	printf("Double tap detected!\n");
+	    	tap_flag = 0;
 
 
 	    } else {
 	    	printf("Double tap not detected\n");
 	    }
 
-
+	}
 
 }
-}
-
 
 void generate_checkerboard(uint32_t base_address) {
     // Loop through each pixel
