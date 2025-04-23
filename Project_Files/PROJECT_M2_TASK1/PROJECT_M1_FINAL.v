@@ -81,8 +81,8 @@ assign GSENSOR_SCLK = GPIO[9]; // SPI CLOCK
 assign GSENSOR_SDI = GPIO[8]; // SPI MOSI 
 assign GSENSOR_SDO = GPIO[7]; // SPI MISSO, input from sensor 
 
-wire [1:0] gyro_int_export; 
-assign GPIO[6] = GSENSOR_CS_N; // accelerator CS active-low from GPIO[6]  
+ 
+assign GSENSOR_CS_N = GPIO[6]; // accelerator CS active-low from GPIO[6]  
 
 // DRIVE CS for accelerometer and ESP  
 assign GPIO[1] = 1'bz;
@@ -93,7 +93,7 @@ assign GPIO[4] = 1'bz;
 
 // Instantiate Modules 
 
-assign gyro_int_export = GSENSOR_INT[2:1]; 
+
 
 PLL_CLK vga_clock(
 	.inclk0(CLOCK_50),
@@ -168,7 +168,7 @@ PROJECT_SYS_V2 project_nios(
 	.spi_external_MOSI(GPIO[8]),    // .MOSI
 	.spi_external_SCLK(GPIO[9]),    // .SCLK
 	.spi_external_SS_n(GPIO[5]),    // .SS_n  // ESP-CAM CS
-	.gyro_int_export(gyro_int_export),
+	.gyro_int_export(GSENSOR_INT[2:1]),
 	// COUNT
 	.time_display_export		(count_ext)			// 32 bit time display
 
