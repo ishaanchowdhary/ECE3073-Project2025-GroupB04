@@ -168,7 +168,7 @@ PROJECT_SYS_V2 project_nios(
 	.spi_external_MOSI(GPIO[8]),    // .MOSI
 	.spi_external_SCLK(GPIO[9]),    // .SCLK
 	.spi_external_SS_n(GPIO[5]),    // .SS_n  // ESP-CAM CS
-	.gyro_int_export(GSENSOR_INT[2:1]),
+	.gyro_int_export(GSENSOR_INT[2]),
 	// COUNT
 	.time_display_export		(count_ext)			// 32 bit time display
 
