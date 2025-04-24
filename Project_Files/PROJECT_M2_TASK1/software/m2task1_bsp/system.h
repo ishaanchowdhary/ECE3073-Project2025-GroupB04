@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_system' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Thu Apr 24 13:04:46 EST 2025
+ * Generated: Thu Apr 24 22:21:27 EST 2025
  */
 
 /*
@@ -602,7 +602,7 @@
 #define SPI_0_ISMASTER 1
 #define SPI_0_LSBFIRST 0
 #define SPI_0_NAME "/dev/spi_0"
-#define SPI_0_NUMSLAVES 1
+#define SPI_0_NUMSLAVES 2
 #define SPI_0_PREFIX "spi_"
 #define SPI_0_SPAN 32
 #define SPI_0_SYNC_REG_DEPTH 2
