@@ -1,5 +1,5 @@
 /*
-Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
+Student IDs: 33115303, 33867860, 33893012, 3311316
 */
 #include "io.h"
 #include "system.h"
@@ -89,8 +89,6 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
     POWER_CONTROL, 0x08
   };
 
-
-
 //interrupt service routine (ISR) for accelerometer interrupt
 void gyro_isr(void * context) {
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_2_BASE, 0); //clear interrupt
@@ -98,12 +96,8 @@ void gyro_isr(void * context) {
 	tap_flag = 1; //set the tap flag when an interrupt is triggered
 }
 
-
-
-
-
-
 int main(void){
+	// Accelerometer Setup
 	alt_u8 gyro_data_in, gyro_data_out, regData;
 	alt_u8 readX = READ_X_AXIS;
 	alt_u8 readY = READ_Y_AXIS;
@@ -130,36 +124,32 @@ int main(void){
 	int counter = 100;
 	int cameraReady = 0;
 
-    uint8_t *sdram_base_ptr = (uint8_t *) SDRAM_BASE_ADDRESS; // Cast base address to pointer
-    uint8_t *pixel_buffer_ptr = (uint8_t *) PIXEL_ADDRESS_BASE_val;
+    	uint8_t *sdram_base_ptr = (uint8_t *) SDRAM_BASE_ADDRESS; // Cast base address to pointer
+    	uint8_t *pixel_buffer_ptr = (uint8_t *) PIXEL_ADDRESS_BASE_val;
 
-
-    cameraReady = IORD(CAM_READY_BASE,0);
-
-
+    	cameraReady = IORD(CAM_READY_BASE,0);
+	
 	IOWR(PIXEL_ADDRESS_BASE_val,0,1);
 
 	while(1){
 		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
-	    int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM ,1,sendBuffPtr,38400,&rxArr,0);
-	    display_image_from_array(&rxArr,PIXEL_ADDRESS_BASE_val);
+	    	int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM ,1,sendBuffPtr,38400,&rxArr,0);
+	    	display_image_from_array(&rxArr,PIXEL_ADDRESS_BASE_val);
+
+		uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
+		Run_Time(start, end); // Call Function to Display Benchmarking
 
 
-	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
-	    Run_Time(start, end); // Call Function to Display Benchmarking
-
-
-	     // read accelerometer rotation data and double tap detection
-
-	    if (tap_flag == 1) {
-	    	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readX, 2, &xData, 0x0);
+		// read accelerometer rotation data
+		alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readX, 2, &xData, 0x0);
 	    	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readY, 2, &yData, 0x0);
 	    	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readZ, 2, &zData, 0x0);
 	    	printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", xData, yData, zData);
-	    	printf("Double tap detected!\n");
-	    	tap_flag = 0;
-	    } else {printf("double tap not detected\n");}
-
+		// Print accelerometer double tap result
+		if (tap_flag == 1) {
+	    		printf("\n\nDouble tap detected!\n\n");
+	    		tap_flag = 0;
+	    	}
 	    gyro_data_in = INT_SOURCE | 0x80;
 	    alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
 	}
