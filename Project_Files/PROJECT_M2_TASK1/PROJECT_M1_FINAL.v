@@ -53,8 +53,6 @@ module PROJECT_M1_FINAL(
 	inout GSENSOR_SDO,
 	output GSENSOR_CS_N,
 	input [2:1] GSENSOR_INT
-
-	
 	
 );
 
@@ -64,7 +62,13 @@ module PROJECT_M1_FINAL(
 wire [31:0] count_ext;
 wire VGA_CLK;
 wire [23:0] first_hex_data;
-wire [23:0] second_hex_data;
+wire [23:0] second_hex_data;  
+
+// Wires for SPI 
+wire spi_clk; 
+wire spi_miso; 
+wire spi_mosi; 
+wire [1:0] spi_cs; 
 
 // Assign HEX displays (each HEX takes 7 bits)
 assign HEX0 = first_hex_data[7:0];     // Ones
@@ -74,23 +78,26 @@ assign HEX3 = second_hex_data[7:0];    // Tens
 assign HEX4[7:0] = 8'b11111111; 
 assign HEX5[7:0] = 8'b11111111;
 
-// Assign GPIOs 
-// Shared SPI lines for both ESP-CAM and Accelerometer 
-
-assign GSENSOR_SCLK = GPIO[9]; // SPI CLOCK 
-assign GSENSOR_SDI = GPIO[8]; // SPI MOSI 
-assign GSENSOR_SDO = GPIO[7]; // SPI MISSO, input from sensor 
-
- 
-assign GSENSOR_CS_N = GPIO[6]; // accelerator CS active-low from GPIO[6]  
-
-// DRIVE CS for accelerometer and ESP  
+// Assign GPIOs   
 assign GPIO[1] = 1'bz;
 assign GPIO[0] = 1'bz;
 assign GPIO[10] = 1'bz;
 assign GPIO[3] = 1'bz;
-assign GPIO[4] = 1'bz;
+assign GPIO[4] = 1'bz; 
+assign GPIO[6] = 1'bz;
 
+// SPI assignments for both gyro and ESP-cam  
+// for spi 
+assign GPIO[8] = spi_mosi; 
+assign GPIO[9] = spi_clk; 
+assign GPIO[5] = spi_cs[0];  // as there are two chip selects  
+
+//now for the gyro 
+assign GSENSOR_SDI = spi_mosi; 
+assign GSENSOR_SCLK = spi_clk; 
+assign GSENSOR_CS_N = spi_cs[1]; 
+
+assign spi_miso = (spi_cs[0] == 1'b0) ? GPIO[7] : (spi_cs[1] == 1'b0)  ? GSENSOR_SDO : 1'bz; 
 // Instantiate Modules 
 
 
@@ -164,11 +171,12 @@ PROJECT_SYS_V2 project_nios(
 	.sdram_we_n       (DRAM_WE_N)  ,
 	
 	// SPI I/O
-	.spi_external_MISO(GPIO[7]),
-	.spi_external_MOSI(GPIO[8]),    // .MOSI
-	.spi_external_SCLK(GPIO[9]),    // .SCLK
-	.spi_external_SS_n(GPIO[5]),    // .SS_n  // ESP-CAM CS
-	.gyro_int_export(GSENSOR_INT[2]),
+	.spi_external_MISO(spi_miso),
+	.spi_external_MOSI(spi_mosi),    // .MOSI
+	.spi_external_SCLK(spi_clk),    // .SCLK
+	.spi_external_SS_n(spi_cs),    // .SS_n  // ESP-CAM CS 
+	.gyro_int_1_export(GSENSOR_INT[1]),
+	.gyro_int_2_export(GSENSOR_INT[2]),
 	// COUNT
 	.time_display_export		(count_ext)			// 32 bit time display
 

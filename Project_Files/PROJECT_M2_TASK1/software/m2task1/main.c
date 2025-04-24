@@ -28,7 +28,7 @@ Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
 
 // Gyro write Registers
 #define BW_RATE 0x2C
-#define POWER_CONTROL 0x2D
+#define POWER_CONTROL 0x2d
 #define DATA_FORMAT 0x31
 #define INT_ENABLE 0x2E
 #define INT_MAP 0x2F
@@ -38,8 +38,8 @@ Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
 #define ACT_INACT_CTL 0x27
 #define THRESH_FF 0x28
 #define TIME_FF 0x29
-#define TAP_AXES 0x2A
-#define TAP_THRES 0x1D
+#define TAP_AXES 0x2a
+#define TAP_THRES 0x1d
 #define DUR 0x21
 #define LATENT 0x22
 #define WINDOW 0x23
@@ -53,6 +53,8 @@ Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
 #define Z_LB 0x36
 #define Z_HB 0x37
 
+#define CONFIG_LENGTH 16 * 2
+#define MAX_COUNT 500000
 
 // Read values
 #define READ_X_AXIS (0xC0 | X_LB)
@@ -62,17 +64,7 @@ Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
 // ----- SPI CHIP SELECTS --------
 #define CS_ACCEL 1
 #define CS_CAM 0
-
-//volatile int tap_flag = 1; // tap detected when i make tap_flag 1, but it is only detected once
 volatile int tap_flag = 0; // Flag to indicate double tap
-//interrupt service routine (ISR) for accelerometer interrupt
-void gyro_isr(void* context) {
-	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0xFF); //clear interrupt
-	tap_flag = 1; //set the tap flag when an interrupt is triggered
-
-}
-
-
 // FUNCTION to initialise the accelerometer for double tap detection
 
 alt_u8 gyro_config[] = {
@@ -94,29 +86,37 @@ alt_u8 gyro_config[] = {
     POWER_CONTROL, 0x08
   };
 
- //Function to read axis data from accelerometer
-//int16_t read_axis_data(alt_u8 register_address) {
-//	alt_u8 cmd = register_address;
-//	alt_u8 readBuff[2];
-//	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &cmd, 0, readBuff, 2);
-//
-//	return (readBuff[1] << 8 | readBuff[0]);;
-//}
 
-int16_t read_axis_data(int16_t *x, int16_t *y, int16_t * z) {
-	alt_u8 cmd = 0xC0 | 0x32;
-	alt_u8 readBuff[6];
-	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &cmd, 0, readBuff, 6);
-	*x = (int16_t)(readBuff[1] << 8 | readBuff[0]);
-	*y = (int16_t)(readBuff[3] << 8 | readBuff[2]);
-	*z = (int16_t)(readBuff[5] << 8 | readBuff[4]);
+
+//interrupt service routine (ISR) for accelerometer interrupt
+void gyro_isr(void* context) {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0xFF); //clear interrupt
+	tap_flag = 1; //set the tap flag when an interrupt is triggered
+
 }
+
+
+
+
+ //Function to read axis data from accelerometer
+int16_t read_axis_data(alt_u8 register_address) {
+	alt_u8 readBuff[2];
+	alt_u8 cmd = 0xC0 | register_address;
+	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &cmd, 0, &readBuff, 2);
+
+	return (readBuff[1] << 8) | readBuff[0];;
+}
+
+
+
+
+
 int main(void){
 
 	int counter_accel = 0;
 	for (int i = 0; i < sizeof(gyro_config); i += 2) {
 		alt_u8 cmd[2] = {gyro_config[i], gyro_config[i + 1]};
-		alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 2, cmd, 0, NULL, 0);
+		alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 2, cmd, 0, NULL, 1);
 	}
 
 
@@ -151,17 +151,15 @@ int main(void){
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
 	    Run_Time(start, end); // Call Function to Display Benchmarking
 
-
 	     // read accelerometer rotation data
 
-//	    alt_16 x_axis = read_axis_data(READ_X_AXIS);
-//	    alt_16 y_axis = read_axis_data(READ_Y_AXIS);
-//	    alt_16 z_axis = read_axis_data(READ_Z_AXIS);
 
-	    int16_t x, y, z;
-	    read_axis_data(&x, &y, &z);
-//	    printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", x_axis, y_axis, z_axis);
-	    printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", x, y, z);
+	    alt_16 x_axis = read_axis_data(X_LB);
+	    alt_16 y_axis = read_axis_data(Y_LB);
+	    alt_16 z_axis = read_axis_data(Z_LB);
+
+	    printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", x_axis, y_axis, z_axis);
+
 
 	    // checks if the double tap interrupt works
 	    // currently not working
@@ -174,6 +172,7 @@ int main(void){
 	    } else {
 	    	printf("Double tap not detected\n");
 	    }
+
 
 	}
 	return 0;
