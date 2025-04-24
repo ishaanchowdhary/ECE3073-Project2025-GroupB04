@@ -113,7 +113,6 @@ int main(void){
 	IOWR(GYRO_INT_2_BASE, 3, 0);
 	IOWR(GYRO_INT_2_BASE, 2, 0x1);
 	int gyroISR = alt_ic_isr_register(GYRO_INT_2_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_2_IRQ, gyro_isr, context, 0x0);
-	printf("gyro iSR = %X\n", gyroISR);
 
 	unsigned char image_buffer[IMAGE_SIZE];
 
@@ -169,14 +168,9 @@ void generate_checkerboard(uint32_t base_address) {
 		for(int j = 0; j<8; j++){
 			combined |= (valuesToDisplay[j] << (28 - j * 4));
 		}
-
         IOWR(base_address, pixelPos, combined);
-
-
         pixelPos = pixelPos + 1; //index the sdram by 1 word
-
 	}
-
 }
 
 void display_image(uint32_t image_base, uint32_t display_base) {
@@ -186,25 +180,15 @@ void display_image(uint32_t image_base, uint32_t display_base) {
     // Loop through each pixel
     for (int i = 0; i < pixel_count ; i = i+8) {
     	int pixelValue = IORD(SDRAM_BASE_ADDRESS,readAddressOffset);
-
-//    	IOWR(display_base, 0, pixelValue);
+	//IOWR(display_base, 0, pixelValue);
     	for(int j=  0; j<8; j++){
-
-
     		uint8_t unpackedValue = (pixelValue >> (28 - j * 4)) & 0xF;
     		IOWR(PIXEL_ADDRESS_BASE_val, 0 , i+j);
-
     		//specific the value to be displayed
     		IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue);
-
     	}
-
     	//specific address of the pixel
-
-
     	readAddressOffset = readAddressOffset + 1;
-
-
     }
 }
 
@@ -228,28 +212,13 @@ void display_image_from_array(uint32_t image_base, uint32_t display_base) {
     		IOWR(PIXEL_ADDRESS_BASE_val, 0 , i+j);
     		//specific the value to be displayed
     		IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue2);
-
-
-
-
-
-
     		IOWR(PIXEL_ADDRESS_BASE_val, 0 , i+offesetVal);
     		IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue);
-
     		mask = mask << 4;
-
-
     	}
-
-
     	//specific address of the pixel
-
     	readAddressOffset = readAddressOffset + 1;
-
-
     }
-
 }
 
 void Run_Time(uint32_t before, uint32_t after){
@@ -261,10 +230,10 @@ void Run_Time(uint32_t before, uint32_t after){
 	// make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
 
 	float frameTime = after - before;  // calculates run time of the frame
-	printf("The Run Time for the Frame is %.2f\n", frameTime);
+	//printf("The Run Time for the Frame is %.2f\n", frameTime);
 
 	float fps = 1000000.0/frameTime;   // converts us to fps
-	printf("The fps for the System is %.2f\n", fps);
+	//printf("The fps for the System is %.2f\n", fps);
 
 	uint16_t fps_x100 = fps*100; // Multiply the fps by 100 to retain the 2 decimal places
 
