@@ -1,27 +1,99 @@
 /*
-Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
+Student IDs: 33115303, 33867860, 33893012, 3311316
 */
+
 #include "io.h"
 #include "system.h"
 #include "stdio.h"
 #include "stdint.h"
 #include <altera_avalon_spi.h>
 #include <altera_avalon_spi_regs.h>
+#include <altera_avalon_pio_regs.h>
 
 #define SDRAM_BASE_ADDRESS 0x00000000
-#define IMAGE_SIZE (320*240/2)//each pixel 4 bits, top 4 bits = first pixel
+#define IMAGE_SIZE (320*240/2) //each pixel 4 bits, top 4 bits = first pixel
 
-#define PIXEL_ADDRESS_BASE_val 0x4041070
-#define PIXEL_DATA_BASE_val 0x4041060
+#define PIXEL_ADDRESS_BASE_val 0x4041090
+#define PIXEL_DATA_BASE_val 0x4041080
 
-#define CAM_READY_BASE 0x04041050
+#define CAM_READY_BASE 0x4041070
+
 //==========SPI constants==========
-#define SPI_CONTROLLER_BASE 0x04041000
+#define SPI_CONTROLLER_BASE 0x4041000
 
-#define TIME_DISPLAY_BASE 0x4041040
+#define TIME_DISPLAY_BASE 0x4041060
+#
+#define HEX20_BASE 0x40410b0
+#define HEX53_BASE 0x40410a0
 
+// Gyroscope address
+#define GYRO_INT_2_BASE 0x4041040
+#define GYRO_INT_2_IRQ 4
+#define GYRO_INT_2_IRQ_INTERRUPT_CONTROLLER_ID 0
+
+// Gyroscope write Registers
+#define BW_RATE 0x2C
+#define POWER_CONTROL 0x2d
+#define DATA_FORMAT 0x31
+#define INT_ENABLE 0x2E
+#define INT_MAP 0x2F
+#define THRESH_ACT 0x24
+#define THRESH_INACT 0x25
+#define TIME_INACT 0x26
+#define ACT_INACT_CTL 0x27
+#define THRESH_FF 0x28
+#define TIME_FF 0x29
+#define TAP_AXES 0x2a
+#define TAP_THRES 0x1d
+#define DUR 0x21
+#define LATENT 0x22
+#define WINDOW 0x23
+
+// Gyro read register
+#define INT_SOURCE 0x30
+#define X_LB 0x32
+#define X_HB 0x33
+#define Y_LB 0x34
+#define Y_HB 0x35
+#define Z_LB 0x36
+#define Z_HB 0x37
+
+#define CONFIG_LENGTH 16 * 2
+#define MAX_COUNT 500000
+
+// Read values
+#define READ_X_AXIS (0xc0 | X_LB)
+#define READ_Y_AXIS (0xc0 | Y_LB)
+#define READ_Z_AXIS (0xc0 | Z_LB)
+
+// ----- SPI CHIP SELECTS --------
+#define CS_ACCEL 1
+#define CS_CAM 0
+volatile int tap_flag = 0; // Flag to indicate double tap
+
+
+// Functionality to initialise the accelerometer for double tap detection
+alt_u8 gyro_config[CONFIG_LENGTH] = {
+    DATA_FORMAT, 0x0b,    // 4-wire SPI, full resolution, +/- 16g
+    THRESH_ACT, 0x04,
+    THRESH_INACT, 0x02,
+    TIME_INACT, 0x02,
+    ACT_INACT_CTL, 0xff,
+    THRESH_FF, 0x09,
+    TIME_FF, 0x46,
+    TAP_THRES, 0x10,
+    TAP_AXES, 0x07,
+    LATENT, 0x85,
+    DUR, 0x40,
+    WINDOW, 0xc0,
+    BW_RATE, 0x0a,
+    INT_ENABLE, 0x60,
+    INT_MAP, 0x20,
+    POWER_CONTROL, 0x08
+  };
 
 int main(void){
+	// Milestone 1
 	unsigned char image_buffer[IMAGE_SIZE];
 
 	alt_u8 sendBuff = 0x14;
@@ -34,21 +106,41 @@ int main(void){
     uint8_t *sdram_base_ptr = (uint8_t *) SDRAM_BASE_ADDRESS; // Cast base address to pointer
     uint8_t *pixel_buffer_ptr = (uint8_t *) PIXEL_ADDRESS_BASE_val;
 
-
     cameraReady = IORD(CAM_READY_BASE,0);
-
-
+	
 	IOWR(PIXEL_ADDRESS_BASE_val,0,1);
 
-	while(1){
-		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
-	    int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtr,38400,&rxArr,0);
-	    display_image_from_array(&rxArr,PIXEL_ADDRESS_BASE_val);
-	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
-	    Run_Time(start, end); // Call Function to Display Benchmarking
-}
-}
+	// Accelerometer Setup
+	alt_u8 gyro_data_in, gyro_data_out, regData;
+	alt_u8 readX = READ_X_AXIS;
+	alt_u8 readY = READ_Y_AXIS;
+	alt_u8 readZ = READ_Z_AXIS;
+	alt_16 xData, yData, zData;
+	alt_u8 isRes = 0xff;
 
+	for (int i = 0; i < CONFIG_LENGTH; i += 2) {
+		alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 2, gyro_config + i, 0, &gyro_data_out, 0);
+	}
+
+	void* context = (void *) &isRes;
+	IOWR(GYRO_INT_2_BASE, 3, 0);
+	IOWR(GYRO_INT_2_BASE, 2, 0x1);
+	int gyroISR = alt_ic_isr_register(GYRO_INT_2_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_2_IRQ, gyro_isr, context, 0x0);
+
+	while(1){
+		
+		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
+	    int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM ,1,sendBuffPtr,38400,&rxArr,0);
+	    display_image_from_array(&rxArr,PIXEL_ADDRESS_BASE_val);
+		uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
+		Run_Time(start, end); // Call Function to Display Benchmarking
+
+		// Accelerometer data processing
+		gyro_process_data(readX, readY, readZ, xData, yData, zData, tap_flag);
+	    gyro_data_in = INT_SOURCE | 0x80;
+	    alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
+	}
+}
 
 void generate_checkerboard(uint32_t base_address) {
     // Loop through each pixel
@@ -64,14 +156,9 @@ void generate_checkerboard(uint32_t base_address) {
 		for(int j = 0; j<8; j++){
 			combined |= (valuesToDisplay[j] << (28 - j * 4));
 		}
-
         IOWR(base_address, pixelPos, combined);
-
-
         pixelPos = pixelPos + 1; //index the sdram by 1 word
-
 	}
-
 }
 
 void display_image(uint32_t image_base, uint32_t display_base) {
@@ -81,25 +168,15 @@ void display_image(uint32_t image_base, uint32_t display_base) {
     // Loop through each pixel
     for (int i = 0; i < pixel_count ; i = i+8) {
     	int pixelValue = IORD(SDRAM_BASE_ADDRESS,readAddressOffset);
-
-//    	IOWR(display_base, 0, pixelValue);
+	//IOWR(display_base, 0, pixelValue);
     	for(int j=  0; j<8; j++){
-
-
     		uint8_t unpackedValue = (pixelValue >> (28 - j * 4)) & 0xF;
     		IOWR(PIXEL_ADDRESS_BASE_val, 0 , i+j);
-
     		//specific the value to be displayed
     		IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue);
-
     	}
-
     	//specific address of the pixel
-
-
     	readAddressOffset = readAddressOffset + 1;
-
-
     }
 }
 
@@ -116,35 +193,20 @@ void display_image_from_array(uint32_t image_base, uint32_t display_base) {
     	for(int j=  0; j<8; j = j+2){
     		int offesetVal = j+1;
 
-//    		uint8_t unpackedValue = (pixelValue >> (28 - j * 4)) & 0xF;
+    		//uint8_t unpackedValue = (pixelValue >> (28 - j * 4)) & 0xF;
     		uint8_t unpackedValue = (pixelValue & mask)>>4*j;
     		mask = mask << 4;
     		uint8_t unpackedValue2 = (pixelValue & mask)>>4*(j+1);
     		IOWR(PIXEL_ADDRESS_BASE_val, 0 , i+j);
     		//specific the value to be displayed
     		IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue2);
-
-
-
-
-
-
     		IOWR(PIXEL_ADDRESS_BASE_val, 0 , i+offesetVal);
     		IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue);
-
     		mask = mask << 4;
-
-
     	}
-
-
     	//specific address of the pixel
-
     	readAddressOffset = readAddressOffset + 1;
-
-
     }
-
 }
 
 void Run_Time(uint32_t before, uint32_t after){
@@ -156,10 +218,10 @@ void Run_Time(uint32_t before, uint32_t after){
 	// make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
 
 	float frameTime = after - before;  // calculates run time of the frame
-	printf("The Run Time for the Frame is %.2f\n", frameTime);
+	//printf("The Run Time for the Frame is %.2f\n", frameTime);
 
 	float fps = 1000000.0/frameTime;   // converts us to fps
-	printf("The fps for the System is %.2f\n", fps);
+	//printf("The fps for the System is %.2f\n", fps);
 
 	uint16_t fps_x100 = fps*100; // Multiply the fps by 100 to retain the 2 decimal places
 
@@ -201,4 +263,27 @@ void Run_Time(uint32_t before, uint32_t after){
 	IOWR(HEX20_BASE, 0, first_hex_value);
 	IOWR(HEX53_BASE, 0, second_hex_value);
 
+}
+
+// Interrupt service routine (ISR) for accelerometer interrupt
+void gyro_isr(void * context) {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_2_BASE, 0); //clear interrupt
+	IOWR(GYRO_INT_2_BASE, 3, 0);
+	tap_flag = 1; //set the tap flag when an interrupt is triggered
+}
+
+void gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData, volatile int* tap_flag) {
+	// Prints rotational data from gyroscope and result of triggering accelerometer double tap interrupt
+	
+	// Read accelerometer rotation data
+	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readX, 2, &xData, 0x0);
+	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readY, 2, &yData, 0x0);
+	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readZ, 2, &zData, 0x0);
+
+	printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", xData, yData, zData);
+	// Print accelerometer double tap result
+	if (*tap_flag == 1) {
+			printf("\n\nDouble tap detected!\n\n");
+			*tap_flag = 0;
+		}
 }
