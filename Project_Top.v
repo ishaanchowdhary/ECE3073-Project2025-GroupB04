@@ -3,7 +3,6 @@
 module PROJECT_M1_FINAL(
 	
 	// General I/O
-	
 	input wire [1:0] KEY,
 	input wire CLOCK_50,
 	input wire [9:0] SW,
@@ -15,11 +14,9 @@ module PROJECT_M1_FINAL(
 	inout wire [10:0] GPIO,
 	
 	// Camera I/O
-	
 	input wire CAM_READY,
 	
 	// Hex I/O
-	
 	output wire [7:0] HEX0,
 	output wire [7:0] HEX1,
 	output wire [7:0] HEX2,
@@ -28,7 +25,6 @@ module PROJECT_M1_FINAL(
 	output wire [7:0] HEX5,
 		
 	// SDRAM I/O
-	
 	output	[12:0]		DRAM_ADDR,
 	output	[1:0]			DRAM_BA,
 	output				DRAM_CAS_N,
@@ -42,23 +38,32 @@ module PROJECT_M1_FINAL(
 	output				DRAM_WE_N,
 	
 	// PIXIEL BUFFER Interface
-
 	output [16:0] wraddress,	// same as pixel address export
 	output wire [3:0] pixel_out, //output from the buffer to the VGA
-	output [3:0] write_value //value we are writing to the buffer
+	output [3:0] write_value, //value we are writing to the buffer
 	
-
-	
+	// Accelerometer
+	output GSENSOR_SCLK,
+	inout GSENSOR_SDI,
+	inout GSENSOR_SDO,
+	output GSENSOR_CS_N,
+	input [2:1] GSENSOR_INT
 	
 );
 
-// Wires and Assigns
+// Wires and Assignments
 
-// Wires for timer, hex and VGA clock
+// Wires for timer, HEX and VGA clock
 wire [31:0] count_ext;
 wire VGA_CLK;
 wire [23:0] first_hex_data;
-wire [23:0] second_hex_data;
+wire [23:0] second_hex_data;  
+
+// Wires for SPI 
+wire spi_clk; 
+wire spi_miso; 
+wire spi_mosi; 
+wire [1:0] spi_cs; 
 
 // Assign HEX displays (each HEX takes 7 bits)
 assign HEX0 = first_hex_data[7:0];     // Ones
@@ -68,16 +73,28 @@ assign HEX3 = second_hex_data[7:0];    // Tens
 assign HEX4[7:0] = 8'b11111111; 
 assign HEX5[7:0] = 8'b11111111;
 
-// Assign GPIOs
-assign GPIO[10] = 1'bz;
-assign GPIO[6] = 1'bz;
-assign GPIO[4] = 1'bz;
-assign GPIO[3] = 1'bz;
+// Assign GPIOs   
 assign GPIO[1] = 1'bz;
 assign GPIO[0] = 1'bz;
+assign GPIO[10] = 1'bz;
+assign GPIO[3] = 1'bz;
+assign GPIO[4] = 1'bz; 
+assign GPIO[6] = 1'bz;
 
+// SPI assignments for both accelerometer and ESP-cam  
+// SPI 
+assign GPIO[8] = spi_mosi; 
+assign GPIO[9] = spi_clk; 
+assign GPIO[5] = spi_cs[0];				// as there are two chip selects  
 
-// Instantiate Modules
+// Accelerometer 
+assign GSENSOR_SDI = spi_mosi; 
+assign GSENSOR_SCLK = spi_clk; 
+assign GSENSOR_CS_N = spi_cs[1]; 
+
+assign spi_miso = (spi_cs[0] == 1'b0) ? GPIO[7] : (spi_cs[1] == 1'b0)  ? GSENSOR_SDO : 1'bz; 
+
+// Instantiate Modules 
 
 PLL_CLK vga_clock(
 	.inclk0(CLOCK_50),
@@ -90,11 +107,11 @@ SDRAM_PLL sdram_pll(
 );
 
 PIXEL_BUFFER pixel_buff(
-	.data(write_value), //what we putting in wraddress when write enable is high
+	.data(write_value),			// what is put into wraddress when write enable is high
 	.clock(VGA_CLK),
-	.rdaddress(VGA_ADDR[16:0]), //where the VGA is reading the buffer (which pixel address)
-	.wraddress(wraddress), // address of what we writing to the buffer
-	.wren(1'b1), //write enable
+	.rdaddress(VGA_ADDR[16:0]),	// where the VGA is reading the buffer (which pixel address)
+	.wraddress(wraddress), 		// address of what we writing to the buffer
+	.wren(1'b1), 				// write enable
 	.q(pixel_out)
 );
 
@@ -112,24 +129,30 @@ vga_controller vga_inst(
 );
 
 usec_timer timer(
-.clk				(CLOCK_50),
-.reset			(KEY[0]),
-.count_ext		(count_ext)
+.clk(CLOCK_50),
+.reset(KEY[0]),
+.count_ext(count_ext)
 
 );
 
 PROJECT_SYS_V2 project_nios(
-	.clk_clk          (CLOCK_50),
+	.clk_clk(CLOCK_50),
 //	.reset_reset_n(1'b0),
+
 	// Camera
 	.cam_ready_export(GPIO[2]),
+
 	// HEX Display
 	.first_hex_export(first_hex_data),		// Use this for the first 3 HEXS (Ones, Tenths and Hundreths)
 	.second_hex_export(second_hex_data),		// Use this for the 4th HEX (tens place)
+
 	// Switches
 	.switches_export(SW),
+
 	// Keys
 	.keys_export(KEY),
+
+	// LEDs
 	.leds_export(LEDR),
 	
 	// Pixel buffer I/O
@@ -148,14 +171,15 @@ PROJECT_SYS_V2 project_nios(
 	.sdram_we_n       (DRAM_WE_N)  ,
 	
 	// SPI I/O
-	.spi_external_MISO(GPIO[7]),
-	.spi_external_MOSI(GPIO[8]),    // .MOSI
-	.spi_external_SCLK(GPIO[9]),    // .SCLK
-	.spi_external_SS_n(GPIO[5]),    // .SS_n
-	
-	// COUNT
-	.time_display_export		(count_ext)			// 32 bit time display
+	.spi_external_MISO(spi_miso),
+	.spi_external_MOSI(spi_mosi),  // .MOSI
+	.spi_external_SCLK(spi_clk),   // .SCLK
+	.spi_external_SS_n(spi_cs),    // .SS_n  // ESP-CAM CS 
+	.gyro_int_1_export(GSENSOR_INT[1]),
+	.gyro_int_2_export(GSENSOR_INT[2]),
 
+	// COUNT
+	.time_display_export(count_ext)			// 32 bit time display
     );
 
 endmodule
@@ -164,14 +188,13 @@ endmodule
 // Microsecond Timer Module
 
 module usec_timer (
-    input clk,          // FPGA system clock (e.g., 50 MHz)
-    input reset,      // Active-low reset
+    input clk,          		// FPGA system clock (e.g., 50 MHz)
+    input reset,      			// Active-low reset
     output reg [31:0] count_ext // 32-bit microsecond counter output
 );
- // have a continous counter of micro seconds that have occured since the program has started
+// have a continous counter of micro seconds that have occured since the program has started
 
 reg [31:0] clk_checker;
-
 
 always @(posedge clk or negedge reset) begin
 	
@@ -190,6 +213,5 @@ always @(posedge clk or negedge reset) begin
 		end
 	end
 end
-		
 
 endmodule
