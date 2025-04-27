@@ -92,6 +92,13 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
     POWER_CONTROL, 0x08
   };
 
+// Interrupt service routine (ISR) for accelerometer interrupt
+void gyro_isr(void * context) {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_2_BASE, 0); //clear interrupt
+	IOWR(GYRO_INT_2_BASE, 3, 0);
+	tap_flag = 1; //set the tap flag when an interrupt is triggered
+}
+
 int main(void){
 	// Milestone 1
 	unsigned char image_buffer[IMAGE_SIZE];
@@ -136,7 +143,7 @@ int main(void){
 		Run_Time(start, end); // Call Function to Display Benchmarking
 
 		// Accelerometer data processing
-		gyro_process_data(readX, readY, readZ, xData, yData, zData, tap_flag);
+		tap_flag = gyro_process_data(readX, readY, readZ, xData, yData, zData, tap_flag);
 	    gyro_data_in = INT_SOURCE | 0x80;
 	    alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
 	}
@@ -265,14 +272,7 @@ void Run_Time(uint32_t before, uint32_t after){
 
 }
 
-// Interrupt service routine (ISR) for accelerometer interrupt
-void gyro_isr(void * context) {
-	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_2_BASE, 0); //clear interrupt
-	IOWR(GYRO_INT_2_BASE, 3, 0);
-	tap_flag = 1; //set the tap flag when an interrupt is triggered
-}
-
-void gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData, volatile int* tap_flag) {
+volatile int gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData, volatile int tap_flag) {
 	// Prints rotational data from gyroscope and result of triggering accelerometer double tap interrupt
 	
 	// Read accelerometer rotation data
@@ -282,8 +282,9 @@ void gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, a
 
 	printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", xData, yData, zData);
 	// Print accelerometer double tap result
-	if (*tap_flag == 1) {
+	if (tap_flag == 1) {
 			printf("\n\nDouble tap detected!\n\n");
-			*tap_flag = 0;
+			tap_flag = 0;
 		}
+	return tap_flag;
 }
