@@ -21,7 +21,23 @@
    {
       datum baseAddress
       {
-         value = "67375184";
+         value = "67375200";
+         type = "String";
+      }
+   }
+   element GYRO_INT
+   {
+      datum _sortIndex
+      {
+         value = "16";
+         type = "int";
+      }
+   }
+   element GYRO_INT.s1
+   {
+      datum baseAddress
+      {
+         value = "67375168";
          type = "String";
       }
    }
@@ -37,7 +53,7 @@
    {
       datum baseAddress
       {
-         value = "67375248";
+         value = "67375264";
          type = "String";
       }
    }
@@ -53,7 +69,7 @@
    {
       datum baseAddress
       {
-         value = "67375232";
+         value = "67375248";
          type = "String";
       }
    }
@@ -69,7 +85,7 @@
    {
       datum baseAddress
       {
-         value = "67375264";
+         value = "67375280";
          type = "String";
       }
    }
@@ -85,7 +101,7 @@
    {
       datum baseAddress
       {
-         value = "67375296";
+         value = "67375312";
          type = "String";
       }
    }
@@ -101,7 +117,7 @@
    {
       datum baseAddress
       {
-         value = "67375216";
+         value = "67375232";
          type = "String";
       }
    }
@@ -117,7 +133,7 @@
    {
       datum baseAddress
       {
-         value = "67375200";
+         value = "67375216";
          type = "String";
       }
    }
@@ -133,7 +149,7 @@
    {
       datum baseAddress
       {
-         value = "67375280";
+         value = "67375296";
          type = "String";
       }
    }
@@ -149,7 +165,7 @@
    {
       datum baseAddress
       {
-         value = "67375168";
+         value = "67375184";
          type = "String";
       }
    }
@@ -173,7 +189,7 @@
    {
       datum baseAddress
       {
-         value = "67375312";
+         value = "67375328";
          type = "String";
       }
    }
@@ -327,6 +343,11 @@
    type="conduit"
    dir="end" />
  <interface
+   name="gyro_int"
+   internal="GYRO_INT.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
    name="keys"
    internal="KEY10.external_connection"
    type="conduit"
@@ -376,6 +397,20 @@
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="false" />
   <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="1" />
+ </module>
+ <module name="GYRO_INT" kind="altera_avalon_pio" version="18.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="true" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="true" />
+  <parameter name="irqType" value="EDGE" />
   <parameter name="resetValue" value="0" />
   <parameter name="simDoTestBenchWiring" value="false" />
   <parameter name="simDrivenValue" value="0" />
@@ -550,7 +585,7 @@
   <parameter name="dataAddrWidth" value="27" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram_pll.s1' start='0x0' end='0x4000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='onchip_memory2_0.s1' start='0x4020000' end='0x4039000' type='altera_avalon_onchip_memory2.s1' /><slave name='nios_system.debug_mem_slave' start='0x4040800' end='0x4041000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='spi_0.spi_control_port' start='0x4041000' end='0x4041020' type='altera_avalon_spi.spi_control_port' /><slave name='timer_0.s1' start='0x4041020' end='0x4041040' type='altera_avalon_timer.s1' /><slave name='TIME_DISPLAY.s1' start='0x4041040' end='0x4041050' type='altera_avalon_pio.s1' /><slave name='CAM_READY.s1' start='0x4041050' end='0x4041060' type='altera_avalon_pio.s1' /><slave name='PIXEL_DATA.s1' start='0x4041060' end='0x4041070' type='altera_avalon_pio.s1' /><slave name='PIXEL_ADDRESS.s1' start='0x4041070' end='0x4041080' type='altera_avalon_pio.s1' /><slave name='HEX53.s1' start='0x4041080' end='0x4041090' type='altera_avalon_pio.s1' /><slave name='HEX20.s1' start='0x4041090' end='0x40410A0' type='altera_avalon_pio.s1' /><slave name='KEY10.s1' start='0x40410A0' end='0x40410B0' type='altera_avalon_pio.s1' /><slave name='SW.s1' start='0x40410B0' end='0x40410C0' type='altera_avalon_pio.s1' /><slave name='LEDR90.s1' start='0x40410C0' end='0x40410D0' type='altera_avalon_pio.s1' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x40410D0' end='0x40410D8' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram_pll.s1' start='0x0' end='0x4000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='onchip_memory2_0.s1' start='0x4020000' end='0x4039000' type='altera_avalon_onchip_memory2.s1' /><slave name='nios_system.debug_mem_slave' start='0x4040800' end='0x4041000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='spi_0.spi_control_port' start='0x4041000' end='0x4041020' type='altera_avalon_spi.spi_control_port' /><slave name='timer_0.s1' start='0x4041020' end='0x4041040' type='altera_avalon_timer.s1' /><slave name='GYRO_INT.s1' start='0x4041040' end='0x4041050' type='altera_avalon_pio.s1' /><slave name='TIME_DISPLAY.s1' start='0x4041050' end='0x4041060' type='altera_avalon_pio.s1' /><slave name='CAM_READY.s1' start='0x4041060' end='0x4041070' type='altera_avalon_pio.s1' /><slave name='PIXEL_DATA.s1' start='0x4041070' end='0x4041080' type='altera_avalon_pio.s1' /><slave name='PIXEL_ADDRESS.s1' start='0x4041080' end='0x4041090' type='altera_avalon_pio.s1' /><slave name='HEX53.s1' start='0x4041090' end='0x40410A0' type='altera_avalon_pio.s1' /><slave name='HEX20.s1' start='0x40410A0' end='0x40410B0' type='altera_avalon_pio.s1' /><slave name='KEY10.s1' start='0x40410B0' end='0x40410C0' type='altera_avalon_pio.s1' /><slave name='SW.s1' start='0x40410C0' end='0x40410D0' type='altera_avalon_pio.s1' /><slave name='LEDR90.s1' start='0x40410D0' end='0x40410E0' type='altera_avalon_pio.s1' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x40410E0' end='0x40410E8' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -596,7 +631,7 @@
   <parameter name="instruction_master_high_performance_paddr_size" value="0" />
   <parameter name="instruction_master_paddr_base" value="0" />
   <parameter name="instruction_master_paddr_size" value="0" />
-  <parameter name="internalIrqMaskSystemInfo" value="7" />
+  <parameter name="internalIrqMaskSystemInfo" value="15" />
   <parameter name="io_regionbase" value="0" />
   <parameter name="io_regionsize" value="0" />
   <parameter name="master_addr_map" value="false" />
@@ -780,7 +815,7 @@
   <parameter name="insertSync" value="false" />
   <parameter name="lsbOrderedFirst" value="false" />
   <parameter name="masterSPI" value="true" />
-  <parameter name="numberOfSlaves" value="1" />
+  <parameter name="numberOfSlaves" value="2" />
   <parameter name="syncRegDepth" value="2" />
   <parameter name="targetClockRate" value="5000000" />
   <parameter name="targetSlaveSelectToSClkDelay" value="0.0" />
@@ -803,7 +838,7 @@
    start="nios_system.data_master"
    end="jtag_uart_0.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x040410d0" />
+  <parameter name="baseAddress" value="0x040410e0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -839,7 +874,7 @@
    start="nios_system.data_master"
    end="LEDR90.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x040410c0" />
+  <parameter name="baseAddress" value="0x040410d0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -848,7 +883,7 @@
    start="nios_system.data_master"
    end="SW.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x040410b0" />
+  <parameter name="baseAddress" value="0x040410c0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -857,7 +892,7 @@
    start="nios_system.data_master"
    end="KEY10.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x040410a0" />
+  <parameter name="baseAddress" value="0x040410b0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -866,7 +901,7 @@
    start="nios_system.data_master"
    end="HEX20.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x04041090" />
+  <parameter name="baseAddress" value="0x040410a0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -875,7 +910,7 @@
    start="nios_system.data_master"
    end="HEX53.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x04041080" />
+  <parameter name="baseAddress" value="0x04041090" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -884,7 +919,7 @@
    start="nios_system.data_master"
    end="PIXEL_ADDRESS.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x04041070" />
+  <parameter name="baseAddress" value="0x04041080" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -893,7 +928,7 @@
    start="nios_system.data_master"
    end="PIXEL_DATA.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x04041060" />
+  <parameter name="baseAddress" value="0x04041070" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -902,7 +937,7 @@
    start="nios_system.data_master"
    end="CAM_READY.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x04041050" />
+  <parameter name="baseAddress" value="0x04041060" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -919,6 +954,15 @@
    version="18.1"
    start="nios_system.data_master"
    end="TIME_DISPLAY.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x04041050" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="nios_system.data_master"
+   end="GYRO_INT.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x04041040" />
   <parameter name="defaultConnection" value="false" />
@@ -964,6 +1008,7 @@
  <connection kind="clock" version="18.1" start="clk_0.clk" end="sdram_pll.clk" />
  <connection kind="clock" version="18.1" start="clk_0.clk" end="spi_0.clk" />
  <connection kind="clock" version="18.1" start="clk_0.clk" end="TIME_DISPLAY.clk" />
+ <connection kind="clock" version="18.1" start="clk_0.clk" end="GYRO_INT.clk" />
  <connection
    kind="clock"
    version="18.1"
@@ -989,6 +1034,13 @@
    start="nios_system.irq"
    end="spi_0.irq">
   <parameter name="irqNumber" value="2" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="18.1"
+   start="nios_system.irq"
+   end="GYRO_INT.irq">
+  <parameter name="irqNumber" value="3" />
  </connection>
  <connection
    kind="reset"
@@ -1044,6 +1096,11 @@
    kind="reset"
    version="18.1"
    start="clk_0.clk_reset"
+   end="GYRO_INT.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clk_0.clk_reset"
    end="onchip_memory2_0.reset1" />
  <connection
    kind="reset"
@@ -1070,6 +1127,11 @@
    version="18.1"
    start="nios_system.debug_reset_request"
    end="spi_0.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="nios_system.debug_reset_request"
+   end="GYRO_INT.reset" />
  <connection
    kind="reset"
    version="18.1"
