@@ -72,8 +72,9 @@ int main(void){
 	volatile int key1Flag = 0; // Flag for key1 interrupt
 	volatile int mode = 1;     // 0 = single mode, 1 = quad mode
 
+	// Initialise the interrupt before entering into the loop
+	initialise_key1_interrupt();
 
-	//initialise_key1_interrupt();
 	while(1){
 
 
@@ -242,13 +243,14 @@ int main(void){
 
 void key1_isr(void* context, alt_u32 id) {
 
-    volatile int* key1FlagPtr = (volatile int*) context;
+    volatile int* edgeCapturePtr = (volatile int*) context;
 
     // Read the edge capture register
-    *key1FlagPtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
+    *edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
 
-	if(*key1FlagPtr == 0x4){
-		key1Flag = 1;
+	// Check if interrupt occured
+	if(*edgeCapturePtr & 0x2){
+		key1Flag = 0x1;
 }
 
     // Clear the edge capture register to enable future interrupts
@@ -264,10 +266,16 @@ void initialise_key1_interrupt() {
     IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
 
     // Enable interrupts for KEY1 (bit 1)
-    IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x2);
+    IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x4);
 
     // Register ISR
-    alt_ic_isr_register(KEY10_IRQ_INTERRUPT_CONTROLLER_ID, KEY10_IRQ, key1_isr, (void*) KEY10_BASE, 0);
+    alt_ic_isr_register(
+		KEY10_IRQ_INTERRUPT_CONTROLLER_ID, 
+		KEY10_IRQ, 
+		key1_isr, 
+		(void*) KEY10_BASE, 
+		0
+	);
 }
 
 
