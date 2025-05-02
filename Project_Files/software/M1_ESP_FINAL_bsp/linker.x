@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_system' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: C:/Users/ishaa/Desktop/ECE3073/Milestone_1/PROJECT_M1/PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Fri Apr 11 18:18:48 EST 2025
+ * Generated: Fri May 02 21:41:09 EST 2025
  */
 
 /*

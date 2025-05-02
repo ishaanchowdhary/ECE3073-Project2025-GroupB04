@@ -2,10 +2,10 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>11/04/2025 6:18:47 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1744359527720</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>C:\Users\ishaa\Documents\GitHub\ECE3073_S12025_B04\PROJECT_M1_CAMERA_WORKS\software\M1_ESP_FINAL_bsp</BspGeneratedLocation>
-        <BspSettingsFile>.\settings.bsp</BspSettingsFile>
+        <BspGeneratedTimeStamp>02/05/2025 9:41:09 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1746186069255</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>C:\Users\ishaa\Documents\GitHub\ECE3073_S12025_B04\Project_Files\software\M1_ESP_FINAL_bsp</BspGeneratedLocation>
+        <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>C:\Users\ishaa\Desktop\ECE3073\Milestone_1\PROJECT_M1\PROJECT_SYS_V2.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
         <Cpu>nios_system</Cpu>

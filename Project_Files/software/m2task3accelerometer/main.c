@@ -706,7 +706,7 @@ void Run_Time(uint32_t before, uint32_t after){
 	IOWR(HEX53_BASE, 0, second_hex_value);
 }
 
-volatile int gyro_detect_tap(volatile int tap_flag, int *counter) {
+int gyro_detect_tap(volatile int tap_flag, int *counter) {
 	// Prints result of triggering accelerometer double tap interrupt and adds to counter
 
 	// Print accelerometer double tap result
