@@ -167,7 +167,7 @@ int main(void){
 	    	bottomRightFlag = selectedMode;
 
 	    	if (selectedMode == 2) {
-	    		for (int i = 0; i < 9600; i++) flipBuff[1] = rxArrSmall[9599 - i];
+	    		for (int i = 0; i < 9600; i++) flipBuff[i] = rxArrSmall[9599 - i];
 	    		printf("Flip buffer generated. \n");
 	    	}
 	    	if (selectedMode == 3) {
