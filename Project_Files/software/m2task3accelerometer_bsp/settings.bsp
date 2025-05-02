@@ -2,10 +2,10 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>02/05/2025 10:55:58 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1746147358266</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>02/05/2025 5:07:51 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1746169671320</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\prana\OneDrive\Documents\ECE3073\ECE3073-Project2025-GroupB04-Task3_Accelerometer\ECE3073-Project2025-GroupB04\Project_Files\software\m2task3accelerometer_bsp</BspGeneratedLocation>
-        <BspSettingsFile>.\settings.bsp</BspSettingsFile>
+        <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\PROJECT_SYS_V2.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
         <Cpu>nios_system</Cpu>

@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_system' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Fri May 02 10:55:59 EST 2025
+ * Generated: Fri May 02 17:07:53 EST 2025
  */
 
 /*
@@ -267,18 +267,18 @@
 #define KEY10_BASE 0x40410b0
 #define KEY10_BIT_CLEARING_EDGE_REGISTER 0
 #define KEY10_BIT_MODIFYING_OUTPUT_REGISTER 0
-#define KEY10_CAPTURE 0
+#define KEY10_CAPTURE 1
 #define KEY10_DATA_WIDTH 2
 #define KEY10_DO_TEST_BENCH_WIRING 0
 #define KEY10_DRIVEN_SIM_VALUE 0
-#define KEY10_EDGE_TYPE "NONE"
+#define KEY10_EDGE_TYPE "RISING"
 #define KEY10_FREQ 50000000
 #define KEY10_HAS_IN 1
 #define KEY10_HAS_OUT 0
 #define KEY10_HAS_TRI 0
-#define KEY10_IRQ -1
-#define KEY10_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define KEY10_IRQ_TYPE "NONE"
+#define KEY10_IRQ 4
+#define KEY10_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define KEY10_IRQ_TYPE "EDGE"
 #define KEY10_NAME "/dev/KEY10"
 #define KEY10_RESET_VALUE 0
 #define KEY10_SPAN 16
