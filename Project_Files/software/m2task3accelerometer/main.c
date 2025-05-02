@@ -21,20 +21,23 @@ Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
 
 #define TIME_DISPLAY_BASE 0x4041050
 
-//Gyro addresses
+// Gyroscope Addresses
 #define GYRO_INT_BASE 0x4041040
 #define GYRO_INT_IRQ 3
 #define GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID 0
+
+// Keys Addresses
 #define KEY10_BASE 0x40410b0
 #define KEY10_IRQ 4
 #define KEY10_IRQ_INTERRUPT_CONTROLLER_ID 0
-// ----- SPI CHIP SELECTS --------
+
+// SPI CHIP SELECTS
 #define CS_ACCEL 1
 #define CS_CAM 0
-volatile int tap_flag = 0; // Flag to indicate double tap
-volatile int key_flag = 0;
-// Gyro Configuration
-// Gyroscope write Registers
+
+// Gyroscope Configuration
+
+// Gyroscope Write Registers
 #define BW_RATE 0x2C
 #define POWER_CONTROL 0x2d
 #define DATA_FORMAT 0x31
@@ -51,7 +54,7 @@ volatile int key_flag = 0;
 #define DUR 0x21
 #define LATENT 0x22
 #define WINDOW 0x23
-// Gyro read register
+// Gyroscope Read Registers
 #define INT_SOURCE 0x30
 #define X_LB 0x32
 #define X_HB 0x33
@@ -61,32 +64,40 @@ volatile int key_flag = 0;
 #define Z_HB 0x37
 #define CONFIG_LENGTH 16 * 2
 #define MAX_COUNT 500000
-// Read values
+// Gyroscope Read Axis Values
 #define READ_X_AXIS (0xc0 | X_LB)
 #define READ_Y_AXIS (0xc0 | Y_LB)
 #define READ_Z_AXIS (0xc0 | Z_LB)
 
 // Functionality to initialise the accelerometer for double tap detection
 alt_u8 gyro_config[CONFIG_LENGTH] = {
-    DATA_FORMAT, 0x0b,    // 4-wire SPI, full resolution, +/- 16g
-    THRESH_ACT, 0x04,
-    THRESH_INACT, 0x02,
-    TIME_INACT, 0x02,
-    ACT_INACT_CTL, 0xff,
-    THRESH_FF, 0x09,
-    TIME_FF, 0x46,
-    TAP_THRES, 0x10,
-    TAP_AXES, 0x07,
-    LATENT, 0x85,
-    DUR, 0x40,
-    WINDOW, 0xc0,
-    BW_RATE, 0x0a,
-    INT_ENABLE, 0x60,
-    INT_MAP, 0x20,
-    POWER_CONTROL, 0x08
-  };
+	DATA_FORMAT, 0x0b,		// 4-wire SPI, full resolution, +/- 16g
+	THRESH_ACT, 0x04,
+	THRESH_INACT, 0x02,
+	TIME_INACT, 0x02,
+	ACT_INACT_CTL, 0xff,
+	THRESH_FF, 0x09,
+	TIME_FF, 0x46,
+	TAP_THRES, 0x10,
+	TAP_AXES, 0x07,
+	LATENT, 0x85,
+	DUR, 0x40,
+	WINDOW, 0xc0,
+	BW_RATE, 0x0a,
+	INT_ENABLE, 0x60,
+	INT_MAP, 0x20,
+	POWER_CONTROL, 0x08
+};
 
-int topLeftFlag = 1, topRightFlag = 1, bottomLeftFlag = 1, bottomRightFlag = 1;
+// Interrupt Flags Define
+volatile int tap_flag = 0;	// Double Tap Interrupt Flag
+volatile int key_flag = 0;	// Key Interrupt Flag
+
+// --------------------------------------------------------------- To remove
+// Global variables for key interrupt
+volatile int key1Flag = 0; // Flag for key1 interrupt
+// ---------------------------------------------------------------
+
 // Interrupt service routine (ISR) for accelerometer interrupt
 void gyro_isr(void * context) {
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0); //clear interrupt
@@ -94,10 +105,25 @@ void gyro_isr(void * context) {
 	tap_flag = 1; //set the tap flag when an interrupt is triggered
 }
 
+// Interrupt service routine (ISR) for key interrupt
 void key_isr(void * context)  {
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
 	IOWR(KEY10_BASE, 3, 0);
 	key_flag = 1 - key_flag;
+}
+
+void key1_isr(void* context, alt_u32 id) {
+    volatile int* edgeCapturePtr = (volatile int*) context;
+
+    // Read the edge capture register
+    *edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
+
+	// Check if interrupt occured
+	if(*edgeCapturePtr & 0x2){
+		key1Flag = 0x1;
+}
+    // Clear the edge capture register to enable future interrupts
+    IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
 }
 
 int main(void){
@@ -108,8 +134,8 @@ int main(void){
 	alt_u8 *sendBuffPtrSmall = &sendBuffSmall;
 	uint8_t rxArr[38400];
 	uint8_t rxArrSmall[9600];
+
 	uint8_t smallImgBuff1[9600];
-	uint8_t flipBuff[9600];
 
 	float  kernel[9] = {
 		    1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f,
@@ -129,112 +155,255 @@ int main(void){
 			-1.0f, -2.0f, -1.0f
 		};
 
-	//sobel filter varibles
+	//Sobel Filter Varibles
 	uint8_t sobelArrX[38400];
 	uint8_t sobelArrY[38400];
 	uint8_t sobelArrCombined[38400];
 
-	alt_u8 yAxisCmd = READ_Y_AXIS;
-	alt_16 yData;
-	//======================================VALUES TO CHNAGE FOR DIFFERENT DISPLAY MODE================================
-	int quadImgMode = 0; //if 0 display single img, 1 if displaying four image
-	//NOTE THAT IF ON SINGLE DISPLY MODE ONLY 1 OF BELOW VALUE CAN BE ASSERTED
-	int blurStatus = 0; //if the image is being blurred
-	int edgeDectStatus = 1; // if sobel filter is being applied
-	int flipImg = 0;
+	// Image Variables
+	uint8_t *img1;
+	uint8_t *img2;
+	uint8_t *img3;
+	uint8_t *img4;
+
+	// Global Displays To Be Copied From
+	uint8_t *GlobalBlur;
+	uint8_t *GlobalEdge;
+
+	// Global variables for key interrupt
+	volatile int key1Flag = 0; // Flag for key1 interrupt
+	volatile int mode = 1;     // 0 = single mode, 1 = quad mode
+
+	// Initialise the interrupt before entering into the loop
+	initialise_key1_interrupt();
+
+	// Accelerometer Setup
+	alt_u8 gyro_data_in, gyro_data_out, regData;
+	alt_u8 readX = READ_X_AXIS;
+	alt_u8 readY = READ_Y_AXIS;
+	alt_u8 readZ = READ_Z_AXIS;
+	alt_16 xData, yData, zData;
 	alt_u8 isRes = 0xff;
+
+	for (int i = 0; i < CONFIG_LENGTH; i += 2) {
+		alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 2, gyro_config + i, 0, &gyro_data_out, 0);
+	}
+
 	void* context = (void *) &isRes;
-	// initiate Interrupts
-	//Gyro
 	IOWR(GYRO_INT_BASE, 3, 0);
 	IOWR(GYRO_INT_BASE, 2, 0x1);
 	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, gyro_isr, context, 0x0);
-	//Key   // NOTE NEED TO ADD KEY INTERRUPT IN QSYS has not been done i am not sure do i make a new key or use the existing
-	IOWR(KEY10_BASE, 3, 0);
-	IOWR(KEY10_BASE, 2, 0x2);
-	int KeyISR_res = alt_ic_isr_register(KEY10_IRQ_INTERRUPT_CONTROLLER_ID, KEY10_IRQ, key_isr, NULL, 0x0);
 
+	// Initialising Double Tap Counter for updating Display
+	int counter = 0;
+
+	// Initial Setup for Single and Quad Display
+	int single_mode = 0;
+	int selectedDisp = 0;
+	int disp1_mode = 0;
+	int disp2_mode = 0;
+	int disp3_mode = 0;
+	int disp4_mode = 0;
+
+	// Key 1 Interrupt Setup
 	while(1){
+		// Run time
 		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
 
-	    if(key_flag == 0){ //displaying 4 image
-	    	int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,9600,&rxArrSmall,0); //SPI for SMALL res
-//		    if(blurStatus == 1){
-////		    	int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
-////		    }
-////
-////		    if(edgeDectStatus==1){
-////		    	//start edge detection
-////		    	convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
-////		    	convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
-////		    	combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
-////
-////		    }
-//
-//		    display_4_images(&rxArrSmall,&rxArrSmall,&smallImgBuff1,&sobelArrCombined,PIXEL_ADDRESS_BASE_val,2);
-////		    display_4_images(&rxArrSmall,&rxArrSmall,&rxArrSmall,&rxArrSmall,PIXEL_ADDRESS_BASE_val,4);
+		// Toggle for switching between Single and Quad Display
+		if (key1Flag == 0x1) {
+            mode = !mode;  // Toggle mode
+            key1Flag = 0;  // Reset the flag
+			// When change occurs, set counter to whatever it was on the previous display last - ONLY USE WHEN KEY INTERRUPT TRIGGERS AS DESIRED
+//			selectedDisp = select_display(yData);
+//			if (mode) {
+//				if (selectedDisp==0) counter = disp1_mode;
+//				else if (selectedDisp==1) counter = disp2_mode;
+//				else if (selectedDisp==2) counter = disp3_mode;
+//				else if (selectedDisp==3) counter = disp4_mode;
+//			} else {
+//				counter = single_mode;
+//			}
+        }
 
-	    	// My implementation :
-	    	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &yAxisCmd, 2, &yData, 0x0);
-	    	int selectedMode = 1;
-	    	if (yData >= -99 && yData <-20) selectedMode = 2;
-	    	else if (yData > 20 && yData <= 60) selectedMode = 3;
-	    	else if (yData > 60 && yData <= 90) selectedMode = 4;
+		// Variable For Switches
+		//int sw = IORD(SW_BASE, 0);
 
-	    	topLeftFlag = selectedMode;
-	    	topRightFlag = selectedMode;
-	    	bottomLeftFlag = selectedMode;
-	    	bottomRightFlag = selectedMode;
+		if (mode) {
 
-	    	if (selectedMode == 2) {
-	    		for (int i = 0; i < 9600; i++) flipBuff[i] = rxArrSmall[9599 - i];
-	    		printf("Flip buffer generated. \n");
-	    	}
-	    	if (selectedMode == 3) {
-	    		convolve(rxArrSmall, smallImgBuff1, kernel, 160, 120);
-	    		printf("Blur buffer generated.\n");
-	    	}
-	    	if (selectedMode == 4) {
-	    		convolve(rxArrSmall, sobelArrX, sobelX, 160, 120);
-	    		convolve(rxArrSmall, sobelArrY, sobelY, 160, 120);
-	    		combineSobelFilter(sobelArrX, sobelArrY, sobelArrCombined, 160, 120);
-	    		printf("Edge detection Buffer generated.\n");
-	    	}
+			// Quad Display Mode
+			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,9600,&rxArrSmall,0); //SPI for SMALL res
 
-	    	uint8_t *quad1 = (topLeftFlag == 1) ? rxArrSmall :
-	    			(topLeftFlag == 2) ? flipBuff :
-	    			(topLeftFlag == 3) ? smallImgBuff1 : sobelArrCombined;
-	    	uint8_t *quad2 = (topRightFlag == 1) ? rxArrSmall :
-	    			(topRightFlag == 2) ? flipBuff :
-	    			(topRightFlag == 3) ? smallImgBuff1 : sobelArrCombined;
-	    	uint8_t *quad3 = (bottomLeftFlag == 1) ? rxArrSmall :
-	    			(bottomLeftFlag == 2) ? flipBuff :
-	    			(bottomLeftFlag == 3) ? smallImgBuff1 : sobelArrCombined;
-	    	uint8_t *quad4  = (bottomRightFlag == 1) ? rxArrSmall :
-	    			(bottomRightFlag == 2) ? flipBuff :
-	    			(bottomRightFlag == 3) ? smallImgBuff1 : sobelArrCombined;
+			// Flags For Copying Displays
+			int flag1 = 0;
+			int flag2 = 0;
 
-	    	display_4_images(quad1, quad2, quad3, quad4, PIXEL_ADDRESS_BASE_val, flipImg);
-	    }else if (key_flag == 0){ //displaying 1 image
-	    	int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrFull,38400,&rxArr,0); //SPI for full res
+			// Select Display using Tilt (About y-axis)
+            selectedDisp = select_display(yData);
 
-	    	if(blurStatus == 1){
-	    		int numOutPixel = convolve(&rxArr,&rxArr,kernel,320,240);
+			// Selected Display Mode updated by Double Tap Interrupt
+			if (selectedDisp==0) disp1_mode = counter;
+			else if (selectedDisp==1) disp2_mode = counter;
+			else if (selectedDisp==2) disp3_mode = counter;
+			else if (selectedDisp==3) disp4_mode = counter;
+			printf("Display Modes: %d, %d, %d, %d", disp1_mode, disp2_mode, disp3_mode, disp4_mode);
+			// Flip Index
+			int flipImgIdx1 = 0;
+			int flipImgIdx2 = 0;
+			int flipImgIdx3 = 0;
+			int flipImgIdx4 = 0;
 
-	    	}else if(edgeDectStatus == 1){
-		    	convolve(&rxArr,&sobelArrX,sobelX,320,240);
+			// Handle Disp1
+			if (disp1_mode == 0) {
+				img1 = &rxArrSmall;
+			} else if (disp1_mode == 1) {
+				img1 = &rxArrSmall;
+				flipImgIdx1 = 1;
+			} else if (disp1_mode == 2) {
+				if (flag1 == 0) {
+					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img1 = GlobalBlur;
+			} else if (disp1_mode == 3) {
+				if (flag2 == 0) {
+					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img1 = GlobalEdge;
+			}
+
+
+			// Handle Disp2
+			if (disp2_mode == 0) {
+				img2 = rxArrSmall;
+			} else if (disp2_mode == 1) {
+				img2 = rxArrSmall;
+				flipImgIdx2 = 1;
+			} else if (disp2_mode == 2) {
+				if (flag1 == 0) {
+					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img2 = GlobalBlur;
+			} else if (disp2_mode == 3) {
+				if (flag2 == 0) {
+					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img2 = GlobalEdge;
+			}
+
+			// Handle Disp3
+			if (disp3_mode == 0) {
+				img3 = rxArrSmall;
+			} else if (disp3_mode == 1) {
+				img3 = rxArrSmall;
+				flipImgIdx3 = 1;
+			} else if (disp3_mode == 2) {
+				if (flag1 == 0) {
+					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img3 = GlobalBlur;
+			} else if (disp3_mode == 3) {
+				if (flag2 == 0) {
+					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img3 = GlobalEdge;
+			}
+
+			// Handle Disp4
+			if (disp4_mode == 0) {
+				img4 = rxArrSmall;
+			} else if (disp4_mode == 1) {
+				img4 = rxArrSmall;
+				flipImgIdx4 = 1;
+			} else if (disp4_mode == 2) {
+				if (flag1 == 0) {
+					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img4 = GlobalBlur;
+			} else if (disp4_mode == 3) {
+				if (flag2 == 0) {
+					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img4 = GlobalEdge;
+			}
+
+			display_4_images(img1, img2, img3, img4, PIXEL_ADDRESS_BASE_val, flipImgIdx1, flipImgIdx2, flipImgIdx3, flipImgIdx4);
+
+		} else {
+
+			// Single Display Mode
+
+			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
+
+			int single_mode = counter; // Uses double tap counter to assign the mode (Normal, Flipped, Blurred or Edge)
+			int SingleFlipImgIdx = 0;
+
+			if (single_mode == 0) {
+				// Displays normally into the quadrant
+			} else if (single_mode == 1) {
+				// this will set a variable to be called in the function "display_4_images" as the last input "int flipImgIdx"
+				SingleFlipImgIdx = 1;
+			} else if (single_mode == 2) {
+				int numOutPixel = convolve(&rxArr,&rxArr,kernel,320,240);
+			} else if (single_mode == 3) {
+				convolve(&rxArr,&sobelArrX,sobelX,320,240);
 		    	convolve(&rxArr,&sobelArrY,sobelY,320,240);
 		    	combineSobelFilter(sobelArrX,sobelArrY,rxArr,320,240);
+			}
 
-	    	}
-	    	display_image_from_array_v3(240,320 ,&rxArr,PIXEL_ADDRESS_BASE_val,flipImg);
+			display_image_from_array_v3(240, 320, &rxArr, PIXEL_ADDRESS_BASE_val, SingleFlipImgIdx);
+		}
 
-	    }
+		// Detect double tap event and update counter
+		tap_flag = gyro_detect_tap(readX, readY, readZ, xData, yData, zData, tap_flag, &counter);
 
+		// Print rotational data and collect rotation around y-axis
+		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
 
+		// Run time
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
 	    Run_Time(start, end); // Call Function to Display Benchmarking
 }
+}
+
+void initialise_key1_interrupt() {
+    // Clear any pending interrupts
+    IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
+
+    // Enable interrupts for KEY1 (bit 1)
+    IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x4);
+
+    // Register ISR
+    alt_ic_isr_register(
+		KEY10_IRQ_INTERRUPT_CONTROLLER_ID,
+		KEY10_IRQ,
+		key1_isr,
+		(void*) KEY10_BASE,
+		0
+	);
 }
 
 void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH){
@@ -261,12 +430,10 @@ void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int 
 		resultImg[i] = packedPixelVal;
 
 		pixelIdx = pixelIdx + 1;
-
 	}
-
 }
 
-void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx){
+void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx1 ,int flipImgIdx2 ,int flipImgIdx3 ,int flipImgIdx4){
 	//function to display 4 smaller image
 	//input
 	//	img1: pointer to image top left
@@ -286,7 +453,7 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
 		for(int w=0; w<159; w++){
 			int displayAddress  = w+(displayW*h)-1;
 
-			if(flipImgIdx == 1){
+			if(flipImgIdx1 == 1){
 				inputPixelAddress = w+(inputImgW* (intputImgH-h-1))-1;
 
 			}else{
@@ -305,7 +472,7 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
 		for(int w=159; w<319; w++){
 			int displayAddress  = w+(displayW*h)-1;
 
-			if(flipImgIdx == 2){
+			if(flipImgIdx2 == 1){
 				inputPixelAddress = w+(inputImgW* (intputImgH-h-2))-1;
 
 			}else{
@@ -324,7 +491,7 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
 		for(int w=0; w<159; w++){
 			int displayAddress  = w+(displayW*h)-1;
 
-			if(flipImgIdx == 3){
+			if(flipImgIdx3 == 1){
 				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH) -2))-1;
 
 			}else{
@@ -342,7 +509,7 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
 	for(int h=120; h<240; h++){
 		for(int w=159; w<319; w++){
 			int displayAddress  = w+(displayW*h)-1;
-			if(flipImgIdx == 4){
+			if(flipImgIdx4 == 1){
 				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH)-2))-1;
 
 			}else{
@@ -355,13 +522,7 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
-
-
-
-
-
 }
-
 
 int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr){
 	//function to get pixel value from a packed array
@@ -454,8 +615,6 @@ void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32
 
 }
 
-
-
 void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32_t display_base) {
 	//FASTER FUNCTION FOR DISPLAY, DO NOT USE TILL M3
 	int pixel_count = imgH*imgW;
@@ -488,15 +647,9 @@ void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32
 
 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , pixelAddress+1);
 	    	IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue2);
-
-
-
 		}
 	}
-
 }
-
-
 
 void Run_Time(uint32_t before, uint32_t after){
 
@@ -507,10 +660,10 @@ void Run_Time(uint32_t before, uint32_t after){
 	// make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
 
 	float frameTime = after - before;  // calculates run time of the frame
-	printf("The Run Time for the Frame is %.2f\n", frameTime);
+	// printf("The Run Time for the Frame is %.2f\n", frameTime);
 
 	float fps = 1000000.0/frameTime;   // converts us to fps
-	printf("The fps for the System is %.2f\n", fps);
+	// printf("The fps for the System is %.2f\n", fps);
 
 	uint16_t fps_x100 = fps*100; // Multiply the fps by 100 to retain the 2 decimal places
 
@@ -551,11 +704,28 @@ void Run_Time(uint32_t before, uint32_t after){
 	// Write to PIOs
 	IOWR(HEX20_BASE, 0, first_hex_value);
 	IOWR(HEX53_BASE, 0, second_hex_value);
-
 }
 
-volatile int gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData, volatile int tap_flag) {
-	// Prints rotational data from gyroscope and result of triggering accelerometer double tap interrupt
+volatile int gyro_detect_tap(volatile int tap_flag, int *counter) {
+	// Prints result of triggering accelerometer double tap interrupt and adds to counter
+
+	// Print accelerometer double tap result
+	if (tap_flag == 1) {
+		printf("\n\nDouble tap detected!\n\n");
+		tap_flag = 0;
+		*counter = *counter + 1;
+	}
+
+	// Reset Counter if over 3
+	if (*counter >= 4) {
+		*counter = 0;
+	}
+
+	return tap_flag;
+}
+
+alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData) {
+	// Prints rotational data from gyroscope and returns Y-axis rotational data
 
 	// Read accelerometer rotation data
 	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readX, 2, &xData, 0x0);
@@ -563,10 +733,15 @@ volatile int gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 
 	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readZ, 2, &zData, 0x0);
 
 	printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", xData, yData, zData);
-	// Print accelerometer double tap result
-	if (tap_flag == 1) {
-			printf("\n\nDouble tap detected!\n\n");
-			tap_flag = 0;
-		}
-	return tap_flag;
+
+	return yData;
+}
+
+int select_display(alt_16 yData) {
+    int selectedDisp = 1;
+	if (yData >= -99 && yData <-20) selectedDisp = 2;
+	else if (yData > 20 && yData <= 60) selectedDisp = 3;
+	else if (yData > 60 && yData <= 90) selectedDisp = 4;
+    printf("Selected Display: %d\n", selectedDisp);
+	return selectedDisp;
 }
