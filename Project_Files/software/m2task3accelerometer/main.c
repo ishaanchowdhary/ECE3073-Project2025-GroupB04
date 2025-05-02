@@ -98,33 +98,20 @@ volatile int key_flag = 0;	// Key Interrupt Flag
 volatile int key1Flag = 0; // Flag for key1 interrupt
 // ---------------------------------------------------------------
 
-// Interrupt service routine (ISR) for accelerometer interrupt
-void gyro_isr(void * context) {
-	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0); //clear interrupt
-	IOWR(GYRO_INT_BASE, 3, 0);
-	tap_flag = 1; //set the tap flag when an interrupt is triggered
-}
-
-// Interrupt service routine (ISR) for key interrupt
-void key_isr(void * context)  {
-	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
-	IOWR(KEY10_BASE, 3, 0);
-	key_flag = 1 - key_flag;
-}
-
-void key1_isr(void* context, alt_u32 id) {
-    volatile int* edgeCapturePtr = (volatile int*) context;
-
-    // Read the edge capture register
-    *edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
-
-	// Check if interrupt occured
-	if(*edgeCapturePtr & 0x2){
-		key1Flag = 0x1;
-}
-    // Clear the edge capture register to enable future interrupts
-    IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
-}
+// Function Declarations
+void gyro_isr(void * context);
+void key_isr(void * context);
+void key1_isr(void* context, alt_u32 id); // Current one in use
+void initialise_key1_interrupt();
+void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH);
+void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx1 ,int flipImgIdx2 ,int flipImgIdx3 ,int flipImgIdx4);
+int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr);
+int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height);
+void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
+void Run_Time(uint32_t before, uint32_t after);
+int gyro_detect_tap(volatile int tap_flag, int *counter);
+int display_select(alt_16 yData);
+alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 
 int main(void){
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
@@ -389,6 +376,35 @@ int main(void){
 }
 }
 
+// Interrupt service routine (ISR) for accelerometer interrupt
+void gyro_isr(void * context) {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0); //clear interrupt
+	IOWR(GYRO_INT_BASE, 3, 0);
+	tap_flag = 1; //set the tap flag when an interrupt is triggered
+}
+
+// Interrupt service routine (ISR) for key interrupt
+void key_isr(void * context)  {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
+	IOWR(KEY10_BASE, 3, 0);
+	key_flag = 1 - key_flag;
+}
+
+void key1_isr(void* context, alt_u32 id) {
+    volatile int* edgeCapturePtr = (volatile int*) context;
+
+    // Read the edge capture register
+    *edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
+
+	// Check if interrupt occured
+	if(*edgeCapturePtr & 0x2){
+		key1Flag = 0x1;
+}
+    // Clear the edge capture register to enable future interrupts
+    IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
+}
+
+
 void initialise_key1_interrupt() {
     // Clear any pending interrupts
     IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
@@ -406,7 +422,7 @@ void initialise_key1_interrupt() {
 	);
 }
 
-void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH){
+void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH) {
 
 	int numPixel = imgH*imgW;
 	int threshold = 11;
@@ -433,7 +449,7 @@ void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int 
 	}
 }
 
-void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx1 ,int flipImgIdx2 ,int flipImgIdx3 ,int flipImgIdx4){
+void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx1 ,int flipImgIdx2 ,int flipImgIdx3 ,int flipImgIdx4) {
 	//function to display 4 smaller image
 	//input
 	//	img1: pointer to image top left
@@ -524,7 +540,7 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
 	}
 }
 
-int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr){
+int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr) {
 	//function to get pixel value from a packed array
 	int pixelOutput = 0;
 	int packedPixelVal = 0;
@@ -545,7 +561,7 @@ int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr){
 	return pixelOutput;
 }
 
-int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height){
+int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height) {
 	int outputPixelIdx = 0;
 	int pixelCount = 0;
 	uint8_t convResiltBuff = 0;
@@ -651,7 +667,7 @@ void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32
 	}
 }
 
-void Run_Time(uint32_t before, uint32_t after){
+void Run_Time(uint32_t before, uint32_t after) {
 
 	// this function will take in the difference after - before for the timer
 	// prints the run time, calculates FPS to 2 decimal places and prints FPS
