@@ -215,7 +215,7 @@ int main(void){
             mode = !mode;  // Toggle mode
             key1Flag = 0;  // Reset the flag
 			// When change occurs, set counter to whatever it was on the previous display last - ONLY USE WHEN KEY INTERRUPT TRIGGERS AS DESIRED
-//			selectedDisp = select_display(yData);
+//			selectedDisp = display_select(yData);
 //			if (mode) {
 //				if (selectedDisp==0) counter = disp1_mode;
 //				else if (selectedDisp==1) counter = disp2_mode;
@@ -239,7 +239,7 @@ int main(void){
 			int flag2 = 0;
 
 			// Select Display using Tilt (About y-axis)
-            selectedDisp = select_display(yData);
+            selectedDisp = display_select(yData);
 
 			// Selected Display Mode updated by Double Tap Interrupt
 			if (selectedDisp==0) disp1_mode = counter;
@@ -358,7 +358,7 @@ int main(void){
 
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
 
-			int single_mode = counter; // Uses double tap counter to assign the mode (Normal, Flipped, Blurred or Edge)
+			single_mode = counter; // Uses double tap counter to assign the mode (Normal, Flipped, Blurred or Edge)
 			int SingleFlipImgIdx = 0;
 
 			if (single_mode == 0) {
@@ -724,6 +724,15 @@ int gyro_detect_tap(volatile int tap_flag, int *counter) {
 	return tap_flag;
 }
 
+int display_select(alt_16 yData) {
+    int selectedDisp = 1;
+	if (yData >= -99 && yData < -20) selectedDisp = 2;
+	else if (yData > 20 && yData <= 60) selectedDisp = 3;
+	else if (yData > 60 && yData <= 90) selectedDisp = 4;
+    printf("Selected Display: %d\n", selectedDisp);
+	return selectedDisp;
+}
+
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData) {
 	// Prints rotational data from gyroscope and returns Y-axis rotational data
 
@@ -735,13 +744,4 @@ alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData,
 	printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", xData, yData, zData);
 
 	return yData;
-}
-
-int select_display(alt_16 yData) {
-    int selectedDisp = 1;
-	if (yData >= -99 && yData <-20) selectedDisp = 2;
-	else if (yData > 20 && yData <= 60) selectedDisp = 3;
-	else if (yData > 60 && yData <= 90) selectedDisp = 4;
-    printf("Selected Display: %d\n", selectedDisp);
-	return selectedDisp;
 }
