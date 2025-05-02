@@ -30,6 +30,7 @@ Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
 #define CS_ACCEL 1
 #define CS_CAM 0
 volatile int tap_flag = 0; // Flag to indicate double tap
+volatile int key_flag = 0;
 // Gyro Configuration
 // Gyroscope write Registers
 #define BW_RATE 0x2C
@@ -91,6 +92,12 @@ void gyro_isr(void * context) {
 	tap_flag = 1; //set the tap flag when an interrupt is triggered
 }
 
+void key_isr(void * context)  {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
+	IOWR(KEY10_BASE, 3, 0);
+	key_flag = 1 - key_flag;
+}
+
 int main(void){
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
 	alt_u8 sendBuffSmall = 0x16; //send buffer for packed data, small res
@@ -133,11 +140,22 @@ int main(void){
 	int blurStatus = 0; //if the image is being blurred
 	int edgeDectStatus = 1; // if sobel filter is being applied
 	int flipImg = 0;
+	alt_u8 isRes = 0xff;
+	void* context = (void *) &isRes;
+	// initiate Interrupts
+	//Gyro
+	IOWR(GYRO_INT_BASE, 3, 0);
+	IOWR(GYRO_INT_BASE, 2, 0x1);
+	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, gyro_isr, context, 0x0);
+	//Key   // NOTE NEED TO ADD KEY INTERRUPT IN QSYS has not been done i am not sure do i make a new key or use the existing
+	IOWR(KEY10_BASE, 3, 0);
+	IOWR(KEY10_BASE, 2, 0x2);
+	int KeyISR_res = alt_ic_isr_register(KEY10_IRQ_INTERRUPT_CONTROLLER_ID, KEY10_IRQ, key_isr, NULL, 0x0);
 
 	while(1){
 		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
 
-	    if(quadImgMode == 1){ //displaying 4 image
+	    if(key_flag == 0){ //displaying 4 image
 	    	int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,9600,&rxArrSmall,0); //SPI for SMALL res
 //		    if(blurStatus == 1){
 ////		    	int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
@@ -195,7 +213,7 @@ int main(void){
 	    			(bottomRightFlag == 3) ? smallImgBuff1 : sobelArrCombined;
 
 	    	display_4_images(quad1, quad2, quad3, quad4, PIXEL_ADDRESS_BASE_val, flipImg);
-	    }else{ //displaying 1 image
+	    }else if (key_flag == 0){ //displaying 1 image
 	    	int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrFull,38400,&rxArr,0); //SPI for full res
 
 	    	if(blurStatus == 1){
