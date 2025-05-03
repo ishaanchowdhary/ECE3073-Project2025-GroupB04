@@ -744,9 +744,12 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 
 int display_select(alt_16 yData) {
     int selectedDisp = 0;
-	if (yData >= -99 && yData < -20) selectedDisp = 1;
-	else if (yData > 20 && yData <= 60) selectedDisp = 2;
-	else if (yData > 60 && yData <= 90) selectedDisp = 3;
+    if (yData >= -30 && yData <= 30) {
+    	selectedDisp = 0;
+    }
+    else if (yData >= -110 && yData < -30) selectedDisp = 1;
+	else if (yData > 30 && yData <= 70) selectedDisp = 2;
+	else if (yData > 70 && yData <= 100) selectedDisp = 3;
     printf("Selected Display: %d\n", selectedDisp);
 	return selectedDisp;
 }
