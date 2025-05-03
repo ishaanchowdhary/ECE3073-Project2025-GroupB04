@@ -35,43 +35,43 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   9 .debug_aranges 00000ff8  00000000  00000000  00016ec0  2**3
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_info   0002578a  00000000  00000000  00017eb8  2**0
+ 10 .debug_info   0002580a  00000000  00000000  00017eb8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_abbrev 00009ba1  00000000  00000000  0003d642  2**0
+ 11 .debug_abbrev 00009ba1  00000000  00000000  0003d6c2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_line   0000c455  00000000  00000000  000471e3  2**0
+ 12 .debug_line   0000c454  00000000  00000000  00047263  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_frame  000024c4  00000000  00000000  00053638  2**2
+ 13 .debug_frame  000024c4  00000000  00000000  000536b8  2**2
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    0000403b  00000000  00000000  00055afc  2**0
+ 14 .debug_str    0000409d  00000000  00000000  00055b7c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_loc    0001a27c  00000000  00000000  00059b37  2**0
+ 15 .debug_loc    0001a27c  00000000  00000000  00059c19  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_alt_sim_info 00000030  00000000  00000000  00073db4  2**2
+ 16 .debug_alt_sim_info 00000030  00000000  00000000  00073e98  2**2
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_ranges 00001da8  00000000  00000000  00073de8  2**3
+ 17 .debug_ranges 00001da8  00000000  00000000  00073ec8  2**3
                   CONTENTS, READONLY, DEBUGGING
- 18 .thread_model 00000003  00000000  00000000  00079092  2**0
+ 18 .thread_model 00000003  00000000  00000000  00079172  2**0
                   CONTENTS, READONLY
- 19 .cpu          0000000b  00000000  00000000  00079095  2**0
+ 19 .cpu          0000000b  00000000  00000000  00079175  2**0
                   CONTENTS, READONLY
- 20 .qsys         00000001  00000000  00000000  000790a0  2**0
+ 20 .qsys         00000001  00000000  00000000  00079180  2**0
                   CONTENTS, READONLY
- 21 .simulation_enabled 00000001  00000000  00000000  000790a1  2**0
+ 21 .simulation_enabled 00000001  00000000  00000000  00079181  2**0
                   CONTENTS, READONLY
- 22 .stderr_dev   0000000b  00000000  00000000  000790a2  2**0
+ 22 .stderr_dev   0000000b  00000000  00000000  00079182  2**0
                   CONTENTS, READONLY
- 23 .stdin_dev    0000000b  00000000  00000000  000790ad  2**0
+ 23 .stdin_dev    0000000b  00000000  00000000  0007918d  2**0
                   CONTENTS, READONLY
- 24 .stdout_dev   0000000b  00000000  00000000  000790b8  2**0
+ 24 .stdout_dev   0000000b  00000000  00000000  00079198  2**0
                   CONTENTS, READONLY
- 25 .sopc_system_name 0000000e  00000000  00000000  000790c3  2**0
+ 25 .sopc_system_name 0000000e  00000000  00000000  000791a3  2**0
                   CONTENTS, READONLY
- 26 .quartus_project_dir 00000040  00000000  00000000  000790d1  2**0
+ 26 .quartus_project_dir 0000006c  00000000  00000000  000791b1  2**0
                   CONTENTS, READONLY
- 27 .jdi          000061c8  00000000  00000000  00079111  2**0
+ 27 .jdi          000061c8  00000000  00000000  0007921d  2**0
                   CONTENTS, READONLY
- 28 .sopcinfo     0007f056  00000000  00000000  0007f2d9  2**0
+ 28 .sopcinfo     0007f056  00000000  00000000  0007f3e5  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 04020000 l    d  .entry	00000000 .entry
@@ -260,7 +260,7 @@ SYMBOL TABLE:
 04029444 g     F .text	0000007c _setlocale_r
 040287e4 g     F .text	00000068 __sfmoreglue
 04031448 g     F .text	00000024 __malloc_unlock
-04021d7c g     F .text	00000068 initialise_key1_interrupt
+04021d74 g     F .text	00000068 initialise_key1_interrupt
 0402343c g     F .text	00000440 .hidden __divsf3
 0402a114 g     F .text	0000015c memmove
 04028964 g     F .text	00000018 _cleanup
@@ -276,11 +276,11 @@ SYMBOL TABLE:
 00001ec8 g     O .bss	00000004 alt_argv
 00009e58 g       *ABS*	00000000 _gp
 04023d34 g     F .text	000004e4 .hidden __subsf3
-04022b10 g     F .text	00000078 gyro_detect_tap
+04022b08 g     F .text	00000080 gyro_detect_tap
 00000c78 g     O .rwdata	00000180 alt_fd_list
 04032f54 g     F .text	00000090 alt_find_dev
 04029fcc g     F .text	00000148 memcpy
-04022380 g     F .text	000000c0 getPixelVal
+04022378 g     F .text	000000c0 getPixelVal
 04028634 g     F .text	0000000c _cleanup_r
 04030a84 g     F .text	000000dc .hidden __floatsidf
 04032abc g     F .text	0000007c alt_io_redirect
@@ -291,7 +291,7 @@ SYMBOL TABLE:
 0402b8f8 g     F .text	00000074 __fpclassifyd
 0402b178 g     F .text	000000a4 __ratio
 0402d148 g     F .text	0000001c __vfiprintf_internal
-04021cbc g     F .text	00000054 key_isr
+04021cb4 g     F .text	00000054 key_isr
 04031ee4 g     F .text	0000021c altera_avalon_jtag_uart_read
 04024500 g     F .text	00000030 _printf_r
 04020000 g       *ABS*	00000000 __alt_mem_onchip_memory2_0
@@ -342,7 +342,7 @@ SYMBOL TABLE:
 0402387c g     F .text	000000bc .hidden __gtsf2
 0000038c g       *ABS*	00000000 __ram_rodata_end
 04030d7c g     F .text	000000b0 fstat
-040228f8 g     F .text	00000218 Run_Time
+040228f0 g     F .text	00000218 Run_Time
 00001ea0 g     O .bss	00000004 key1Flag
 0402f8fc g     F .text	000000f4 .hidden __ledf2
 0402a9d8 g     F .text	00000140 __pow5mult
@@ -378,19 +378,19 @@ SYMBOL TABLE:
 04031d8c g     F .text	00000068 altera_avalon_jtag_uart_close
 0000038c g       *ABS*	00000000 __ram_rwdata_start
 00000000 g       *ABS*	00000000 __ram_rodata_start
-04021de4 g     F .text	00000154 combineSobelFilter
+04021ddc g     F .text	00000154 combineSobelFilter
 00001edc g     O .bss	00000028 __malloc_current_mallinfo
 0402b02c g     F .text	0000014c __d2b
 040318bc g     F .text	00000060 altera_avalon_jtag_uart_read_fd
 040330ec g     F .text	000000a4 alt_get_fd
-04021f38 g     F .text	00000448 display_4_images
+04021f30 g     F .text	00000448 display_4_images
 0402d280 g     F .text	00000054 _close_r
 0000038c g     O .rwdata	00000020 gyro_config
 0403326c g     F .text	0000007c memcmp
 0403197c g     F .text	00000050 altera_avalon_jtag_uart_close_fd
 00002004 g       *ABS*	00000000 __alt_stack_base
 040319cc g     F .text	00000054 altera_avalon_jtag_uart_ioctl_fd
-040227ac g     F .text	0000014c display_image_from_array_v2
+040227a4 g     F .text	0000014c display_image_from_array_v2
 040269a8 g     F .text	00000154 __swsetup_r
 0402eeb0 g     F .text	000008e8 .hidden __divdf3
 0402884c g     F .text	00000118 __sfp
@@ -407,20 +407,20 @@ SYMBOL TABLE:
 0402d2d4 g     F .text	000000c4 _calloc_r
 00001e98 g       *ABS*	00000000 __bss_start
 0402a270 g     F .text	00000128 memset
-04020290 g     F .text	000019e0 main
+04020290 g     F .text	000019d8 main
 00001ecc g     O .bss	00000004 alt_envp
 00001eb0 g     O .bss	00000004 __malloc_max_total_mem
 0403191c g     F .text	00000060 altera_avalon_jtag_uart_write_fd
 0402d954 g     F .text	00000018 __swbuf
 0402baf4 g     F .text	00000008 __sclose
-04021d10 g     F .text	0000006c key1_isr
+04021d08 g     F .text	0000006c key1_isr
 04000000 g       *ABS*	00000000 __alt_heap_limit
 0402d488 g     F .text	00000014 fclose
 04026cfc g     F .text	00001688 _dtoa_r
 040296dc g     F .text	0000080c _malloc_r
 0402dac8 g     F .text	00000030 __ascii_wctomb
 00001e84 g     O .rwdata	00000004 alt_errno
-04022650 g     F .text	0000015c display_image_from_array_v3
+04022648 g     F .text	0000015c display_image_from_array_v3
 040292bc g     F .text	000000c4 _fwalk
 00001e98 g     O .bss	00000004 tap_flag
 04022dc0 g     F .text	00000084 .hidden __divsi3
@@ -439,7 +439,7 @@ SYMBOL TABLE:
 0402387c g     F .text	000000bc .hidden __gesf2
 0402d220 g     F .text	00000060 _write_r
 040294fc g     F .text	00000018 setlocale
-04022440 g     F .text	00000210 convolve
+04022438 g     F .text	00000210 convolve
 00001e5c g     O .rwdata	00000004 _impure_ptr
 00001ec4 g     O .bss	00000004 alt_argc
 04028384 g     F .text	0000021c __sflush_r
@@ -449,7 +449,7 @@ SYMBOL TABLE:
 0402aebc g     F .text	00000064 __ulp
 040289b4 g     F .text	00000018 __fp_unlock_all
 00001e70 g     O .rwdata	00000008 alt_fs_list
-04021c70 g     F .text	0000004c gyro_isr
+04021c68 g     F .text	0000004c gyro_isr
 04020020 g       *ABS*	00000000 __ram_exceptions_start
 04029514 g     F .text	0000000c localeconv
 04030e2c g     F .text	00000050 alt_ic_isr_register
@@ -1003,7 +1003,7 @@ alt_after_alt_main:
 
 04020290 <main>:
 void Run_Time(uint32_t before, uint32_t after);
-int gyro_detect_tap(volatile int tap_flag, int *counter);
+void gyro_detect_tap(volatile int *tap_flag, int *counter);
 int display_select(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 
@@ -1279,7 +1279,7 @@ int main(void){
 
 	// Initialise the interrupt before entering into the loop
 	initialise_key1_interrupt();
- 4020648:	4021d7c0 	call	4021d7c <initialise_key1_interrupt>
+ 4020648:	4021d740 	call	4021d74 <initialise_key1_interrupt>
 
 	// Accelerometer Setup
 	alt_u8 gyro_data_in, gyro_data_out, regData;
@@ -1302,7 +1302,7 @@ int main(void){
  4020680:	1f07883a 	add	r3,r3,fp
  4020684:	18800005 	stb	r2,0(r3)
 	alt_16 xData, yData, zData;
-	alt_u8 isRes = 0xff;
+	alt_u8 isrRes = 0xff;
  4020688:	008000f4 	movhi	r2,3
  402068c:	10a902c4 	addi	r2,r2,-23541
  4020690:	013fff74 	movhi	r4,65533
@@ -1344,7 +1344,7 @@ int main(void){
 	alt_u8 readY = READ_Y_AXIS;
 	alt_u8 readZ = READ_Z_AXIS;
 	alt_16 xData, yData, zData;
-	alt_u8 isRes = 0xff;
+	alt_u8 isrRes = 0xff;
 
 	for (int i = 0; i < CONFIG_LENGTH; i += 2) {
  4020714:	01bfff74 	movhi	r6,65533
@@ -1365,7 +1365,7 @@ int main(void){
 		alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 2, gyro_config + i, 0, &gyro_data_out, 0);
 	}
 
-	void* context = (void *) &isRes;
+	void* context = (void *) &isrRes;
  4020750:	008000f4 	movhi	r2,3
  4020754:	10a902c4 	addi	r2,r2,-23541
  4020758:	013fff74 	movhi	r4,65533
@@ -1393,7 +1393,7 @@ int main(void){
  40207a4:	4711883a 	add	r8,r8,fp
  40207a8:	41c00017 	ldw	r7,0(r8)
  40207ac:	018100b4 	movhi	r6,1026
- 40207b0:	31871c04 	addi	r6,r6,7280
+ 40207b0:	31871a04 	addi	r6,r6,7272
  40207b4:	014000c4 	movi	r5,3
  40207b8:	0009883a 	mov	r4,zero
  40207bc:	4030e2c0 	call	4030e2c <alt_ic_isr_register>
@@ -1531,7 +1531,6 @@ int main(void){
  4020954:	42171704 	addi	r8,r8,23644
  4020958:	4711883a 	add	r8,r8,fp
  402095c:	40800015 	stw	r2,0(r8)
-
 			// Flags For Copying Displays
 			int flag1 = 0;
  4020960:	00bfff74 	movhi	r2,65533
@@ -1753,7 +1752,7 @@ int main(void){
  4020c54:	280d883a 	mov	r6,r5
  4020c58:	200b883a 	mov	r5,r4
  4020c5c:	1809883a 	mov	r4,r3
- 4020c60:	40224400 	call	4022440 <convolve>
+ 4020c60:	40224380 	call	4022438 <convolve>
  4020c64:	023fff74 	movhi	r8,65533
  4020c68:	42171804 	addi	r8,r8,23648
  4020c6c:	4711883a 	add	r8,r8,fp
@@ -1820,7 +1819,7 @@ int main(void){
  4020d44:	280d883a 	mov	r6,r5
  4020d48:	200b883a 	mov	r5,r4
  4020d4c:	1809883a 	mov	r4,r3
- 4020d50:	40224400 	call	4022440 <convolve>
+ 4020d50:	40224380 	call	4022438 <convolve>
 					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
  4020d54:	00b87714 	movui	r2,57820
  4020d58:	023fff74 	movhi	r8,65533
@@ -1844,7 +1843,7 @@ int main(void){
  4020da0:	280d883a 	mov	r6,r5
  4020da4:	200b883a 	mov	r5,r4
  4020da8:	1809883a 	mov	r4,r3
- 4020dac:	40224400 	call	4022440 <convolve>
+ 4020dac:	40224380 	call	4022438 <convolve>
 					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
  4020db0:	008000b4 	movhi	r2,2
  4020db4:	10838004 	addi	r2,r2,3584
@@ -1869,7 +1868,7 @@ int main(void){
  4020e00:	280d883a 	mov	r6,r5
  4020e04:	200b883a 	mov	r5,r4
  4020e08:	1809883a 	mov	r4,r3
- 4020e0c:	4021de40 	call	4021de4 <combineSobelFilter>
+ 4020e0c:	4021ddc0 	call	4021ddc <combineSobelFilter>
 					GlobalEdge = &sobelArrCombined;
  4020e10:	008000b4 	movhi	r2,2
  4020e14:	10838004 	addi	r2,r2,3584
@@ -1977,7 +1976,7 @@ int main(void){
  4020f70:	280d883a 	mov	r6,r5
  4020f74:	200b883a 	mov	r5,r4
  4020f78:	1809883a 	mov	r4,r3
- 4020f7c:	40224400 	call	4022440 <convolve>
+ 4020f7c:	40224380 	call	4022438 <convolve>
  4020f80:	00ffff74 	movhi	r3,65533
  4020f84:	18d71904 	addi	r3,r3,23652
  4020f88:	1f07883a 	add	r3,r3,fp
@@ -2044,7 +2043,7 @@ int main(void){
  4021060:	280d883a 	mov	r6,r5
  4021064:	200b883a 	mov	r5,r4
  4021068:	1809883a 	mov	r4,r3
- 402106c:	40224400 	call	4022440 <convolve>
+ 402106c:	40224380 	call	4022438 <convolve>
 					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
  4021070:	00b87714 	movui	r2,57820
  4021074:	00ffff74 	movhi	r3,65533
@@ -2068,7 +2067,7 @@ int main(void){
  40210bc:	280d883a 	mov	r6,r5
  40210c0:	200b883a 	mov	r5,r4
  40210c4:	1809883a 	mov	r4,r3
- 40210c8:	40224400 	call	4022440 <convolve>
+ 40210c8:	40224380 	call	4022438 <convolve>
 					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
  40210cc:	008000b4 	movhi	r2,2
  40210d0:	10838004 	addi	r2,r2,3584
@@ -2093,7 +2092,7 @@ int main(void){
  402111c:	280d883a 	mov	r6,r5
  4021120:	200b883a 	mov	r5,r4
  4021124:	1809883a 	mov	r4,r3
- 4021128:	4021de40 	call	4021de4 <combineSobelFilter>
+ 4021128:	4021ddc0 	call	4021ddc <combineSobelFilter>
 					GlobalEdge = &sobelArrCombined;
  402112c:	008000b4 	movhi	r2,2
  4021130:	10838004 	addi	r2,r2,3584
@@ -2200,7 +2199,7 @@ int main(void){
  402128c:	280d883a 	mov	r6,r5
  4021290:	200b883a 	mov	r5,r4
  4021294:	1809883a 	mov	r4,r3
- 4021298:	40224400 	call	4022440 <convolve>
+ 4021298:	40224380 	call	4022438 <convolve>
  402129c:	023fff74 	movhi	r8,65533
  40212a0:	42171a04 	addi	r8,r8,23656
  40212a4:	4711883a 	add	r8,r8,fp
@@ -2267,7 +2266,7 @@ int main(void){
  402137c:	280d883a 	mov	r6,r5
  4021380:	200b883a 	mov	r5,r4
  4021384:	1809883a 	mov	r4,r3
- 4021388:	40224400 	call	4022440 <convolve>
+ 4021388:	40224380 	call	4022438 <convolve>
 					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
  402138c:	00b87714 	movui	r2,57820
  4021390:	023fff74 	movhi	r8,65533
@@ -2291,7 +2290,7 @@ int main(void){
  40213d8:	280d883a 	mov	r6,r5
  40213dc:	200b883a 	mov	r5,r4
  40213e0:	1809883a 	mov	r4,r3
- 40213e4:	40224400 	call	4022440 <convolve>
+ 40213e4:	40224380 	call	4022438 <convolve>
 					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
  40213e8:	008000b4 	movhi	r2,2
  40213ec:	10838004 	addi	r2,r2,3584
@@ -2316,7 +2315,7 @@ int main(void){
  4021438:	280d883a 	mov	r6,r5
  402143c:	200b883a 	mov	r5,r4
  4021440:	1809883a 	mov	r4,r3
- 4021444:	4021de40 	call	4021de4 <combineSobelFilter>
+ 4021444:	4021ddc0 	call	4021ddc <combineSobelFilter>
 					GlobalEdge = &sobelArrCombined;
  4021448:	008000b4 	movhi	r2,2
  402144c:	10838004 	addi	r2,r2,3584
@@ -2423,7 +2422,7 @@ int main(void){
  40215a8:	280d883a 	mov	r6,r5
  40215ac:	200b883a 	mov	r5,r4
  40215b0:	1809883a 	mov	r4,r3
- 40215b4:	40224400 	call	4022440 <convolve>
+ 40215b4:	40224380 	call	4022438 <convolve>
  40215b8:	00ffff74 	movhi	r3,65533
  40215bc:	18d71b04 	addi	r3,r3,23660
  40215c0:	1f07883a 	add	r3,r3,fp
@@ -2490,7 +2489,7 @@ int main(void){
  4021698:	280d883a 	mov	r6,r5
  402169c:	200b883a 	mov	r5,r4
  40216a0:	1809883a 	mov	r4,r3
- 40216a4:	40224400 	call	4022440 <convolve>
+ 40216a4:	40224380 	call	4022438 <convolve>
 					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
  40216a8:	00b87714 	movui	r2,57820
  40216ac:	00ffff74 	movhi	r3,65533
@@ -2514,7 +2513,7 @@ int main(void){
  40216f4:	280d883a 	mov	r6,r5
  40216f8:	200b883a 	mov	r5,r4
  40216fc:	1809883a 	mov	r4,r3
- 4021700:	40224400 	call	4022440 <convolve>
+ 4021700:	40224380 	call	4022438 <convolve>
 					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
  4021704:	008000b4 	movhi	r2,2
  4021708:	10838004 	addi	r2,r2,3584
@@ -2539,7 +2538,7 @@ int main(void){
  4021754:	280d883a 	mov	r6,r5
  4021758:	200b883a 	mov	r5,r4
  402175c:	1809883a 	mov	r4,r3
- 4021760:	4021de40 	call	4021de4 <combineSobelFilter>
+ 4021760:	4021ddc0 	call	4021ddc <combineSobelFilter>
 					GlobalEdge = &sobelArrCombined;
  4021764:	008000b4 	movhi	r2,2
  4021768:	10838004 	addi	r2,r2,3584
@@ -2609,7 +2608,7 @@ int main(void){
  4021850:	18d6fc04 	addi	r3,r3,23536
  4021854:	1f07883a 	add	r3,r3,fp
  4021858:	19000017 	ldw	r4,0(r3)
- 402185c:	4021f380 	call	4021f38 <display_4_images>
+ 402185c:	4021f300 	call	4021f30 <display_4_images>
  4021860:	0000aa06 	br	4021b0c <main+0x187c>
 
 		} else {
@@ -2703,7 +2702,7 @@ int main(void){
  4021984:	280d883a 	mov	r6,r5
  4021988:	200b883a 	mov	r5,r4
  402198c:	1809883a 	mov	r4,r3
- 4021990:	40224400 	call	4022440 <convolve>
+ 4021990:	40224380 	call	4022438 <convolve>
  4021994:	023fff74 	movhi	r8,65533
  4021998:	42171d04 	addi	r8,r8,23668
  402199c:	4711883a 	add	r8,r8,fp
@@ -2736,7 +2735,7 @@ int main(void){
  4021a00:	280d883a 	mov	r6,r5
  4021a04:	200b883a 	mov	r5,r4
  4021a08:	1809883a 	mov	r4,r3
- 4021a0c:	40224400 	call	4022440 <convolve>
+ 4021a0c:	40224380 	call	4022438 <convolve>
 		    	convolve(&rxArr,&sobelArrY,sobelY,320,240);
  4021a10:	00b87714 	movui	r2,57820
  4021a14:	00ffff74 	movhi	r3,65533
@@ -2758,7 +2757,7 @@ int main(void){
  4021a54:	280d883a 	mov	r6,r5
  4021a58:	200b883a 	mov	r5,r4
  4021a5c:	1809883a 	mov	r4,r3
- 4021a60:	40224400 	call	4022440 <convolve>
+ 4021a60:	40224380 	call	4022438 <convolve>
 		    	combineSobelFilter(sobelArrX,sobelArrY,rxArr,320,240);
  4021a64:	00bfff74 	movhi	r2,65533
  4021a68:	10972084 	addi	r2,r2,23682
@@ -2780,7 +2779,7 @@ int main(void){
  4021aa8:	280d883a 	mov	r6,r5
  4021aac:	200b883a 	mov	r5,r4
  4021ab0:	1809883a 	mov	r4,r3
- 4021ab4:	4021de40 	call	4021de4 <combineSobelFilter>
+ 4021ab4:	4021ddc0 	call	4021ddc <combineSobelFilter>
 			}
 			printf("Single Image Mode: %d\n", single_mode);
  4021ab8:	023fff74 	movhi	r8,65533
@@ -2804,1548 +2803,1548 @@ int main(void){
  4021afc:	180d883a 	mov	r6,r3
  4021b00:	01405004 	movi	r5,320
  4021b04:	01003c04 	movi	r4,240
- 4021b08:	40226500 	call	4022650 <display_image_from_array_v3>
+ 4021b08:	40226480 	call	4022648 <display_image_from_array_v3>
 		}
 
 		// Detect double tap event and update counter
-		tap_flag = gyro_detect_tap(tap_flag, &counter);
- 4021b0c:	d0e01017 	ldw	r3,-32704(gp)
- 4021b10:	008000f4 	movhi	r2,3
- 4021b14:	10a90304 	addi	r2,r2,-23540
- 4021b18:	01bfff74 	movhi	r6,65533
- 4021b1c:	3196fc04 	addi	r6,r6,23536
- 4021b20:	370d883a 	add	r6,r6,fp
- 4021b24:	3085883a 	add	r2,r6,r2
- 4021b28:	100b883a 	mov	r5,r2
- 4021b2c:	1809883a 	mov	r4,r3
- 4021b30:	4022b100 	call	4022b10 <gyro_detect_tap>
- 4021b34:	d0a01015 	stw	r2,-32704(gp)
+		gyro_detect_tap(&tap_flag, &counter);
+ 4021b0c:	008000f4 	movhi	r2,3
+ 4021b10:	10a90304 	addi	r2,r2,-23540
+ 4021b14:	01bfff74 	movhi	r6,65533
+ 4021b18:	3196fc04 	addi	r6,r6,23536
+ 4021b1c:	370d883a 	add	r6,r6,fp
+ 4021b20:	3085883a 	add	r2,r6,r2
+ 4021b24:	100b883a 	mov	r5,r2
+ 4021b28:	d1201004 	addi	r4,gp,-32704
+ 4021b2c:	4022b080 	call	4022b08 <gyro_detect_tap>
 
 		// Print rotational data and collect rotation around y-axis
 		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
- 4021b38:	023fff74 	movhi	r8,65533
- 4021b3c:	42171104 	addi	r8,r8,23620
- 4021b40:	4711883a 	add	r8,r8,fp
- 4021b44:	41000003 	ldbu	r4,0(r8)
- 4021b48:	00bfff74 	movhi	r2,65533
- 4021b4c:	10971144 	addi	r2,r2,23621
- 4021b50:	1705883a 	add	r2,r2,fp
- 4021b54:	11400003 	ldbu	r5,0(r2)
- 4021b58:	00ffff74 	movhi	r3,65533
- 4021b5c:	18d71184 	addi	r3,r3,23622
- 4021b60:	1f07883a 	add	r3,r3,fp
- 4021b64:	19800003 	ldbu	r6,0(r3)
- 4021b68:	023fff74 	movhi	r8,65533
- 4021b6c:	42171e04 	addi	r8,r8,23672
- 4021b70:	4711883a 	add	r8,r8,fp
- 4021b74:	41c0000f 	ldh	r7,0(r8)
- 4021b78:	00ffff74 	movhi	r3,65533
- 4021b7c:	18d70204 	addi	r3,r3,23560
- 4021b80:	1f07883a 	add	r3,r3,fp
- 4021b84:	1880000f 	ldh	r2,0(r3)
- 4021b88:	023fff74 	movhi	r8,65533
- 4021b8c:	42171e84 	addi	r8,r8,23674
- 4021b90:	4711883a 	add	r8,r8,fp
- 4021b94:	40c0000f 	ldh	r3,0(r8)
- 4021b98:	d8c00115 	stw	r3,4(sp)
- 4021b9c:	d8800015 	stw	r2,0(sp)
- 4021ba0:	4022c340 	call	4022c34 <gyro_process_data>
- 4021ba4:	00ffff74 	movhi	r3,65533
- 4021ba8:	18d70204 	addi	r3,r3,23560
- 4021bac:	1f07883a 	add	r3,r3,fp
- 4021bb0:	1880000d 	sth	r2,0(r3)
+ 4021b30:	023fff74 	movhi	r8,65533
+ 4021b34:	42171104 	addi	r8,r8,23620
+ 4021b38:	4711883a 	add	r8,r8,fp
+ 4021b3c:	41000003 	ldbu	r4,0(r8)
+ 4021b40:	00bfff74 	movhi	r2,65533
+ 4021b44:	10971144 	addi	r2,r2,23621
+ 4021b48:	1705883a 	add	r2,r2,fp
+ 4021b4c:	11400003 	ldbu	r5,0(r2)
+ 4021b50:	00ffff74 	movhi	r3,65533
+ 4021b54:	18d71184 	addi	r3,r3,23622
+ 4021b58:	1f07883a 	add	r3,r3,fp
+ 4021b5c:	19800003 	ldbu	r6,0(r3)
+ 4021b60:	023fff74 	movhi	r8,65533
+ 4021b64:	42171e04 	addi	r8,r8,23672
+ 4021b68:	4711883a 	add	r8,r8,fp
+ 4021b6c:	41c0000f 	ldh	r7,0(r8)
+ 4021b70:	00ffff74 	movhi	r3,65533
+ 4021b74:	18d70204 	addi	r3,r3,23560
+ 4021b78:	1f07883a 	add	r3,r3,fp
+ 4021b7c:	1880000f 	ldh	r2,0(r3)
+ 4021b80:	023fff74 	movhi	r8,65533
+ 4021b84:	42171e84 	addi	r8,r8,23674
+ 4021b88:	4711883a 	add	r8,r8,fp
+ 4021b8c:	40c0000f 	ldh	r3,0(r8)
+ 4021b90:	d8c00115 	stw	r3,4(sp)
+ 4021b94:	d8800015 	stw	r2,0(sp)
+ 4021b98:	4022c340 	call	4022c34 <gyro_process_data>
+ 4021b9c:	00ffff74 	movhi	r3,65533
+ 4021ba0:	18d70204 	addi	r3,r3,23560
+ 4021ba4:	1f07883a 	add	r3,r3,fp
+ 4021ba8:	1880000d 	sth	r2,0(r3)
 
-		gyro_data_in = INT_SOURCE | 0x80;
- 4021bb4:	008000f4 	movhi	r2,3
- 4021bb8:	10a90204 	addi	r2,r2,-23544
- 4021bbc:	013fff74 	movhi	r4,65533
- 4021bc0:	2116fc04 	addi	r4,r4,23536
- 4021bc4:	2709883a 	add	r4,r4,fp
- 4021bc8:	2085883a 	add	r2,r4,r2
- 4021bcc:	00ffec04 	movi	r3,-80
- 4021bd0:	10c00005 	stb	r3,0(r2)
-	    alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
- 4021bd4:	008000f4 	movhi	r2,3
- 4021bd8:	10a90204 	addi	r2,r2,-23544
- 4021bdc:	01bfff74 	movhi	r6,65533
- 4021be0:	3196fc04 	addi	r6,r6,23536
- 4021be4:	370d883a 	add	r6,r6,fp
- 4021be8:	3087883a 	add	r3,r6,r2
- 4021bec:	d8000215 	stw	zero,8(sp)
- 4021bf0:	008000f4 	movhi	r2,3
- 4021bf4:	10a90284 	addi	r2,r2,-23542
- 4021bf8:	023fff74 	movhi	r8,65533
- 4021bfc:	4216fc04 	addi	r8,r8,23536
- 4021c00:	4711883a 	add	r8,r8,fp
- 4021c04:	4085883a 	add	r2,r8,r2
- 4021c08:	d8800115 	stw	r2,4(sp)
- 4021c0c:	00800044 	movi	r2,1
- 4021c10:	d8800015 	stw	r2,0(sp)
- 4021c14:	180f883a 	mov	r7,r3
- 4021c18:	01800044 	movi	r6,1
- 4021c1c:	01400044 	movi	r5,1
- 4021c20:	01010134 	movhi	r4,1028
- 4021c24:	21040004 	addi	r4,r4,4096
- 4021c28:	40323240 	call	4032324 <alt_avalon_spi_command>
 
 		// Run time
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
- 4021c2c:	00810134 	movhi	r2,1028
- 4021c30:	10841404 	addi	r2,r2,4176
- 4021c34:	10800037 	ldwio	r2,0(r2)
- 4021c38:	00ffff74 	movhi	r3,65533
- 4021c3c:	18d71f04 	addi	r3,r3,23676
- 4021c40:	1f07883a 	add	r3,r3,fp
- 4021c44:	18800015 	stw	r2,0(r3)
+ 4021bac:	00810134 	movhi	r2,1028
+ 4021bb0:	10841404 	addi	r2,r2,4176
+ 4021bb4:	10800037 	ldwio	r2,0(r2)
+ 4021bb8:	013fff74 	movhi	r4,65533
+ 4021bbc:	21171f04 	addi	r4,r4,23676
+ 4021bc0:	2709883a 	add	r4,r4,fp
+ 4021bc4:	20800015 	stw	r2,0(r4)
 	    Run_Time(start, end); // Call Function to Display Benchmarking
- 4021c48:	013fff74 	movhi	r4,65533
- 4021c4c:	21171f04 	addi	r4,r4,23676
- 4021c50:	2709883a 	add	r4,r4,fp
- 4021c54:	21400017 	ldw	r5,0(r4)
- 4021c58:	01bfff74 	movhi	r6,65533
- 4021c5c:	31971604 	addi	r6,r6,23640
- 4021c60:	370d883a 	add	r6,r6,fp
- 4021c64:	31000017 	ldw	r4,0(r6)
- 4021c68:	40228f80 	call	40228f8 <Run_Time>
+ 4021bc8:	01bfff74 	movhi	r6,65533
+ 4021bcc:	31971f04 	addi	r6,r6,23676
+ 4021bd0:	370d883a 	add	r6,r6,fp
+ 4021bd4:	31400017 	ldw	r5,0(r6)
+ 4021bd8:	023fff74 	movhi	r8,65533
+ 4021bdc:	42171604 	addi	r8,r8,23640
+ 4021be0:	4711883a 	add	r8,r8,fp
+ 4021be4:	41000017 	ldw	r4,0(r8)
+ 4021be8:	40228f00 	call	40228f0 <Run_Time>
+		gyro_data_in = INT_SOURCE | 0x80;
+ 4021bec:	008000f4 	movhi	r2,3
+ 4021bf0:	10a90204 	addi	r2,r2,-23544
+ 4021bf4:	00ffff74 	movhi	r3,65533
+ 4021bf8:	18d6fc04 	addi	r3,r3,23536
+ 4021bfc:	1f07883a 	add	r3,r3,fp
+ 4021c00:	1885883a 	add	r2,r3,r2
+ 4021c04:	00ffec04 	movi	r3,-80
+ 4021c08:	10c00005 	stb	r3,0(r2)
+		alt_avalon_spi_command(SPI_CONTROLLER_BASE, 1, 1, &gyro_data_in, 1, &regData, 0x0);
+ 4021c0c:	008000f4 	movhi	r2,3
+ 4021c10:	10a90204 	addi	r2,r2,-23544
+ 4021c14:	013fff74 	movhi	r4,65533
+ 4021c18:	2116fc04 	addi	r4,r4,23536
+ 4021c1c:	2709883a 	add	r4,r4,fp
+ 4021c20:	2087883a 	add	r3,r4,r2
+ 4021c24:	d8000215 	stw	zero,8(sp)
+ 4021c28:	008000f4 	movhi	r2,3
+ 4021c2c:	10a90284 	addi	r2,r2,-23542
+ 4021c30:	01bfff74 	movhi	r6,65533
+ 4021c34:	3196fc04 	addi	r6,r6,23536
+ 4021c38:	370d883a 	add	r6,r6,fp
+ 4021c3c:	3085883a 	add	r2,r6,r2
+ 4021c40:	d8800115 	stw	r2,4(sp)
+ 4021c44:	00800044 	movi	r2,1
+ 4021c48:	d8800015 	stw	r2,0(sp)
+ 4021c4c:	180f883a 	mov	r7,r3
+ 4021c50:	01800044 	movi	r6,1
+ 4021c54:	01400044 	movi	r5,1
+ 4021c58:	01010134 	movhi	r4,1028
+ 4021c5c:	21040004 	addi	r4,r4,4096
+ 4021c60:	40323240 	call	4032324 <alt_avalon_spi_command>
 }
- 4021c6c:	003af706 	br	402084c <__flash_rwdata_start+0xfffecf0c>
+ 4021c64:	003af906 	br	402084c <__flash_rwdata_start+0xfffecf0c>
 
-04021c70 <gyro_isr>:
+04021c68 <gyro_isr>:
 }
 
 // Interrupt service routine (ISR) for accelerometer interrupt
 void gyro_isr(void * context) {
- 4021c70:	defffe04 	addi	sp,sp,-8
- 4021c74:	df000115 	stw	fp,4(sp)
- 4021c78:	df000104 	addi	fp,sp,4
- 4021c7c:	e13fff15 	stw	r4,-4(fp)
+ 4021c68:	defffe04 	addi	sp,sp,-8
+ 4021c6c:	df000115 	stw	fp,4(sp)
+ 4021c70:	df000104 	addi	fp,sp,4
+ 4021c74:	e13fff15 	stw	r4,-4(fp)
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0); //clear interrupt
- 4021c80:	0007883a 	mov	r3,zero
- 4021c84:	00810134 	movhi	r2,1028
- 4021c88:	10841304 	addi	r2,r2,4172
- 4021c8c:	10c00035 	stwio	r3,0(r2)
+ 4021c78:	0007883a 	mov	r3,zero
+ 4021c7c:	00810134 	movhi	r2,1028
+ 4021c80:	10841304 	addi	r2,r2,4172
+ 4021c84:	10c00035 	stwio	r3,0(r2)
 	IOWR(GYRO_INT_BASE, 3, 0);
- 4021c90:	0007883a 	mov	r3,zero
- 4021c94:	00810134 	movhi	r2,1028
- 4021c98:	10841304 	addi	r2,r2,4172
- 4021c9c:	10c00035 	stwio	r3,0(r2)
+ 4021c88:	0007883a 	mov	r3,zero
+ 4021c8c:	00810134 	movhi	r2,1028
+ 4021c90:	10841304 	addi	r2,r2,4172
+ 4021c94:	10c00035 	stwio	r3,0(r2)
 	tap_flag = 1; //set the tap flag when an interrupt is triggered
- 4021ca0:	00800044 	movi	r2,1
- 4021ca4:	d0a01015 	stw	r2,-32704(gp)
+ 4021c98:	00800044 	movi	r2,1
+ 4021c9c:	d0a01015 	stw	r2,-32704(gp)
 }
- 4021ca8:	0001883a 	nop
- 4021cac:	e037883a 	mov	sp,fp
- 4021cb0:	df000017 	ldw	fp,0(sp)
- 4021cb4:	dec00104 	addi	sp,sp,4
- 4021cb8:	f800283a 	ret
+ 4021ca0:	0001883a 	nop
+ 4021ca4:	e037883a 	mov	sp,fp
+ 4021ca8:	df000017 	ldw	fp,0(sp)
+ 4021cac:	dec00104 	addi	sp,sp,4
+ 4021cb0:	f800283a 	ret
 
-04021cbc <key_isr>:
+04021cb4 <key_isr>:
 
 // Interrupt service routine (ISR) for key interrupt
 void key_isr(void * context)  {
- 4021cbc:	defffe04 	addi	sp,sp,-8
- 4021cc0:	df000115 	stw	fp,4(sp)
- 4021cc4:	df000104 	addi	fp,sp,4
- 4021cc8:	e13fff15 	stw	r4,-4(fp)
+ 4021cb4:	defffe04 	addi	sp,sp,-8
+ 4021cb8:	df000115 	stw	fp,4(sp)
+ 4021cbc:	df000104 	addi	fp,sp,4
+ 4021cc0:	e13fff15 	stw	r4,-4(fp)
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
- 4021ccc:	0007883a 	mov	r3,zero
- 4021cd0:	00810134 	movhi	r2,1028
- 4021cd4:	10842f04 	addi	r2,r2,4284
- 4021cd8:	10c00035 	stwio	r3,0(r2)
+ 4021cc4:	0007883a 	mov	r3,zero
+ 4021cc8:	00810134 	movhi	r2,1028
+ 4021ccc:	10842f04 	addi	r2,r2,4284
+ 4021cd0:	10c00035 	stwio	r3,0(r2)
 	IOWR(KEY10_BASE, 3, 0);
- 4021cdc:	0007883a 	mov	r3,zero
- 4021ce0:	00810134 	movhi	r2,1028
- 4021ce4:	10842f04 	addi	r2,r2,4284
- 4021ce8:	10c00035 	stwio	r3,0(r2)
+ 4021cd4:	0007883a 	mov	r3,zero
+ 4021cd8:	00810134 	movhi	r2,1028
+ 4021cdc:	10842f04 	addi	r2,r2,4284
+ 4021ce0:	10c00035 	stwio	r3,0(r2)
 	key_flag = 1 - key_flag;
- 4021cec:	d0a01117 	ldw	r2,-32700(gp)
- 4021cf0:	00c00044 	movi	r3,1
- 4021cf4:	1885c83a 	sub	r2,r3,r2
- 4021cf8:	d0a01115 	stw	r2,-32700(gp)
+ 4021ce4:	d0a01117 	ldw	r2,-32700(gp)
+ 4021ce8:	00c00044 	movi	r3,1
+ 4021cec:	1885c83a 	sub	r2,r3,r2
+ 4021cf0:	d0a01115 	stw	r2,-32700(gp)
 }
- 4021cfc:	0001883a 	nop
- 4021d00:	e037883a 	mov	sp,fp
- 4021d04:	df000017 	ldw	fp,0(sp)
- 4021d08:	dec00104 	addi	sp,sp,4
- 4021d0c:	f800283a 	ret
+ 4021cf4:	0001883a 	nop
+ 4021cf8:	e037883a 	mov	sp,fp
+ 4021cfc:	df000017 	ldw	fp,0(sp)
+ 4021d00:	dec00104 	addi	sp,sp,4
+ 4021d04:	f800283a 	ret
 
-04021d10 <key1_isr>:
+04021d08 <key1_isr>:
 
-void key1_isr(void* context, alt_u32 id) {
- 4021d10:	defffc04 	addi	sp,sp,-16
- 4021d14:	df000315 	stw	fp,12(sp)
- 4021d18:	df000304 	addi	fp,sp,12
- 4021d1c:	e13ffe15 	stw	r4,-8(fp)
- 4021d20:	e17fff15 	stw	r5,-4(fp)
-    volatile int* edgeCapturePtr = (volatile int*) context;
- 4021d24:	e0bffe17 	ldw	r2,-8(fp)
- 4021d28:	e0bffd15 	stw	r2,-12(fp)
+void key1_isr(void* context1, alt_u32 id) {
+ 4021d08:	defffc04 	addi	sp,sp,-16
+ 4021d0c:	df000315 	stw	fp,12(sp)
+ 4021d10:	df000304 	addi	fp,sp,12
+ 4021d14:	e13ffe15 	stw	r4,-8(fp)
+ 4021d18:	e17fff15 	stw	r5,-4(fp)
+    volatile int* edgeCapturePtr = (volatile int*) context1;
+ 4021d1c:	e0bffe17 	ldw	r2,-8(fp)
+ 4021d20:	e0bffd15 	stw	r2,-12(fp)
 
     // Read the edge capture register
     *edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
- 4021d2c:	00810134 	movhi	r2,1028
- 4021d30:	10842f04 	addi	r2,r2,4284
- 4021d34:	10c00037 	ldwio	r3,0(r2)
- 4021d38:	e0bffd17 	ldw	r2,-12(fp)
- 4021d3c:	10c00015 	stw	r3,0(r2)
+ 4021d24:	00810134 	movhi	r2,1028
+ 4021d28:	10842f04 	addi	r2,r2,4284
+ 4021d2c:	10c00037 	ldwio	r3,0(r2)
+ 4021d30:	e0bffd17 	ldw	r2,-12(fp)
+ 4021d34:	10c00015 	stw	r3,0(r2)
 
 	// Check if interrupt occured
 	if(*edgeCapturePtr & 0x2){
- 4021d40:	e0bffd17 	ldw	r2,-12(fp)
- 4021d44:	10800017 	ldw	r2,0(r2)
- 4021d48:	1080008c 	andi	r2,r2,2
- 4021d4c:	10000226 	beq	r2,zero,4021d58 <key1_isr+0x48>
+ 4021d38:	e0bffd17 	ldw	r2,-12(fp)
+ 4021d3c:	10800017 	ldw	r2,0(r2)
+ 4021d40:	1080008c 	andi	r2,r2,2
+ 4021d44:	10000226 	beq	r2,zero,4021d50 <key1_isr+0x48>
 		key1Flag = 0x1;
- 4021d50:	00800044 	movi	r2,1
- 4021d54:	d0a01215 	stw	r2,-32696(gp)
+ 4021d48:	00800044 	movi	r2,1
+ 4021d4c:	d0a01215 	stw	r2,-32696(gp)
 }
     // Clear the edge capture register to enable future interrupts
     IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
- 4021d58:	0007883a 	mov	r3,zero
- 4021d5c:	00810134 	movhi	r2,1028
- 4021d60:	10842f04 	addi	r2,r2,4284
- 4021d64:	10c00035 	stwio	r3,0(r2)
+ 4021d50:	0007883a 	mov	r3,zero
+ 4021d54:	00810134 	movhi	r2,1028
+ 4021d58:	10842f04 	addi	r2,r2,4284
+ 4021d5c:	10c00035 	stwio	r3,0(r2)
 }
- 4021d68:	0001883a 	nop
- 4021d6c:	e037883a 	mov	sp,fp
- 4021d70:	df000017 	ldw	fp,0(sp)
- 4021d74:	dec00104 	addi	sp,sp,4
- 4021d78:	f800283a 	ret
+ 4021d60:	0001883a 	nop
+ 4021d64:	e037883a 	mov	sp,fp
+ 4021d68:	df000017 	ldw	fp,0(sp)
+ 4021d6c:	dec00104 	addi	sp,sp,4
+ 4021d70:	f800283a 	ret
 
-04021d7c <initialise_key1_interrupt>:
+04021d74 <initialise_key1_interrupt>:
 
 
 void initialise_key1_interrupt() {
- 4021d7c:	defffd04 	addi	sp,sp,-12
- 4021d80:	dfc00215 	stw	ra,8(sp)
- 4021d84:	df000115 	stw	fp,4(sp)
- 4021d88:	df000104 	addi	fp,sp,4
+ 4021d74:	defffd04 	addi	sp,sp,-12
+ 4021d78:	dfc00215 	stw	ra,8(sp)
+ 4021d7c:	df000115 	stw	fp,4(sp)
+ 4021d80:	df000104 	addi	fp,sp,4
     // Clear any pending interrupts
     IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
- 4021d8c:	0007883a 	mov	r3,zero
- 4021d90:	00810134 	movhi	r2,1028
- 4021d94:	10842f04 	addi	r2,r2,4284
- 4021d98:	10c00035 	stwio	r3,0(r2)
+ 4021d84:	0007883a 	mov	r3,zero
+ 4021d88:	00810134 	movhi	r2,1028
+ 4021d8c:	10842f04 	addi	r2,r2,4284
+ 4021d90:	10c00035 	stwio	r3,0(r2)
 
     // Enable interrupts for KEY1 (bit 1)
     IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x4);
- 4021d9c:	00c00104 	movi	r3,4
- 4021da0:	00810134 	movhi	r2,1028
- 4021da4:	10842e04 	addi	r2,r2,4280
- 4021da8:	10c00035 	stwio	r3,0(r2)
+ 4021d94:	00c00104 	movi	r3,4
+ 4021d98:	00810134 	movhi	r2,1028
+ 4021d9c:	10842e04 	addi	r2,r2,4280
+ 4021da0:	10c00035 	stwio	r3,0(r2)
 
     // Register ISR
     alt_ic_isr_register(
- 4021dac:	d8000015 	stw	zero,0(sp)
- 4021db0:	01c10134 	movhi	r7,1028
- 4021db4:	39c42c04 	addi	r7,r7,4272
- 4021db8:	018100b4 	movhi	r6,1026
- 4021dbc:	31874404 	addi	r6,r6,7440
- 4021dc0:	01400104 	movi	r5,4
- 4021dc4:	0009883a 	mov	r4,zero
- 4021dc8:	4030e2c0 	call	4030e2c <alt_ic_isr_register>
+ 4021da4:	d8000015 	stw	zero,0(sp)
+ 4021da8:	01c10134 	movhi	r7,1028
+ 4021dac:	39c42c04 	addi	r7,r7,4272
+ 4021db0:	018100b4 	movhi	r6,1026
+ 4021db4:	31874204 	addi	r6,r6,7432
+ 4021db8:	01400104 	movi	r5,4
+ 4021dbc:	0009883a 	mov	r4,zero
+ 4021dc0:	4030e2c0 	call	4030e2c <alt_ic_isr_register>
 		KEY10_IRQ,
 		key1_isr,
 		(void*) KEY10_BASE,
 		0
 	);
 }
- 4021dcc:	0001883a 	nop
- 4021dd0:	e037883a 	mov	sp,fp
- 4021dd4:	dfc00117 	ldw	ra,4(sp)
- 4021dd8:	df000017 	ldw	fp,0(sp)
- 4021ddc:	dec00204 	addi	sp,sp,8
- 4021de0:	f800283a 	ret
+ 4021dc4:	0001883a 	nop
+ 4021dc8:	e037883a 	mov	sp,fp
+ 4021dcc:	dfc00117 	ldw	ra,4(sp)
+ 4021dd0:	df000017 	ldw	fp,0(sp)
+ 4021dd4:	dec00204 	addi	sp,sp,8
+ 4021dd8:	f800283a 	ret
 
-04021de4 <combineSobelFilter>:
+04021ddc <combineSobelFilter>:
 
 void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH) {
- 4021de4:	defff404 	addi	sp,sp,-48
- 4021de8:	df000b15 	stw	fp,44(sp)
- 4021dec:	df000b04 	addi	fp,sp,44
- 4021df0:	e13ffc15 	stw	r4,-16(fp)
- 4021df4:	e17ffd15 	stw	r5,-12(fp)
- 4021df8:	e1bffe15 	stw	r6,-8(fp)
- 4021dfc:	e1ffff15 	stw	r7,-4(fp)
+ 4021ddc:	defff404 	addi	sp,sp,-48
+ 4021de0:	df000b15 	stw	fp,44(sp)
+ 4021de4:	df000b04 	addi	fp,sp,44
+ 4021de8:	e13ffc15 	stw	r4,-16(fp)
+ 4021dec:	e17ffd15 	stw	r5,-12(fp)
+ 4021df0:	e1bffe15 	stw	r6,-8(fp)
+ 4021df4:	e1ffff15 	stw	r7,-4(fp)
 
 	int numPixel = imgH*imgW;
- 4021e00:	e0c00117 	ldw	r3,4(fp)
- 4021e04:	e0bfff17 	ldw	r2,-4(fp)
- 4021e08:	1885383a 	mul	r2,r3,r2
- 4021e0c:	e0bff915 	stw	r2,-28(fp)
+ 4021df8:	e0c00117 	ldw	r3,4(fp)
+ 4021dfc:	e0bfff17 	ldw	r2,-4(fp)
+ 4021e00:	1885383a 	mul	r2,r3,r2
+ 4021e04:	e0bff915 	stw	r2,-28(fp)
 	int threshold = 11;
- 4021e10:	008002c4 	movi	r2,11
- 4021e14:	e0bffa15 	stw	r2,-24(fp)
+ 4021e08:	008002c4 	movi	r2,11
+ 4021e0c:	e0bffa15 	stw	r2,-24(fp)
 	int pixelIdx = 0;
- 4021e18:	e03ff515 	stw	zero,-44(fp)
+ 4021e10:	e03ff515 	stw	zero,-44(fp)
 	uint8_t packedPixelVal = 0;
- 4021e1c:	e03ffb05 	stb	zero,-20(fp)
+ 4021e14:	e03ffb05 	stb	zero,-20(fp)
 	for(int i=0; i< numPixel; i = i+1){
- 4021e20:	e03ff615 	stw	zero,-40(fp)
- 4021e24:	00003c06 	br	4021f18 <combineSobelFilter+0x134>
+ 4021e18:	e03ff615 	stw	zero,-40(fp)
+ 4021e1c:	00003c06 	br	4021f10 <combineSobelFilter+0x134>
 		//pixel 1
 		int pixelValue1 = ((sobelX[pixelIdx] & 0xF0)>>4) + ((sobelY[pixelIdx] & 0xF0)>>4);//combining x,y value after conv
- 4021e28:	e0bff517 	ldw	r2,-44(fp)
- 4021e2c:	e0fffc17 	ldw	r3,-16(fp)
- 4021e30:	1885883a 	add	r2,r3,r2
- 4021e34:	10800003 	ldbu	r2,0(r2)
- 4021e38:	10803fcc 	andi	r2,r2,255
- 4021e3c:	1004d13a 	srli	r2,r2,4
- 4021e40:	10c03fcc 	andi	r3,r2,255
- 4021e44:	e0bff517 	ldw	r2,-44(fp)
- 4021e48:	e13ffd17 	ldw	r4,-12(fp)
- 4021e4c:	2085883a 	add	r2,r4,r2
- 4021e50:	10800003 	ldbu	r2,0(r2)
+ 4021e20:	e0bff517 	ldw	r2,-44(fp)
+ 4021e24:	e0fffc17 	ldw	r3,-16(fp)
+ 4021e28:	1885883a 	add	r2,r3,r2
+ 4021e2c:	10800003 	ldbu	r2,0(r2)
+ 4021e30:	10803fcc 	andi	r2,r2,255
+ 4021e34:	1004d13a 	srli	r2,r2,4
+ 4021e38:	10c03fcc 	andi	r3,r2,255
+ 4021e3c:	e0bff517 	ldw	r2,-44(fp)
+ 4021e40:	e13ffd17 	ldw	r4,-12(fp)
+ 4021e44:	2085883a 	add	r2,r4,r2
+ 4021e48:	10800003 	ldbu	r2,0(r2)
+ 4021e4c:	10803fcc 	andi	r2,r2,255
+ 4021e50:	1004d13a 	srli	r2,r2,4
  4021e54:	10803fcc 	andi	r2,r2,255
- 4021e58:	1004d13a 	srli	r2,r2,4
- 4021e5c:	10803fcc 	andi	r2,r2,255
- 4021e60:	1885883a 	add	r2,r3,r2
- 4021e64:	e0bff715 	stw	r2,-36(fp)
+ 4021e58:	1885883a 	add	r2,r3,r2
+ 4021e5c:	e0bff715 	stw	r2,-36(fp)
 
 		if (pixelValue1 < threshold){
- 4021e68:	e0fff717 	ldw	r3,-36(fp)
- 4021e6c:	e0bffa17 	ldw	r2,-24(fp)
- 4021e70:	1880010e 	bge	r3,r2,4021e78 <combineSobelFilter+0x94>
+ 4021e60:	e0fff717 	ldw	r3,-36(fp)
+ 4021e64:	e0bffa17 	ldw	r2,-24(fp)
+ 4021e68:	1880010e 	bge	r3,r2,4021e70 <combineSobelFilter+0x94>
 			pixelValue1 = 0; //blacking out pixel value if they are smaller than threshold
- 4021e74:	e03ff715 	stw	zero,-36(fp)
+ 4021e6c:	e03ff715 	stw	zero,-36(fp)
 		}
 		//pixel 2
 		int pixelValue2 = ((sobelX[pixelIdx] & 0x0F))+((sobelY[pixelIdx] & 0x0F));
- 4021e78:	e0bff517 	ldw	r2,-44(fp)
- 4021e7c:	e0fffc17 	ldw	r3,-16(fp)
- 4021e80:	1885883a 	add	r2,r3,r2
- 4021e84:	10800003 	ldbu	r2,0(r2)
- 4021e88:	10803fcc 	andi	r2,r2,255
- 4021e8c:	10c003cc 	andi	r3,r2,15
- 4021e90:	e0bff517 	ldw	r2,-44(fp)
- 4021e94:	e13ffd17 	ldw	r4,-12(fp)
- 4021e98:	2085883a 	add	r2,r4,r2
- 4021e9c:	10800003 	ldbu	r2,0(r2)
- 4021ea0:	10803fcc 	andi	r2,r2,255
- 4021ea4:	108003cc 	andi	r2,r2,15
- 4021ea8:	1885883a 	add	r2,r3,r2
- 4021eac:	e0bff815 	stw	r2,-32(fp)
+ 4021e70:	e0bff517 	ldw	r2,-44(fp)
+ 4021e74:	e0fffc17 	ldw	r3,-16(fp)
+ 4021e78:	1885883a 	add	r2,r3,r2
+ 4021e7c:	10800003 	ldbu	r2,0(r2)
+ 4021e80:	10803fcc 	andi	r2,r2,255
+ 4021e84:	10c003cc 	andi	r3,r2,15
+ 4021e88:	e0bff517 	ldw	r2,-44(fp)
+ 4021e8c:	e13ffd17 	ldw	r4,-12(fp)
+ 4021e90:	2085883a 	add	r2,r4,r2
+ 4021e94:	10800003 	ldbu	r2,0(r2)
+ 4021e98:	10803fcc 	andi	r2,r2,255
+ 4021e9c:	108003cc 	andi	r2,r2,15
+ 4021ea0:	1885883a 	add	r2,r3,r2
+ 4021ea4:	e0bff815 	stw	r2,-32(fp)
 
 		if (pixelValue2 < threshold){
- 4021eb0:	e0fff817 	ldw	r3,-32(fp)
- 4021eb4:	e0bffa17 	ldw	r2,-24(fp)
- 4021eb8:	1880010e 	bge	r3,r2,4021ec0 <combineSobelFilter+0xdc>
+ 4021ea8:	e0fff817 	ldw	r3,-32(fp)
+ 4021eac:	e0bffa17 	ldw	r2,-24(fp)
+ 4021eb0:	1880010e 	bge	r3,r2,4021eb8 <combineSobelFilter+0xdc>
 			pixelValue2 = 0;
- 4021ebc:	e03ff815 	stw	zero,-32(fp)
+ 4021eb4:	e03ff815 	stw	zero,-32(fp)
 		}
 
 		packedPixelVal = (((uint8_t)pixelValue2)|0xF0) & (((uint8_t)pixelValue1<<4) | 0x0F); //packing 2 pixel value into 1 byte
- 4021ec0:	e0bff817 	ldw	r2,-32(fp)
- 4021ec4:	1007883a 	mov	r3,r2
- 4021ec8:	00bffc04 	movi	r2,-16
- 4021ecc:	1884b03a 	or	r2,r3,r2
- 4021ed0:	1007883a 	mov	r3,r2
- 4021ed4:	e0bff717 	ldw	r2,-36(fp)
- 4021ed8:	10803fcc 	andi	r2,r2,255
- 4021edc:	1004913a 	slli	r2,r2,4
- 4021ee0:	108003d4 	ori	r2,r2,15
- 4021ee4:	1884703a 	and	r2,r3,r2
- 4021ee8:	e0bffb05 	stb	r2,-20(fp)
+ 4021eb8:	e0bff817 	ldw	r2,-32(fp)
+ 4021ebc:	1007883a 	mov	r3,r2
+ 4021ec0:	00bffc04 	movi	r2,-16
+ 4021ec4:	1884b03a 	or	r2,r3,r2
+ 4021ec8:	1007883a 	mov	r3,r2
+ 4021ecc:	e0bff717 	ldw	r2,-36(fp)
+ 4021ed0:	10803fcc 	andi	r2,r2,255
+ 4021ed4:	1004913a 	slli	r2,r2,4
+ 4021ed8:	108003d4 	ori	r2,r2,15
+ 4021edc:	1884703a 	and	r2,r3,r2
+ 4021ee0:	e0bffb05 	stb	r2,-20(fp)
 		resultImg[i] = packedPixelVal;
- 4021eec:	e0bff617 	ldw	r2,-40(fp)
- 4021ef0:	e0fffe17 	ldw	r3,-8(fp)
- 4021ef4:	1885883a 	add	r2,r3,r2
- 4021ef8:	e0fffb03 	ldbu	r3,-20(fp)
- 4021efc:	10c00005 	stb	r3,0(r2)
+ 4021ee4:	e0bff617 	ldw	r2,-40(fp)
+ 4021ee8:	e0fffe17 	ldw	r3,-8(fp)
+ 4021eec:	1885883a 	add	r2,r3,r2
+ 4021ef0:	e0fffb03 	ldbu	r3,-20(fp)
+ 4021ef4:	10c00005 	stb	r3,0(r2)
 
 		pixelIdx = pixelIdx + 1;
- 4021f00:	e0bff517 	ldw	r2,-44(fp)
- 4021f04:	10800044 	addi	r2,r2,1
- 4021f08:	e0bff515 	stw	r2,-44(fp)
+ 4021ef8:	e0bff517 	ldw	r2,-44(fp)
+ 4021efc:	10800044 	addi	r2,r2,1
+ 4021f00:	e0bff515 	stw	r2,-44(fp)
 
 	int numPixel = imgH*imgW;
 	int threshold = 11;
 	int pixelIdx = 0;
 	uint8_t packedPixelVal = 0;
 	for(int i=0; i< numPixel; i = i+1){
- 4021f0c:	e0bff617 	ldw	r2,-40(fp)
- 4021f10:	10800044 	addi	r2,r2,1
- 4021f14:	e0bff615 	stw	r2,-40(fp)
- 4021f18:	e0fff617 	ldw	r3,-40(fp)
- 4021f1c:	e0bff917 	ldw	r2,-28(fp)
- 4021f20:	18bfc116 	blt	r3,r2,4021e28 <__flash_rwdata_start+0xfffee4e8>
+ 4021f04:	e0bff617 	ldw	r2,-40(fp)
+ 4021f08:	10800044 	addi	r2,r2,1
+ 4021f0c:	e0bff615 	stw	r2,-40(fp)
+ 4021f10:	e0fff617 	ldw	r3,-40(fp)
+ 4021f14:	e0bff917 	ldw	r2,-28(fp)
+ 4021f18:	18bfc116 	blt	r3,r2,4021e20 <__flash_rwdata_start+0xfffee4e0>
 		packedPixelVal = (((uint8_t)pixelValue2)|0xF0) & (((uint8_t)pixelValue1<<4) | 0x0F); //packing 2 pixel value into 1 byte
 		resultImg[i] = packedPixelVal;
 
 		pixelIdx = pixelIdx + 1;
 	}
 }
- 4021f24:	0001883a 	nop
- 4021f28:	e037883a 	mov	sp,fp
- 4021f2c:	df000017 	ldw	fp,0(sp)
- 4021f30:	dec00104 	addi	sp,sp,4
- 4021f34:	f800283a 	ret
+ 4021f1c:	0001883a 	nop
+ 4021f20:	e037883a 	mov	sp,fp
+ 4021f24:	df000017 	ldw	fp,0(sp)
+ 4021f28:	dec00104 	addi	sp,sp,4
+ 4021f2c:	f800283a 	ret
 
-04021f38 <display_4_images>:
+04021f30 <display_4_images>:
 
 void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx1 ,int flipImgIdx2 ,int flipImgIdx3 ,int flipImgIdx4) {
- 4021f38:	deffe904 	addi	sp,sp,-92
- 4021f3c:	dfc01615 	stw	ra,88(sp)
- 4021f40:	df001515 	stw	fp,84(sp)
- 4021f44:	df001504 	addi	fp,sp,84
- 4021f48:	e13ffc15 	stw	r4,-16(fp)
- 4021f4c:	e17ffd15 	stw	r5,-12(fp)
- 4021f50:	e1bffe15 	stw	r6,-8(fp)
- 4021f54:	e1ffff15 	stw	r7,-4(fp)
+ 4021f30:	deffe904 	addi	sp,sp,-92
+ 4021f34:	dfc01615 	stw	ra,88(sp)
+ 4021f38:	df001515 	stw	fp,84(sp)
+ 4021f3c:	df001504 	addi	fp,sp,84
+ 4021f40:	e13ffc15 	stw	r4,-16(fp)
+ 4021f44:	e17ffd15 	stw	r5,-12(fp)
+ 4021f48:	e1bffe15 	stw	r6,-8(fp)
+ 4021f4c:	e1ffff15 	stw	r7,-4(fp)
 	//	img2: pointer to image top right
 	//	img3: pointer to image bottom left
 	//	img4: pointer to image bottom right
 	//	display_base: base address for display
 	//	flipImgIdx: The image of which that need to be flipped (i.e if index is 1, top left image is flipped)
 	int displayW = 320;
- 4021f58:	00805004 	movi	r2,320
- 4021f5c:	e0bff415 	stw	r2,-48(fp)
+ 4021f50:	00805004 	movi	r2,320
+ 4021f54:	e0bff415 	stw	r2,-48(fp)
 	int inputImgW = 160;
- 4021f60:	00802804 	movi	r2,160
- 4021f64:	e0bff515 	stw	r2,-44(fp)
+ 4021f58:	00802804 	movi	r2,160
+ 4021f5c:	e0bff515 	stw	r2,-44(fp)
 	int intputImgH = 120;
- 4021f68:	00801e04 	movi	r2,120
- 4021f6c:	e0bff615 	stw	r2,-40(fp)
+ 4021f60:	00801e04 	movi	r2,120
+ 4021f64:	e0bff615 	stw	r2,-40(fp)
 	int inputPixelAddress = 0;
- 4021f70:	e03feb15 	stw	zero,-84(fp)
+ 4021f68:	e03feb15 	stw	zero,-84(fp)
 
 	int pixelValue = 0;
- 4021f74:	e03ff715 	stw	zero,-36(fp)
+ 4021f6c:	e03ff715 	stw	zero,-36(fp)
 	//image 1
 	for(int h=0; h<120; h++){
- 4021f78:	e03fec15 	stw	zero,-80(fp)
- 4021f7c:	00003706 	br	402205c <display_4_images+0x124>
+ 4021f70:	e03fec15 	stw	zero,-80(fp)
+ 4021f74:	00003706 	br	4022054 <display_4_images+0x124>
 		for(int w=0; w<159; w++){
- 4021f80:	e03fed15 	stw	zero,-76(fp)
- 4021f84:	00002f06 	br	4022044 <display_4_images+0x10c>
+ 4021f78:	e03fed15 	stw	zero,-76(fp)
+ 4021f7c:	00002f06 	br	402203c <display_4_images+0x10c>
 			int displayAddress  = w+(displayW*h)-1;
- 4021f88:	e0fff417 	ldw	r3,-48(fp)
- 4021f8c:	e0bfec17 	ldw	r2,-80(fp)
- 4021f90:	1887383a 	mul	r3,r3,r2
- 4021f94:	e0bfed17 	ldw	r2,-76(fp)
- 4021f98:	1885883a 	add	r2,r3,r2
- 4021f9c:	10bfffc4 	addi	r2,r2,-1
- 4021fa0:	e0bff815 	stw	r2,-32(fp)
+ 4021f80:	e0fff417 	ldw	r3,-48(fp)
+ 4021f84:	e0bfec17 	ldw	r2,-80(fp)
+ 4021f88:	1887383a 	mul	r3,r3,r2
+ 4021f8c:	e0bfed17 	ldw	r2,-76(fp)
+ 4021f90:	1885883a 	add	r2,r3,r2
+ 4021f94:	10bfffc4 	addi	r2,r2,-1
+ 4021f98:	e0bff815 	stw	r2,-32(fp)
 
 			if(flipImgIdx1 == 1){
- 4021fa4:	e0800317 	ldw	r2,12(fp)
- 4021fa8:	10800058 	cmpnei	r2,r2,1
- 4021fac:	10000b1e 	bne	r2,zero,4021fdc <display_4_images+0xa4>
+ 4021f9c:	e0800317 	ldw	r2,12(fp)
+ 4021fa0:	10800058 	cmpnei	r2,r2,1
+ 4021fa4:	10000b1e 	bne	r2,zero,4021fd4 <display_4_images+0xa4>
 				inputPixelAddress = w+(inputImgW* (intputImgH-h-1))-1;
- 4021fb0:	e0fff617 	ldw	r3,-40(fp)
- 4021fb4:	e0bfec17 	ldw	r2,-80(fp)
- 4021fb8:	1885c83a 	sub	r2,r3,r2
- 4021fbc:	10ffffc4 	addi	r3,r2,-1
- 4021fc0:	e0bff517 	ldw	r2,-44(fp)
- 4021fc4:	1887383a 	mul	r3,r3,r2
- 4021fc8:	e0bfed17 	ldw	r2,-76(fp)
- 4021fcc:	1885883a 	add	r2,r3,r2
- 4021fd0:	10bfffc4 	addi	r2,r2,-1
- 4021fd4:	e0bfeb15 	stw	r2,-84(fp)
- 4021fd8:	00000906 	br	4022000 <display_4_images+0xc8>
+ 4021fa8:	e0fff617 	ldw	r3,-40(fp)
+ 4021fac:	e0bfec17 	ldw	r2,-80(fp)
+ 4021fb0:	1885c83a 	sub	r2,r3,r2
+ 4021fb4:	10ffffc4 	addi	r3,r2,-1
+ 4021fb8:	e0bff517 	ldw	r2,-44(fp)
+ 4021fbc:	1887383a 	mul	r3,r3,r2
+ 4021fc0:	e0bfed17 	ldw	r2,-76(fp)
+ 4021fc4:	1885883a 	add	r2,r3,r2
+ 4021fc8:	10bfffc4 	addi	r2,r2,-1
+ 4021fcc:	e0bfeb15 	stw	r2,-84(fp)
+ 4021fd0:	00000906 	br	4021ff8 <display_4_images+0xc8>
 
 			}else{
 				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
- 4021fdc:	e0bff517 	ldw	r2,-44(fp)
- 4021fe0:	10ffff04 	addi	r3,r2,-4
- 4021fe4:	e0bfed17 	ldw	r2,-76(fp)
- 4021fe8:	1887c83a 	sub	r3,r3,r2
- 4021fec:	e13ff517 	ldw	r4,-44(fp)
- 4021ff0:	e0bfec17 	ldw	r2,-80(fp)
- 4021ff4:	2085383a 	mul	r2,r4,r2
- 4021ff8:	1885883a 	add	r2,r3,r2
- 4021ffc:	e0bfeb15 	stw	r2,-84(fp)
+ 4021fd4:	e0bff517 	ldw	r2,-44(fp)
+ 4021fd8:	10ffff04 	addi	r3,r2,-4
+ 4021fdc:	e0bfed17 	ldw	r2,-76(fp)
+ 4021fe0:	1887c83a 	sub	r3,r3,r2
+ 4021fe4:	e13ff517 	ldw	r4,-44(fp)
+ 4021fe8:	e0bfec17 	ldw	r2,-80(fp)
+ 4021fec:	2085383a 	mul	r2,r4,r2
+ 4021ff0:	1885883a 	add	r2,r3,r2
+ 4021ff4:	e0bfeb15 	stw	r2,-84(fp)
 			}
 
 			pixelValue = getPixelVal(0,0,inputPixelAddress,img1);
- 4022000:	e1fffc17 	ldw	r7,-16(fp)
- 4022004:	e1bfeb17 	ldw	r6,-84(fp)
- 4022008:	000b883a 	mov	r5,zero
- 402200c:	0009883a 	mov	r4,zero
- 4022010:	40223800 	call	4022380 <getPixelVal>
- 4022014:	e0bff715 	stw	r2,-36(fp)
+ 4021ff8:	e1fffc17 	ldw	r7,-16(fp)
+ 4021ffc:	e1bfeb17 	ldw	r6,-84(fp)
+ 4022000:	000b883a 	mov	r5,zero
+ 4022004:	0009883a 	mov	r4,zero
+ 4022008:	40223780 	call	4022378 <getPixelVal>
+ 402200c:	e0bff715 	stw	r2,-36(fp)
 
 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
- 4022018:	00810134 	movhi	r2,1028
- 402201c:	10842004 	addi	r2,r2,4224
- 4022020:	e0fff817 	ldw	r3,-32(fp)
- 4022024:	10c00035 	stwio	r3,0(r2)
+ 4022010:	00810134 	movhi	r2,1028
+ 4022014:	10842004 	addi	r2,r2,4224
+ 4022018:	e0fff817 	ldw	r3,-32(fp)
+ 402201c:	10c00035 	stwio	r3,0(r2)
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
- 4022028:	00810134 	movhi	r2,1028
- 402202c:	10841c04 	addi	r2,r2,4208
- 4022030:	e0fff717 	ldw	r3,-36(fp)
- 4022034:	10c00035 	stwio	r3,0(r2)
+ 4022020:	00810134 	movhi	r2,1028
+ 4022024:	10841c04 	addi	r2,r2,4208
+ 4022028:	e0fff717 	ldw	r3,-36(fp)
+ 402202c:	10c00035 	stwio	r3,0(r2)
 	int inputPixelAddress = 0;
 
 	int pixelValue = 0;
 	//image 1
 	for(int h=0; h<120; h++){
 		for(int w=0; w<159; w++){
- 4022038:	e0bfed17 	ldw	r2,-76(fp)
- 402203c:	10800044 	addi	r2,r2,1
- 4022040:	e0bfed15 	stw	r2,-76(fp)
- 4022044:	e0bfed17 	ldw	r2,-76(fp)
- 4022048:	108027d0 	cmplti	r2,r2,159
- 402204c:	103fce1e 	bne	r2,zero,4021f88 <__flash_rwdata_start+0xfffee648>
+ 4022030:	e0bfed17 	ldw	r2,-76(fp)
+ 4022034:	10800044 	addi	r2,r2,1
+ 4022038:	e0bfed15 	stw	r2,-76(fp)
+ 402203c:	e0bfed17 	ldw	r2,-76(fp)
+ 4022040:	108027d0 	cmplti	r2,r2,159
+ 4022044:	103fce1e 	bne	r2,zero,4021f80 <__flash_rwdata_start+0xfffee640>
 	int intputImgH = 120;
 	int inputPixelAddress = 0;
 
 	int pixelValue = 0;
 	//image 1
 	for(int h=0; h<120; h++){
- 4022050:	e0bfec17 	ldw	r2,-80(fp)
- 4022054:	10800044 	addi	r2,r2,1
- 4022058:	e0bfec15 	stw	r2,-80(fp)
- 402205c:	e0bfec17 	ldw	r2,-80(fp)
- 4022060:	10801e10 	cmplti	r2,r2,120
- 4022064:	103fc61e 	bne	r2,zero,4021f80 <__flash_rwdata_start+0xfffee640>
+ 4022048:	e0bfec17 	ldw	r2,-80(fp)
+ 402204c:	10800044 	addi	r2,r2,1
+ 4022050:	e0bfec15 	stw	r2,-80(fp)
+ 4022054:	e0bfec17 	ldw	r2,-80(fp)
+ 4022058:	10801e10 	cmplti	r2,r2,120
+ 402205c:	103fc61e 	bne	r2,zero,4021f78 <__flash_rwdata_start+0xfffee638>
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
 	// image 2
 	for(int h=0; h<120; h++){
- 4022068:	e03fee15 	stw	zero,-72(fp)
- 402206c:	00003806 	br	4022150 <display_4_images+0x218>
+ 4022060:	e03fee15 	stw	zero,-72(fp)
+ 4022064:	00003806 	br	4022148 <display_4_images+0x218>
 		for(int w=159; w<319; w++){
- 4022070:	008027c4 	movi	r2,159
- 4022074:	e0bfef15 	stw	r2,-68(fp)
- 4022078:	00002f06 	br	4022138 <display_4_images+0x200>
+ 4022068:	008027c4 	movi	r2,159
+ 402206c:	e0bfef15 	stw	r2,-68(fp)
+ 4022070:	00002f06 	br	4022130 <display_4_images+0x200>
 			int displayAddress  = w+(displayW*h)-1;
- 402207c:	e0fff417 	ldw	r3,-48(fp)
- 4022080:	e0bfee17 	ldw	r2,-72(fp)
- 4022084:	1887383a 	mul	r3,r3,r2
- 4022088:	e0bfef17 	ldw	r2,-68(fp)
- 402208c:	1885883a 	add	r2,r3,r2
- 4022090:	10bfffc4 	addi	r2,r2,-1
- 4022094:	e0bff915 	stw	r2,-28(fp)
+ 4022074:	e0fff417 	ldw	r3,-48(fp)
+ 4022078:	e0bfee17 	ldw	r2,-72(fp)
+ 402207c:	1887383a 	mul	r3,r3,r2
+ 4022080:	e0bfef17 	ldw	r2,-68(fp)
+ 4022084:	1885883a 	add	r2,r3,r2
+ 4022088:	10bfffc4 	addi	r2,r2,-1
+ 402208c:	e0bff915 	stw	r2,-28(fp)
 
 			if(flipImgIdx2 == 1){
- 4022098:	e0800417 	ldw	r2,16(fp)
- 402209c:	10800058 	cmpnei	r2,r2,1
- 40220a0:	10000b1e 	bne	r2,zero,40220d0 <display_4_images+0x198>
+ 4022090:	e0800417 	ldw	r2,16(fp)
+ 4022094:	10800058 	cmpnei	r2,r2,1
+ 4022098:	10000b1e 	bne	r2,zero,40220c8 <display_4_images+0x198>
 				inputPixelAddress = w+(inputImgW* (intputImgH-h-2))-1;
- 40220a4:	e0fff617 	ldw	r3,-40(fp)
- 40220a8:	e0bfee17 	ldw	r2,-72(fp)
- 40220ac:	1885c83a 	sub	r2,r3,r2
- 40220b0:	10ffff84 	addi	r3,r2,-2
- 40220b4:	e0bff517 	ldw	r2,-44(fp)
- 40220b8:	1887383a 	mul	r3,r3,r2
- 40220bc:	e0bfef17 	ldw	r2,-68(fp)
- 40220c0:	1885883a 	add	r2,r3,r2
- 40220c4:	10bfffc4 	addi	r2,r2,-1
- 40220c8:	e0bfeb15 	stw	r2,-84(fp)
- 40220cc:	00000906 	br	40220f4 <display_4_images+0x1bc>
+ 402209c:	e0fff617 	ldw	r3,-40(fp)
+ 40220a0:	e0bfee17 	ldw	r2,-72(fp)
+ 40220a4:	1885c83a 	sub	r2,r3,r2
+ 40220a8:	10ffff84 	addi	r3,r2,-2
+ 40220ac:	e0bff517 	ldw	r2,-44(fp)
+ 40220b0:	1887383a 	mul	r3,r3,r2
+ 40220b4:	e0bfef17 	ldw	r2,-68(fp)
+ 40220b8:	1885883a 	add	r2,r3,r2
+ 40220bc:	10bfffc4 	addi	r2,r2,-1
+ 40220c0:	e0bfeb15 	stw	r2,-84(fp)
+ 40220c4:	00000906 	br	40220ec <display_4_images+0x1bc>
 
 			}else{
 				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
- 40220d0:	e0bff517 	ldw	r2,-44(fp)
- 40220d4:	10ffff04 	addi	r3,r2,-4
- 40220d8:	e0bfef17 	ldw	r2,-68(fp)
- 40220dc:	1887c83a 	sub	r3,r3,r2
- 40220e0:	e13ff517 	ldw	r4,-44(fp)
- 40220e4:	e0bfee17 	ldw	r2,-72(fp)
- 40220e8:	2085383a 	mul	r2,r4,r2
- 40220ec:	1885883a 	add	r2,r3,r2
- 40220f0:	e0bfeb15 	stw	r2,-84(fp)
+ 40220c8:	e0bff517 	ldw	r2,-44(fp)
+ 40220cc:	10ffff04 	addi	r3,r2,-4
+ 40220d0:	e0bfef17 	ldw	r2,-68(fp)
+ 40220d4:	1887c83a 	sub	r3,r3,r2
+ 40220d8:	e13ff517 	ldw	r4,-44(fp)
+ 40220dc:	e0bfee17 	ldw	r2,-72(fp)
+ 40220e0:	2085383a 	mul	r2,r4,r2
+ 40220e4:	1885883a 	add	r2,r3,r2
+ 40220e8:	e0bfeb15 	stw	r2,-84(fp)
 			}
 
 			pixelValue = getPixelVal(0,0,inputPixelAddress,img2);
- 40220f4:	e1fffd17 	ldw	r7,-12(fp)
- 40220f8:	e1bfeb17 	ldw	r6,-84(fp)
- 40220fc:	000b883a 	mov	r5,zero
- 4022100:	0009883a 	mov	r4,zero
- 4022104:	40223800 	call	4022380 <getPixelVal>
- 4022108:	e0bff715 	stw	r2,-36(fp)
+ 40220ec:	e1fffd17 	ldw	r7,-12(fp)
+ 40220f0:	e1bfeb17 	ldw	r6,-84(fp)
+ 40220f4:	000b883a 	mov	r5,zero
+ 40220f8:	0009883a 	mov	r4,zero
+ 40220fc:	40223780 	call	4022378 <getPixelVal>
+ 4022100:	e0bff715 	stw	r2,-36(fp)
 
 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
- 402210c:	00810134 	movhi	r2,1028
- 4022110:	10842004 	addi	r2,r2,4224
- 4022114:	e0fff917 	ldw	r3,-28(fp)
- 4022118:	10c00035 	stwio	r3,0(r2)
+ 4022104:	00810134 	movhi	r2,1028
+ 4022108:	10842004 	addi	r2,r2,4224
+ 402210c:	e0fff917 	ldw	r3,-28(fp)
+ 4022110:	10c00035 	stwio	r3,0(r2)
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
- 402211c:	00810134 	movhi	r2,1028
- 4022120:	10841c04 	addi	r2,r2,4208
- 4022124:	e0fff717 	ldw	r3,-36(fp)
- 4022128:	10c00035 	stwio	r3,0(r2)
+ 4022114:	00810134 	movhi	r2,1028
+ 4022118:	10841c04 	addi	r2,r2,4208
+ 402211c:	e0fff717 	ldw	r3,-36(fp)
+ 4022120:	10c00035 	stwio	r3,0(r2)
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
 	// image 2
 	for(int h=0; h<120; h++){
 		for(int w=159; w<319; w++){
- 402212c:	e0bfef17 	ldw	r2,-68(fp)
- 4022130:	10800044 	addi	r2,r2,1
- 4022134:	e0bfef15 	stw	r2,-68(fp)
- 4022138:	e0bfef17 	ldw	r2,-68(fp)
- 402213c:	10804fd0 	cmplti	r2,r2,319
- 4022140:	103fce1e 	bne	r2,zero,402207c <__flash_rwdata_start+0xfffee73c>
+ 4022124:	e0bfef17 	ldw	r2,-68(fp)
+ 4022128:	10800044 	addi	r2,r2,1
+ 402212c:	e0bfef15 	stw	r2,-68(fp)
+ 4022130:	e0bfef17 	ldw	r2,-68(fp)
+ 4022134:	10804fd0 	cmplti	r2,r2,319
+ 4022138:	103fce1e 	bne	r2,zero,4022074 <__flash_rwdata_start+0xfffee734>
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
 	// image 2
 	for(int h=0; h<120; h++){
- 4022144:	e0bfee17 	ldw	r2,-72(fp)
- 4022148:	10800044 	addi	r2,r2,1
- 402214c:	e0bfee15 	stw	r2,-72(fp)
- 4022150:	e0bfee17 	ldw	r2,-72(fp)
- 4022154:	10801e10 	cmplti	r2,r2,120
- 4022158:	103fc51e 	bne	r2,zero,4022070 <__flash_rwdata_start+0xfffee730>
+ 402213c:	e0bfee17 	ldw	r2,-72(fp)
+ 4022140:	10800044 	addi	r2,r2,1
+ 4022144:	e0bfee15 	stw	r2,-72(fp)
+ 4022148:	e0bfee17 	ldw	r2,-72(fp)
+ 402214c:	10801e10 	cmplti	r2,r2,120
+ 4022150:	103fc51e 	bne	r2,zero,4022068 <__flash_rwdata_start+0xfffee728>
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
 	// image 3
 	for(int h=120; h<240; h++){
- 402215c:	00801e04 	movi	r2,120
- 4022160:	e0bff015 	stw	r2,-64(fp)
- 4022164:	00003b06 	br	4022254 <display_4_images+0x31c>
+ 4022154:	00801e04 	movi	r2,120
+ 4022158:	e0bff015 	stw	r2,-64(fp)
+ 402215c:	00003b06 	br	402224c <display_4_images+0x31c>
 		for(int w=0; w<159; w++){
- 4022168:	e03ff115 	stw	zero,-60(fp)
- 402216c:	00003306 	br	402223c <display_4_images+0x304>
+ 4022160:	e03ff115 	stw	zero,-60(fp)
+ 4022164:	00003306 	br	4022234 <display_4_images+0x304>
 			int displayAddress  = w+(displayW*h)-1;
- 4022170:	e0fff417 	ldw	r3,-48(fp)
- 4022174:	e0bff017 	ldw	r2,-64(fp)
- 4022178:	1887383a 	mul	r3,r3,r2
- 402217c:	e0bff117 	ldw	r2,-60(fp)
- 4022180:	1885883a 	add	r2,r3,r2
- 4022184:	10bfffc4 	addi	r2,r2,-1
- 4022188:	e0bffa15 	stw	r2,-24(fp)
+ 4022168:	e0fff417 	ldw	r3,-48(fp)
+ 402216c:	e0bff017 	ldw	r2,-64(fp)
+ 4022170:	1887383a 	mul	r3,r3,r2
+ 4022174:	e0bff117 	ldw	r2,-60(fp)
+ 4022178:	1885883a 	add	r2,r3,r2
+ 402217c:	10bfffc4 	addi	r2,r2,-1
+ 4022180:	e0bffa15 	stw	r2,-24(fp)
 
 			if(flipImgIdx3 == 1){
- 402218c:	e0800517 	ldw	r2,20(fp)
- 4022190:	10800058 	cmpnei	r2,r2,1
- 4022194:	10000d1e 	bne	r2,zero,40221cc <display_4_images+0x294>
+ 4022184:	e0800517 	ldw	r2,20(fp)
+ 4022188:	10800058 	cmpnei	r2,r2,1
+ 402218c:	10000d1e 	bne	r2,zero,40221c4 <display_4_images+0x294>
 				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH) -2))-1;
- 4022198:	e0fff017 	ldw	r3,-64(fp)
- 402219c:	e0bff617 	ldw	r2,-40(fp)
+ 4022190:	e0fff017 	ldw	r3,-64(fp)
+ 4022194:	e0bff617 	ldw	r2,-40(fp)
+ 4022198:	1885c83a 	sub	r2,r3,r2
+ 402219c:	e0fff617 	ldw	r3,-40(fp)
  40221a0:	1885c83a 	sub	r2,r3,r2
- 40221a4:	e0fff617 	ldw	r3,-40(fp)
- 40221a8:	1885c83a 	sub	r2,r3,r2
- 40221ac:	10ffff84 	addi	r3,r2,-2
- 40221b0:	e0bff517 	ldw	r2,-44(fp)
- 40221b4:	1887383a 	mul	r3,r3,r2
- 40221b8:	e0bff117 	ldw	r2,-60(fp)
- 40221bc:	1885883a 	add	r2,r3,r2
- 40221c0:	10bfffc4 	addi	r2,r2,-1
- 40221c4:	e0bfeb15 	stw	r2,-84(fp)
- 40221c8:	00000b06 	br	40221f8 <display_4_images+0x2c0>
+ 40221a4:	10ffff84 	addi	r3,r2,-2
+ 40221a8:	e0bff517 	ldw	r2,-44(fp)
+ 40221ac:	1887383a 	mul	r3,r3,r2
+ 40221b0:	e0bff117 	ldw	r2,-60(fp)
+ 40221b4:	1885883a 	add	r2,r3,r2
+ 40221b8:	10bfffc4 	addi	r2,r2,-1
+ 40221bc:	e0bfeb15 	stw	r2,-84(fp)
+ 40221c0:	00000b06 	br	40221f0 <display_4_images+0x2c0>
 
 			}else{
 				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
- 40221cc:	e0bff517 	ldw	r2,-44(fp)
- 40221d0:	10ffff04 	addi	r3,r2,-4
- 40221d4:	e0bff117 	ldw	r2,-60(fp)
- 40221d8:	1887c83a 	sub	r3,r3,r2
- 40221dc:	e13ff017 	ldw	r4,-64(fp)
- 40221e0:	e0bff617 	ldw	r2,-40(fp)
- 40221e4:	2089c83a 	sub	r4,r4,r2
- 40221e8:	e0bff517 	ldw	r2,-44(fp)
- 40221ec:	2085383a 	mul	r2,r4,r2
- 40221f0:	1885883a 	add	r2,r3,r2
- 40221f4:	e0bfeb15 	stw	r2,-84(fp)
+ 40221c4:	e0bff517 	ldw	r2,-44(fp)
+ 40221c8:	10ffff04 	addi	r3,r2,-4
+ 40221cc:	e0bff117 	ldw	r2,-60(fp)
+ 40221d0:	1887c83a 	sub	r3,r3,r2
+ 40221d4:	e13ff017 	ldw	r4,-64(fp)
+ 40221d8:	e0bff617 	ldw	r2,-40(fp)
+ 40221dc:	2089c83a 	sub	r4,r4,r2
+ 40221e0:	e0bff517 	ldw	r2,-44(fp)
+ 40221e4:	2085383a 	mul	r2,r4,r2
+ 40221e8:	1885883a 	add	r2,r3,r2
+ 40221ec:	e0bfeb15 	stw	r2,-84(fp)
 			}
 
 			pixelValue = getPixelVal(0,0,inputPixelAddress,img3);
- 40221f8:	e1fffe17 	ldw	r7,-8(fp)
- 40221fc:	e1bfeb17 	ldw	r6,-84(fp)
- 4022200:	000b883a 	mov	r5,zero
- 4022204:	0009883a 	mov	r4,zero
- 4022208:	40223800 	call	4022380 <getPixelVal>
- 402220c:	e0bff715 	stw	r2,-36(fp)
+ 40221f0:	e1fffe17 	ldw	r7,-8(fp)
+ 40221f4:	e1bfeb17 	ldw	r6,-84(fp)
+ 40221f8:	000b883a 	mov	r5,zero
+ 40221fc:	0009883a 	mov	r4,zero
+ 4022200:	40223780 	call	4022378 <getPixelVal>
+ 4022204:	e0bff715 	stw	r2,-36(fp)
 
 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
- 4022210:	00810134 	movhi	r2,1028
- 4022214:	10842004 	addi	r2,r2,4224
- 4022218:	e0fffa17 	ldw	r3,-24(fp)
- 402221c:	10c00035 	stwio	r3,0(r2)
+ 4022208:	00810134 	movhi	r2,1028
+ 402220c:	10842004 	addi	r2,r2,4224
+ 4022210:	e0fffa17 	ldw	r3,-24(fp)
+ 4022214:	10c00035 	stwio	r3,0(r2)
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
- 4022220:	00810134 	movhi	r2,1028
- 4022224:	10841c04 	addi	r2,r2,4208
- 4022228:	e0fff717 	ldw	r3,-36(fp)
- 402222c:	10c00035 	stwio	r3,0(r2)
+ 4022218:	00810134 	movhi	r2,1028
+ 402221c:	10841c04 	addi	r2,r2,4208
+ 4022220:	e0fff717 	ldw	r3,-36(fp)
+ 4022224:	10c00035 	stwio	r3,0(r2)
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
 	// image 3
 	for(int h=120; h<240; h++){
 		for(int w=0; w<159; w++){
- 4022230:	e0bff117 	ldw	r2,-60(fp)
- 4022234:	10800044 	addi	r2,r2,1
- 4022238:	e0bff115 	stw	r2,-60(fp)
- 402223c:	e0bff117 	ldw	r2,-60(fp)
- 4022240:	108027d0 	cmplti	r2,r2,159
- 4022244:	103fca1e 	bne	r2,zero,4022170 <__flash_rwdata_start+0xfffee830>
+ 4022228:	e0bff117 	ldw	r2,-60(fp)
+ 402222c:	10800044 	addi	r2,r2,1
+ 4022230:	e0bff115 	stw	r2,-60(fp)
+ 4022234:	e0bff117 	ldw	r2,-60(fp)
+ 4022238:	108027d0 	cmplti	r2,r2,159
+ 402223c:	103fca1e 	bne	r2,zero,4022168 <__flash_rwdata_start+0xfffee828>
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
 	// image 3
 	for(int h=120; h<240; h++){
- 4022248:	e0bff017 	ldw	r2,-64(fp)
- 402224c:	10800044 	addi	r2,r2,1
- 4022250:	e0bff015 	stw	r2,-64(fp)
- 4022254:	e0bff017 	ldw	r2,-64(fp)
- 4022258:	10803c10 	cmplti	r2,r2,240
- 402225c:	103fc21e 	bne	r2,zero,4022168 <__flash_rwdata_start+0xfffee828>
+ 4022240:	e0bff017 	ldw	r2,-64(fp)
+ 4022244:	10800044 	addi	r2,r2,1
+ 4022248:	e0bff015 	stw	r2,-64(fp)
+ 402224c:	e0bff017 	ldw	r2,-64(fp)
+ 4022250:	10803c10 	cmplti	r2,r2,240
+ 4022254:	103fc21e 	bne	r2,zero,4022160 <__flash_rwdata_start+0xfffee820>
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
 	//image 4
 	for(int h=120; h<240; h++){
- 4022260:	00801e04 	movi	r2,120
- 4022264:	e0bff215 	stw	r2,-56(fp)
- 4022268:	00003c06 	br	402235c <display_4_images+0x424>
+ 4022258:	00801e04 	movi	r2,120
+ 402225c:	e0bff215 	stw	r2,-56(fp)
+ 4022260:	00003c06 	br	4022354 <display_4_images+0x424>
 		for(int w=159; w<319; w++){
- 402226c:	008027c4 	movi	r2,159
- 4022270:	e0bff315 	stw	r2,-52(fp)
- 4022274:	00003306 	br	4022344 <display_4_images+0x40c>
+ 4022264:	008027c4 	movi	r2,159
+ 4022268:	e0bff315 	stw	r2,-52(fp)
+ 402226c:	00003306 	br	402233c <display_4_images+0x40c>
 			int displayAddress  = w+(displayW*h)-1;
- 4022278:	e0fff417 	ldw	r3,-48(fp)
- 402227c:	e0bff217 	ldw	r2,-56(fp)
- 4022280:	1887383a 	mul	r3,r3,r2
- 4022284:	e0bff317 	ldw	r2,-52(fp)
- 4022288:	1885883a 	add	r2,r3,r2
- 402228c:	10bfffc4 	addi	r2,r2,-1
- 4022290:	e0bffb15 	stw	r2,-20(fp)
+ 4022270:	e0fff417 	ldw	r3,-48(fp)
+ 4022274:	e0bff217 	ldw	r2,-56(fp)
+ 4022278:	1887383a 	mul	r3,r3,r2
+ 402227c:	e0bff317 	ldw	r2,-52(fp)
+ 4022280:	1885883a 	add	r2,r3,r2
+ 4022284:	10bfffc4 	addi	r2,r2,-1
+ 4022288:	e0bffb15 	stw	r2,-20(fp)
 			if(flipImgIdx4 == 1){
- 4022294:	e0800617 	ldw	r2,24(fp)
- 4022298:	10800058 	cmpnei	r2,r2,1
- 402229c:	10000d1e 	bne	r2,zero,40222d4 <display_4_images+0x39c>
+ 402228c:	e0800617 	ldw	r2,24(fp)
+ 4022290:	10800058 	cmpnei	r2,r2,1
+ 4022294:	10000d1e 	bne	r2,zero,40222cc <display_4_images+0x39c>
 				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH)-2))-1;
- 40222a0:	e0fff217 	ldw	r3,-56(fp)
- 40222a4:	e0bff617 	ldw	r2,-40(fp)
+ 4022298:	e0fff217 	ldw	r3,-56(fp)
+ 402229c:	e0bff617 	ldw	r2,-40(fp)
+ 40222a0:	1885c83a 	sub	r2,r3,r2
+ 40222a4:	e0fff617 	ldw	r3,-40(fp)
  40222a8:	1885c83a 	sub	r2,r3,r2
- 40222ac:	e0fff617 	ldw	r3,-40(fp)
- 40222b0:	1885c83a 	sub	r2,r3,r2
- 40222b4:	10ffff84 	addi	r3,r2,-2
- 40222b8:	e0bff517 	ldw	r2,-44(fp)
- 40222bc:	1887383a 	mul	r3,r3,r2
- 40222c0:	e0bff317 	ldw	r2,-52(fp)
- 40222c4:	1885883a 	add	r2,r3,r2
- 40222c8:	10bfffc4 	addi	r2,r2,-1
- 40222cc:	e0bfeb15 	stw	r2,-84(fp)
- 40222d0:	00000b06 	br	4022300 <display_4_images+0x3c8>
+ 40222ac:	10ffff84 	addi	r3,r2,-2
+ 40222b0:	e0bff517 	ldw	r2,-44(fp)
+ 40222b4:	1887383a 	mul	r3,r3,r2
+ 40222b8:	e0bff317 	ldw	r2,-52(fp)
+ 40222bc:	1885883a 	add	r2,r3,r2
+ 40222c0:	10bfffc4 	addi	r2,r2,-1
+ 40222c4:	e0bfeb15 	stw	r2,-84(fp)
+ 40222c8:	00000b06 	br	40222f8 <display_4_images+0x3c8>
 
 			}else{
 				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
- 40222d4:	e0bff517 	ldw	r2,-44(fp)
- 40222d8:	10ffff04 	addi	r3,r2,-4
- 40222dc:	e0bff317 	ldw	r2,-52(fp)
- 40222e0:	1887c83a 	sub	r3,r3,r2
- 40222e4:	e13ff217 	ldw	r4,-56(fp)
- 40222e8:	e0bff617 	ldw	r2,-40(fp)
- 40222ec:	2089c83a 	sub	r4,r4,r2
- 40222f0:	e0bff517 	ldw	r2,-44(fp)
- 40222f4:	2085383a 	mul	r2,r4,r2
- 40222f8:	1885883a 	add	r2,r3,r2
- 40222fc:	e0bfeb15 	stw	r2,-84(fp)
+ 40222cc:	e0bff517 	ldw	r2,-44(fp)
+ 40222d0:	10ffff04 	addi	r3,r2,-4
+ 40222d4:	e0bff317 	ldw	r2,-52(fp)
+ 40222d8:	1887c83a 	sub	r3,r3,r2
+ 40222dc:	e13ff217 	ldw	r4,-56(fp)
+ 40222e0:	e0bff617 	ldw	r2,-40(fp)
+ 40222e4:	2089c83a 	sub	r4,r4,r2
+ 40222e8:	e0bff517 	ldw	r2,-44(fp)
+ 40222ec:	2085383a 	mul	r2,r4,r2
+ 40222f0:	1885883a 	add	r2,r3,r2
+ 40222f4:	e0bfeb15 	stw	r2,-84(fp)
 			}
 			pixelValue = getPixelVal(0,0,inputPixelAddress,img4);
- 4022300:	e1ffff17 	ldw	r7,-4(fp)
- 4022304:	e1bfeb17 	ldw	r6,-84(fp)
- 4022308:	000b883a 	mov	r5,zero
- 402230c:	0009883a 	mov	r4,zero
- 4022310:	40223800 	call	4022380 <getPixelVal>
- 4022314:	e0bff715 	stw	r2,-36(fp)
+ 40222f8:	e1ffff17 	ldw	r7,-4(fp)
+ 40222fc:	e1bfeb17 	ldw	r6,-84(fp)
+ 4022300:	000b883a 	mov	r5,zero
+ 4022304:	0009883a 	mov	r4,zero
+ 4022308:	40223780 	call	4022378 <getPixelVal>
+ 402230c:	e0bff715 	stw	r2,-36(fp)
 
 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
- 4022318:	00810134 	movhi	r2,1028
- 402231c:	10842004 	addi	r2,r2,4224
- 4022320:	e0fffb17 	ldw	r3,-20(fp)
- 4022324:	10c00035 	stwio	r3,0(r2)
+ 4022310:	00810134 	movhi	r2,1028
+ 4022314:	10842004 	addi	r2,r2,4224
+ 4022318:	e0fffb17 	ldw	r3,-20(fp)
+ 402231c:	10c00035 	stwio	r3,0(r2)
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
- 4022328:	00810134 	movhi	r2,1028
- 402232c:	10841c04 	addi	r2,r2,4208
- 4022330:	e0fff717 	ldw	r3,-36(fp)
- 4022334:	10c00035 	stwio	r3,0(r2)
+ 4022320:	00810134 	movhi	r2,1028
+ 4022324:	10841c04 	addi	r2,r2,4208
+ 4022328:	e0fff717 	ldw	r3,-36(fp)
+ 402232c:	10c00035 	stwio	r3,0(r2)
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
 	//image 4
 	for(int h=120; h<240; h++){
 		for(int w=159; w<319; w++){
- 4022338:	e0bff317 	ldw	r2,-52(fp)
- 402233c:	10800044 	addi	r2,r2,1
- 4022340:	e0bff315 	stw	r2,-52(fp)
- 4022344:	e0bff317 	ldw	r2,-52(fp)
- 4022348:	10804fd0 	cmplti	r2,r2,319
- 402234c:	103fca1e 	bne	r2,zero,4022278 <__flash_rwdata_start+0xfffee938>
+ 4022330:	e0bff317 	ldw	r2,-52(fp)
+ 4022334:	10800044 	addi	r2,r2,1
+ 4022338:	e0bff315 	stw	r2,-52(fp)
+ 402233c:	e0bff317 	ldw	r2,-52(fp)
+ 4022340:	10804fd0 	cmplti	r2,r2,319
+ 4022344:	103fca1e 	bne	r2,zero,4022270 <__flash_rwdata_start+0xfffee930>
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
 	//image 4
 	for(int h=120; h<240; h++){
- 4022350:	e0bff217 	ldw	r2,-56(fp)
- 4022354:	10800044 	addi	r2,r2,1
- 4022358:	e0bff215 	stw	r2,-56(fp)
- 402235c:	e0bff217 	ldw	r2,-56(fp)
- 4022360:	10803c10 	cmplti	r2,r2,240
- 4022364:	103fc11e 	bne	r2,zero,402226c <__flash_rwdata_start+0xfffee92c>
+ 4022348:	e0bff217 	ldw	r2,-56(fp)
+ 402234c:	10800044 	addi	r2,r2,1
+ 4022350:	e0bff215 	stw	r2,-56(fp)
+ 4022354:	e0bff217 	ldw	r2,-56(fp)
+ 4022358:	10803c10 	cmplti	r2,r2,240
+ 402235c:	103fc11e 	bne	r2,zero,4022264 <__flash_rwdata_start+0xfffee924>
 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 		}
 	}
 }
- 4022368:	0001883a 	nop
- 402236c:	e037883a 	mov	sp,fp
- 4022370:	dfc00117 	ldw	ra,4(sp)
- 4022374:	df000017 	ldw	fp,0(sp)
- 4022378:	dec00204 	addi	sp,sp,8
- 402237c:	f800283a 	ret
+ 4022360:	0001883a 	nop
+ 4022364:	e037883a 	mov	sp,fp
+ 4022368:	dfc00117 	ldw	ra,4(sp)
+ 402236c:	df000017 	ldw	fp,0(sp)
+ 4022370:	dec00204 	addi	sp,sp,8
+ 4022374:	f800283a 	ret
 
-04022380 <getPixelVal>:
+04022378 <getPixelVal>:
 
 int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr) {
- 4022380:	defff804 	addi	sp,sp,-32
- 4022384:	df000715 	stw	fp,28(sp)
- 4022388:	df000704 	addi	fp,sp,28
- 402238c:	e13ffc15 	stw	r4,-16(fp)
- 4022390:	e17ffd15 	stw	r5,-12(fp)
- 4022394:	e1bffe15 	stw	r6,-8(fp)
- 4022398:	e1ffff15 	stw	r7,-4(fp)
+ 4022378:	defff804 	addi	sp,sp,-32
+ 402237c:	df000715 	stw	fp,28(sp)
+ 4022380:	df000704 	addi	fp,sp,28
+ 4022384:	e13ffc15 	stw	r4,-16(fp)
+ 4022388:	e17ffd15 	stw	r5,-12(fp)
+ 402238c:	e1bffe15 	stw	r6,-8(fp)
+ 4022390:	e1ffff15 	stw	r7,-4(fp)
 	//function to get pixel value from a packed array
 	int pixelOutput = 0;
- 402239c:	e03ff915 	stw	zero,-28(fp)
+ 4022394:	e03ff915 	stw	zero,-28(fp)
 	int packedPixelVal = 0;
- 40223a0:	e03ffa15 	stw	zero,-24(fp)
+ 4022398:	e03ffa15 	stw	zero,-24(fp)
 	int decodedAddress;
 
 	if (rawAddress % 2 == 0) { //if the value is even we need to extract the top 4 bits
- 40223a4:	e0bffe17 	ldw	r2,-8(fp)
- 40223a8:	1080004c 	andi	r2,r2,1
- 40223ac:	1000101e 	bne	r2,zero,40223f0 <getPixelVal+0x70>
+ 402239c:	e0bffe17 	ldw	r2,-8(fp)
+ 40223a0:	1080004c 	andi	r2,r2,1
+ 40223a4:	1000101e 	bne	r2,zero,40223e8 <getPixelVal+0x70>
 
 	    decodedAddress = rawAddress/2;
- 40223b0:	e0bffe17 	ldw	r2,-8(fp)
- 40223b4:	1006d7fa 	srli	r3,r2,31
- 40223b8:	1885883a 	add	r2,r3,r2
- 40223bc:	1005d07a 	srai	r2,r2,1
- 40223c0:	e0bffb15 	stw	r2,-20(fp)
+ 40223a8:	e0bffe17 	ldw	r2,-8(fp)
+ 40223ac:	1006d7fa 	srli	r3,r2,31
+ 40223b0:	1885883a 	add	r2,r3,r2
+ 40223b4:	1005d07a 	srai	r2,r2,1
+ 40223b8:	e0bffb15 	stw	r2,-20(fp)
 	    packedPixelVal = packedImgArr[decodedAddress];
- 40223c4:	e0bffb17 	ldw	r2,-20(fp)
- 40223c8:	e0ffff17 	ldw	r3,-4(fp)
- 40223cc:	1885883a 	add	r2,r3,r2
- 40223d0:	10800003 	ldbu	r2,0(r2)
- 40223d4:	10803fcc 	andi	r2,r2,255
- 40223d8:	e0bffa15 	stw	r2,-24(fp)
+ 40223bc:	e0bffb17 	ldw	r2,-20(fp)
+ 40223c0:	e0ffff17 	ldw	r3,-4(fp)
+ 40223c4:	1885883a 	add	r2,r3,r2
+ 40223c8:	10800003 	ldbu	r2,0(r2)
+ 40223cc:	10803fcc 	andi	r2,r2,255
+ 40223d0:	e0bffa15 	stw	r2,-24(fp)
 
 	    pixelOutput = (packedPixelVal & 0xF0)>>4;
- 40223dc:	e0bffa17 	ldw	r2,-24(fp)
- 40223e0:	10803c0c 	andi	r2,r2,240
- 40223e4:	1005d13a 	srai	r2,r2,4
- 40223e8:	e0bff915 	stw	r2,-28(fp)
- 40223ec:	00000f06 	br	402242c <getPixelVal+0xac>
+ 40223d4:	e0bffa17 	ldw	r2,-24(fp)
+ 40223d8:	10803c0c 	andi	r2,r2,240
+ 40223dc:	1005d13a 	srai	r2,r2,4
+ 40223e0:	e0bff915 	stw	r2,-28(fp)
+ 40223e4:	00000f06 	br	4022424 <getPixelVal+0xac>
 	} else { //if the value is odd we need to extract the bottom 4 bits
 	    decodedAddress = (rawAddress-1)/2;
- 40223f0:	e0bffe17 	ldw	r2,-8(fp)
- 40223f4:	10bfffc4 	addi	r2,r2,-1
- 40223f8:	1006d7fa 	srli	r3,r2,31
- 40223fc:	1885883a 	add	r2,r3,r2
- 4022400:	1005d07a 	srai	r2,r2,1
- 4022404:	e0bffb15 	stw	r2,-20(fp)
+ 40223e8:	e0bffe17 	ldw	r2,-8(fp)
+ 40223ec:	10bfffc4 	addi	r2,r2,-1
+ 40223f0:	1006d7fa 	srli	r3,r2,31
+ 40223f4:	1885883a 	add	r2,r3,r2
+ 40223f8:	1005d07a 	srai	r2,r2,1
+ 40223fc:	e0bffb15 	stw	r2,-20(fp)
 	    packedPixelVal = packedImgArr[decodedAddress];
- 4022408:	e0bffb17 	ldw	r2,-20(fp)
- 402240c:	e0ffff17 	ldw	r3,-4(fp)
- 4022410:	1885883a 	add	r2,r3,r2
- 4022414:	10800003 	ldbu	r2,0(r2)
- 4022418:	10803fcc 	andi	r2,r2,255
- 402241c:	e0bffa15 	stw	r2,-24(fp)
+ 4022400:	e0bffb17 	ldw	r2,-20(fp)
+ 4022404:	e0ffff17 	ldw	r3,-4(fp)
+ 4022408:	1885883a 	add	r2,r3,r2
+ 402240c:	10800003 	ldbu	r2,0(r2)
+ 4022410:	10803fcc 	andi	r2,r2,255
+ 4022414:	e0bffa15 	stw	r2,-24(fp)
 
 	    pixelOutput = (packedPixelVal & 0x0F); //extracting the value for a single pixel from the packed storage
- 4022420:	e0bffa17 	ldw	r2,-24(fp)
- 4022424:	108003cc 	andi	r2,r2,15
- 4022428:	e0bff915 	stw	r2,-28(fp)
+ 4022418:	e0bffa17 	ldw	r2,-24(fp)
+ 402241c:	108003cc 	andi	r2,r2,15
+ 4022420:	e0bff915 	stw	r2,-28(fp)
 	}
 	return pixelOutput;
- 402242c:	e0bff917 	ldw	r2,-28(fp)
+ 4022424:	e0bff917 	ldw	r2,-28(fp)
 }
- 4022430:	e037883a 	mov	sp,fp
- 4022434:	df000017 	ldw	fp,0(sp)
- 4022438:	dec00104 	addi	sp,sp,4
- 402243c:	f800283a 	ret
+ 4022428:	e037883a 	mov	sp,fp
+ 402242c:	df000017 	ldw	fp,0(sp)
+ 4022430:	dec00104 	addi	sp,sp,4
+ 4022434:	f800283a 	ret
 
-04022440 <convolve>:
+04022438 <convolve>:
 
 int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height) {
- 4022440:	deffed04 	addi	sp,sp,-76
- 4022444:	dfc01215 	stw	ra,72(sp)
- 4022448:	df001115 	stw	fp,68(sp)
- 402244c:	df001104 	addi	fp,sp,68
- 4022450:	e13ffc15 	stw	r4,-16(fp)
- 4022454:	e17ffd15 	stw	r5,-12(fp)
- 4022458:	e1bffe15 	stw	r6,-8(fp)
- 402245c:	e1ffff15 	stw	r7,-4(fp)
+ 4022438:	deffed04 	addi	sp,sp,-76
+ 402243c:	dfc01215 	stw	ra,72(sp)
+ 4022440:	df001115 	stw	fp,68(sp)
+ 4022444:	df001104 	addi	fp,sp,68
+ 4022448:	e13ffc15 	stw	r4,-16(fp)
+ 402244c:	e17ffd15 	stw	r5,-12(fp)
+ 4022450:	e1bffe15 	stw	r6,-8(fp)
+ 4022454:	e1ffff15 	stw	r7,-4(fp)
 	int outputPixelIdx = 0;
- 4022460:	e03fef15 	stw	zero,-68(fp)
+ 4022458:	e03fef15 	stw	zero,-68(fp)
 	int pixelCount = 0;
- 4022464:	e03ff015 	stw	zero,-64(fp)
+ 402245c:	e03ff015 	stw	zero,-64(fp)
 	uint8_t convResiltBuff = 0;
- 4022468:	e03ff105 	stb	zero,-60(fp)
+ 4022460:	e03ff105 	stb	zero,-60(fp)
 
 	for(int h=0; h<=height-1;h = h+1){
- 402246c:	e03ff215 	stw	zero,-56(fp)
- 4022470:	00006d06 	br	4022628 <convolve+0x1e8>
+ 4022464:	e03ff215 	stw	zero,-56(fp)
+ 4022468:	00006d06 	br	4022620 <convolve+0x1e8>
 		for(int w=0; w<=width-1;w = w + 1){
- 4022474:	e03ff315 	stw	zero,-52(fp)
- 4022478:	00006406 	br	402260c <convolve+0x1cc>
+ 402246c:	e03ff315 	stw	zero,-52(fp)
+ 4022470:	00006406 	br	4022604 <convolve+0x1cc>
 			float convResult = 0;
- 402247c:	e03ff415 	stw	zero,-48(fp)
+ 4022474:	e03ff415 	stw	zero,-48(fp)
 			float currentPixelVal = 0;
- 4022480:	e03ff715 	stw	zero,-36(fp)
+ 4022478:	e03ff715 	stw	zero,-36(fp)
 			float currentKernelVal;
 
 			//looping through each offset pixel locations overlapped by the kernel
 			for(int kh = -1; kh<=1; kh++){
- 4022484:	00bfffc4 	movi	r2,-1
- 4022488:	e0bff515 	stw	r2,-44(fp)
- 402248c:	00003a06 	br	4022578 <convolve+0x138>
+ 402247c:	00bfffc4 	movi	r2,-1
+ 4022480:	e0bff515 	stw	r2,-44(fp)
+ 4022484:	00003a06 	br	4022570 <convolve+0x138>
 				for(int kw = -1; kw<=1; kw++){
- 4022490:	00bfffc4 	movi	r2,-1
- 4022494:	e0bff615 	stw	r2,-40(fp)
- 4022498:	00003106 	br	4022560 <convolve+0x120>
+ 4022488:	00bfffc4 	movi	r2,-1
+ 402248c:	e0bff615 	stw	r2,-40(fp)
+ 4022490:	00003106 	br	4022558 <convolve+0x120>
 					int kernelIdx = (kh+1)*3 +(kw+1);
- 402249c:	e0bff517 	ldw	r2,-44(fp)
- 40224a0:	10c00044 	addi	r3,r2,1
- 40224a4:	1805883a 	mov	r2,r3
- 40224a8:	1085883a 	add	r2,r2,r2
- 40224ac:	10c7883a 	add	r3,r2,r3
- 40224b0:	e0bff617 	ldw	r2,-40(fp)
- 40224b4:	10800044 	addi	r2,r2,1
- 40224b8:	1885883a 	add	r2,r3,r2
- 40224bc:	e0bff815 	stw	r2,-32(fp)
+ 4022494:	e0bff517 	ldw	r2,-44(fp)
+ 4022498:	10c00044 	addi	r3,r2,1
+ 402249c:	1805883a 	mov	r2,r3
+ 40224a0:	1085883a 	add	r2,r2,r2
+ 40224a4:	10c7883a 	add	r3,r2,r3
+ 40224a8:	e0bff617 	ldw	r2,-40(fp)
+ 40224ac:	10800044 	addi	r2,r2,1
+ 40224b0:	1885883a 	add	r2,r3,r2
+ 40224b4:	e0bff815 	stw	r2,-32(fp)
 					int pixelAddress = (h+kh)*width + (w+kw);
- 40224c0:	e0fff217 	ldw	r3,-56(fp)
- 40224c4:	e0bff517 	ldw	r2,-44(fp)
- 40224c8:	1887883a 	add	r3,r3,r2
- 40224cc:	e0bfff17 	ldw	r2,-4(fp)
- 40224d0:	1887383a 	mul	r3,r3,r2
- 40224d4:	e13ff317 	ldw	r4,-52(fp)
- 40224d8:	e0bff617 	ldw	r2,-40(fp)
- 40224dc:	2085883a 	add	r2,r4,r2
- 40224e0:	1885883a 	add	r2,r3,r2
- 40224e4:	e0bff915 	stw	r2,-28(fp)
+ 40224b8:	e0fff217 	ldw	r3,-56(fp)
+ 40224bc:	e0bff517 	ldw	r2,-44(fp)
+ 40224c0:	1887883a 	add	r3,r3,r2
+ 40224c4:	e0bfff17 	ldw	r2,-4(fp)
+ 40224c8:	1887383a 	mul	r3,r3,r2
+ 40224cc:	e13ff317 	ldw	r4,-52(fp)
+ 40224d0:	e0bff617 	ldw	r2,-40(fp)
+ 40224d4:	2085883a 	add	r2,r4,r2
+ 40224d8:	1885883a 	add	r2,r3,r2
+ 40224dc:	e0bff915 	stw	r2,-28(fp)
 					currentKernelVal = kernel[kernelIdx]; //getting the current value of the kernel
- 40224e8:	e0bff817 	ldw	r2,-32(fp)
- 40224ec:	1085883a 	add	r2,r2,r2
- 40224f0:	1085883a 	add	r2,r2,r2
- 40224f4:	1007883a 	mov	r3,r2
- 40224f8:	e0bffe17 	ldw	r2,-8(fp)
- 40224fc:	10c5883a 	add	r2,r2,r3
- 4022500:	10800017 	ldw	r2,0(r2)
- 4022504:	e0bffa15 	stw	r2,-24(fp)
+ 40224e0:	e0bff817 	ldw	r2,-32(fp)
+ 40224e4:	1085883a 	add	r2,r2,r2
+ 40224e8:	1085883a 	add	r2,r2,r2
+ 40224ec:	1007883a 	mov	r3,r2
+ 40224f0:	e0bffe17 	ldw	r2,-8(fp)
+ 40224f4:	10c5883a 	add	r2,r2,r3
+ 40224f8:	10800017 	ldw	r2,0(r2)
+ 40224fc:	e0bffa15 	stw	r2,-24(fp)
 					currentPixelVal = getPixelVal(0,0,pixelAddress, inputImg); //getting the overlapping pixel location
- 4022508:	e1fffc17 	ldw	r7,-16(fp)
- 402250c:	e1bff917 	ldw	r6,-28(fp)
- 4022510:	000b883a 	mov	r5,zero
- 4022514:	0009883a 	mov	r4,zero
- 4022518:	40223800 	call	4022380 <getPixelVal>
- 402251c:	1009883a 	mov	r4,r2
- 4022520:	40242880 	call	4024288 <__floatsisf>
- 4022524:	1007883a 	mov	r3,r2
- 4022528:	e0fff715 	stw	r3,-36(fp)
+ 4022500:	e1fffc17 	ldw	r7,-16(fp)
+ 4022504:	e1bff917 	ldw	r6,-28(fp)
+ 4022508:	000b883a 	mov	r5,zero
+ 402250c:	0009883a 	mov	r4,zero
+ 4022510:	40223780 	call	4022378 <getPixelVal>
+ 4022514:	1009883a 	mov	r4,r2
+ 4022518:	40242880 	call	4024288 <__floatsisf>
+ 402251c:	1007883a 	mov	r3,r2
+ 4022520:	e0fff715 	stw	r3,-36(fp)
 
 					convResult = convResult + (currentPixelVal*currentKernelVal);
- 402252c:	e17ffa17 	ldw	r5,-24(fp)
- 4022530:	e13ff717 	ldw	r4,-36(fp)
- 4022534:	40239380 	call	4023938 <__mulsf3>
- 4022538:	1007883a 	mov	r3,r2
- 402253c:	1805883a 	mov	r2,r3
- 4022540:	100b883a 	mov	r5,r2
- 4022544:	e13ff417 	ldw	r4,-48(fp)
- 4022548:	4022f740 	call	4022f74 <__addsf3>
- 402254c:	1007883a 	mov	r3,r2
- 4022550:	e0fff415 	stw	r3,-48(fp)
+ 4022524:	e17ffa17 	ldw	r5,-24(fp)
+ 4022528:	e13ff717 	ldw	r4,-36(fp)
+ 402252c:	40239380 	call	4023938 <__mulsf3>
+ 4022530:	1007883a 	mov	r3,r2
+ 4022534:	1805883a 	mov	r2,r3
+ 4022538:	100b883a 	mov	r5,r2
+ 402253c:	e13ff417 	ldw	r4,-48(fp)
+ 4022540:	4022f740 	call	4022f74 <__addsf3>
+ 4022544:	1007883a 	mov	r3,r2
+ 4022548:	e0fff415 	stw	r3,-48(fp)
 			float currentPixelVal = 0;
 			float currentKernelVal;
 
 			//looping through each offset pixel locations overlapped by the kernel
 			for(int kh = -1; kh<=1; kh++){
 				for(int kw = -1; kw<=1; kw++){
- 4022554:	e0bff617 	ldw	r2,-40(fp)
- 4022558:	10800044 	addi	r2,r2,1
- 402255c:	e0bff615 	stw	r2,-40(fp)
- 4022560:	e0bff617 	ldw	r2,-40(fp)
- 4022564:	10800090 	cmplti	r2,r2,2
- 4022568:	103fcc1e 	bne	r2,zero,402249c <__flash_rwdata_start+0xfffeeb5c>
+ 402254c:	e0bff617 	ldw	r2,-40(fp)
+ 4022550:	10800044 	addi	r2,r2,1
+ 4022554:	e0bff615 	stw	r2,-40(fp)
+ 4022558:	e0bff617 	ldw	r2,-40(fp)
+ 402255c:	10800090 	cmplti	r2,r2,2
+ 4022560:	103fcc1e 	bne	r2,zero,4022494 <__flash_rwdata_start+0xfffeeb54>
 			float convResult = 0;
 			float currentPixelVal = 0;
 			float currentKernelVal;
 
 			//looping through each offset pixel locations overlapped by the kernel
 			for(int kh = -1; kh<=1; kh++){
- 402256c:	e0bff517 	ldw	r2,-44(fp)
- 4022570:	10800044 	addi	r2,r2,1
- 4022574:	e0bff515 	stw	r2,-44(fp)
- 4022578:	e0bff517 	ldw	r2,-44(fp)
- 402257c:	10800090 	cmplti	r2,r2,2
- 4022580:	103fc31e 	bne	r2,zero,4022490 <__flash_rwdata_start+0xfffeeb50>
+ 4022564:	e0bff517 	ldw	r2,-44(fp)
+ 4022568:	10800044 	addi	r2,r2,1
+ 402256c:	e0bff515 	stw	r2,-44(fp)
+ 4022570:	e0bff517 	ldw	r2,-44(fp)
+ 4022574:	10800090 	cmplti	r2,r2,2
+ 4022578:	103fc31e 	bne	r2,zero,4022488 <__flash_rwdata_start+0xfffeeb48>
 					currentPixelVal = getPixelVal(0,0,pixelAddress, inputImg); //getting the overlapping pixel location
 
 					convResult = convResult + (currentPixelVal*currentKernelVal);
 				}
 			}
 			pixelCount = pixelCount + 1;
- 4022584:	e0bff017 	ldw	r2,-64(fp)
- 4022588:	10800044 	addi	r2,r2,1
- 402258c:	e0bff015 	stw	r2,-64(fp)
+ 402257c:	e0bff017 	ldw	r2,-64(fp)
+ 4022580:	10800044 	addi	r2,r2,1
+ 4022584:	e0bff015 	stw	r2,-64(fp)
 
 			if(pixelCount == 2){//once we have 2 pixel, we can store them to the output array
- 4022590:	e0bff017 	ldw	r2,-64(fp)
- 4022594:	10800098 	cmpnei	r2,r2,2
- 4022598:	1000131e 	bne	r2,zero,40225e8 <convolve+0x1a8>
+ 4022588:	e0bff017 	ldw	r2,-64(fp)
+ 402258c:	10800098 	cmpnei	r2,r2,2
+ 4022590:	1000131e 	bne	r2,zero,40225e0 <convolve+0x1a8>
 				uint8_t finalResult = (((uint8_t)convResult)|0xF0) & convResiltBuff; //packing the value together
- 402259c:	e13ff417 	ldw	r4,-48(fp)
- 40225a0:	4022d600 	call	4022d60 <__fixunssfsi>
- 40225a4:	1007883a 	mov	r3,r2
- 40225a8:	00bffc04 	movi	r2,-16
- 40225ac:	1884b03a 	or	r2,r3,r2
- 40225b0:	1007883a 	mov	r3,r2
- 40225b4:	e0bff103 	ldbu	r2,-60(fp)
- 40225b8:	1884703a 	and	r2,r3,r2
- 40225bc:	e0bffb05 	stb	r2,-20(fp)
+ 4022594:	e13ff417 	ldw	r4,-48(fp)
+ 4022598:	4022d600 	call	4022d60 <__fixunssfsi>
+ 402259c:	1007883a 	mov	r3,r2
+ 40225a0:	00bffc04 	movi	r2,-16
+ 40225a4:	1884b03a 	or	r2,r3,r2
+ 40225a8:	1007883a 	mov	r3,r2
+ 40225ac:	e0bff103 	ldbu	r2,-60(fp)
+ 40225b0:	1884703a 	and	r2,r3,r2
+ 40225b4:	e0bffb05 	stb	r2,-20(fp)
 				outputImg[outputPixelIdx] = finalResult;
- 40225c0:	e0bfef17 	ldw	r2,-68(fp)
- 40225c4:	e0fffd17 	ldw	r3,-12(fp)
- 40225c8:	1885883a 	add	r2,r3,r2
- 40225cc:	e0fffb03 	ldbu	r3,-20(fp)
- 40225d0:	10c00005 	stb	r3,0(r2)
+ 40225b8:	e0bfef17 	ldw	r2,-68(fp)
+ 40225bc:	e0fffd17 	ldw	r3,-12(fp)
+ 40225c0:	1885883a 	add	r2,r3,r2
+ 40225c4:	e0fffb03 	ldbu	r3,-20(fp)
+ 40225c8:	10c00005 	stb	r3,0(r2)
 
 				outputPixelIdx = outputPixelIdx + 1;
- 40225d4:	e0bfef17 	ldw	r2,-68(fp)
- 40225d8:	10800044 	addi	r2,r2,1
- 40225dc:	e0bfef15 	stw	r2,-68(fp)
+ 40225cc:	e0bfef17 	ldw	r2,-68(fp)
+ 40225d0:	10800044 	addi	r2,r2,1
+ 40225d4:	e0bfef15 	stw	r2,-68(fp)
 				pixelCount = 0;
- 40225e0:	e03ff015 	stw	zero,-64(fp)
- 40225e4:	00000606 	br	4022600 <convolve+0x1c0>
+ 40225d8:	e03ff015 	stw	zero,-64(fp)
+ 40225dc:	00000606 	br	40225f8 <convolve+0x1c0>
 			}else{
 				convResiltBuff = ((uint8_t)convResult<<4) | 0x0F; //padding the bottom 4 bits with 0
- 40225e8:	e13ff417 	ldw	r4,-48(fp)
- 40225ec:	4022d600 	call	4022d60 <__fixunssfsi>
- 40225f0:	10803fcc 	andi	r2,r2,255
- 40225f4:	1004913a 	slli	r2,r2,4
- 40225f8:	108003d4 	ori	r2,r2,15
- 40225fc:	e0bff105 	stb	r2,-60(fp)
+ 40225e0:	e13ff417 	ldw	r4,-48(fp)
+ 40225e4:	4022d600 	call	4022d60 <__fixunssfsi>
+ 40225e8:	10803fcc 	andi	r2,r2,255
+ 40225ec:	1004913a 	slli	r2,r2,4
+ 40225f0:	108003d4 	ori	r2,r2,15
+ 40225f4:	e0bff105 	stb	r2,-60(fp)
 	int outputPixelIdx = 0;
 	int pixelCount = 0;
 	uint8_t convResiltBuff = 0;
 
 	for(int h=0; h<=height-1;h = h+1){
 		for(int w=0; w<=width-1;w = w + 1){
- 4022600:	e0bff317 	ldw	r2,-52(fp)
- 4022604:	10800044 	addi	r2,r2,1
- 4022608:	e0bff315 	stw	r2,-52(fp)
- 402260c:	e0bfff17 	ldw	r2,-4(fp)
- 4022610:	10ffffc4 	addi	r3,r2,-1
- 4022614:	e0bff317 	ldw	r2,-52(fp)
- 4022618:	18bf980e 	bge	r3,r2,402247c <__flash_rwdata_start+0xfffeeb3c>
+ 40225f8:	e0bff317 	ldw	r2,-52(fp)
+ 40225fc:	10800044 	addi	r2,r2,1
+ 4022600:	e0bff315 	stw	r2,-52(fp)
+ 4022604:	e0bfff17 	ldw	r2,-4(fp)
+ 4022608:	10ffffc4 	addi	r3,r2,-1
+ 402260c:	e0bff317 	ldw	r2,-52(fp)
+ 4022610:	18bf980e 	bge	r3,r2,4022474 <__flash_rwdata_start+0xfffeeb34>
 int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height) {
 	int outputPixelIdx = 0;
 	int pixelCount = 0;
 	uint8_t convResiltBuff = 0;
 
 	for(int h=0; h<=height-1;h = h+1){
- 402261c:	e0bff217 	ldw	r2,-56(fp)
- 4022620:	10800044 	addi	r2,r2,1
- 4022624:	e0bff215 	stw	r2,-56(fp)
- 4022628:	e0800217 	ldw	r2,8(fp)
- 402262c:	10ffffc4 	addi	r3,r2,-1
- 4022630:	e0bff217 	ldw	r2,-56(fp)
- 4022634:	18bf8f0e 	bge	r3,r2,4022474 <__flash_rwdata_start+0xfffeeb34>
+ 4022614:	e0bff217 	ldw	r2,-56(fp)
+ 4022618:	10800044 	addi	r2,r2,1
+ 402261c:	e0bff215 	stw	r2,-56(fp)
+ 4022620:	e0800217 	ldw	r2,8(fp)
+ 4022624:	10ffffc4 	addi	r3,r2,-1
+ 4022628:	e0bff217 	ldw	r2,-56(fp)
+ 402262c:	18bf8f0e 	bge	r3,r2,402246c <__flash_rwdata_start+0xfffeeb2c>
 				convResiltBuff = ((uint8_t)convResult<<4) | 0x0F; //padding the bottom 4 bits with 0
 			}
 		}
 	}
 
 return outputPixelIdx;
- 4022638:	e0bfef17 	ldw	r2,-68(fp)
+ 4022630:	e0bfef17 	ldw	r2,-68(fp)
 }
- 402263c:	e037883a 	mov	sp,fp
- 4022640:	dfc00117 	ldw	ra,4(sp)
- 4022644:	df000017 	ldw	fp,0(sp)
- 4022648:	dec00204 	addi	sp,sp,8
- 402264c:	f800283a 	ret
+ 4022634:	e037883a 	mov	sp,fp
+ 4022638:	dfc00117 	ldw	ra,4(sp)
+ 402263c:	df000017 	ldw	fp,0(sp)
+ 4022640:	dec00204 	addi	sp,sp,8
+ 4022644:	f800283a 	ret
 
-04022650 <display_image_from_array_v3>:
+04022648 <display_image_from_array_v3>:
 
 void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg) {
- 4022650:	defff504 	addi	sp,sp,-44
- 4022654:	dfc00a15 	stw	ra,40(sp)
- 4022658:	df000915 	stw	fp,36(sp)
- 402265c:	df000904 	addi	fp,sp,36
- 4022660:	e13ffc15 	stw	r4,-16(fp)
- 4022664:	e17ffd15 	stw	r5,-12(fp)
- 4022668:	e1bffe15 	stw	r6,-8(fp)
- 402266c:	e1ffff15 	stw	r7,-4(fp)
+ 4022648:	defff504 	addi	sp,sp,-44
+ 402264c:	dfc00a15 	stw	ra,40(sp)
+ 4022650:	df000915 	stw	fp,36(sp)
+ 4022654:	df000904 	addi	fp,sp,36
+ 4022658:	e13ffc15 	stw	r4,-16(fp)
+ 402265c:	e17ffd15 	stw	r5,-12(fp)
+ 4022660:	e1bffe15 	stw	r6,-8(fp)
+ 4022664:	e1ffff15 	stw	r7,-4(fp)
 	// if flipImg is 1, the displayed img will be flipped
 	int pixelValue = 0;
- 4022670:	e03ff715 	stw	zero,-36(fp)
+ 4022668:	e03ff715 	stw	zero,-36(fp)
 	int pixelAddress = 0;
- 4022674:	e03ff815 	stw	zero,-32(fp)
+ 402266c:	e03ff815 	stw	zero,-32(fp)
 	for(int h = 0; h<=240; h=h+1){
- 4022678:	e03ff915 	stw	zero,-28(fp)
- 402267c:	00004206 	br	4022788 <display_image_from_array_v3+0x138>
+ 4022670:	e03ff915 	stw	zero,-28(fp)
+ 4022674:	00004206 	br	4022780 <display_image_from_array_v3+0x138>
 		for(int w = 0; w<=320; w=w+1){
- 4022680:	e03ffa15 	stw	zero,-24(fp)
- 4022684:	00003a06 	br	4022770 <display_image_from_array_v3+0x120>
+ 4022678:	e03ffa15 	stw	zero,-24(fp)
+ 402267c:	00003a06 	br	4022768 <display_image_from_array_v3+0x120>
 
 			if(flipImg){
- 4022688:	e0800217 	ldw	r2,8(fp)
- 402268c:	10000b26 	beq	r2,zero,40226bc <display_image_from_array_v3+0x6c>
+ 4022680:	e0800217 	ldw	r2,8(fp)
+ 4022684:	10000b26 	beq	r2,zero,40226b4 <display_image_from_array_v3+0x6c>
 				pixelAddress = w+(imgW* (imgH-h-1))-1;
- 4022690:	e0fffc17 	ldw	r3,-16(fp)
- 4022694:	e0bff917 	ldw	r2,-28(fp)
- 4022698:	1885c83a 	sub	r2,r3,r2
- 402269c:	10ffffc4 	addi	r3,r2,-1
- 40226a0:	e0bffd17 	ldw	r2,-12(fp)
- 40226a4:	1887383a 	mul	r3,r3,r2
- 40226a8:	e0bffa17 	ldw	r2,-24(fp)
- 40226ac:	1885883a 	add	r2,r3,r2
- 40226b0:	10bfffc4 	addi	r2,r2,-1
- 40226b4:	e0bff815 	stw	r2,-32(fp)
- 40226b8:	00000606 	br	40226d4 <display_image_from_array_v3+0x84>
+ 4022688:	e0fffc17 	ldw	r3,-16(fp)
+ 402268c:	e0bff917 	ldw	r2,-28(fp)
+ 4022690:	1885c83a 	sub	r2,r3,r2
+ 4022694:	10ffffc4 	addi	r3,r2,-1
+ 4022698:	e0bffd17 	ldw	r2,-12(fp)
+ 402269c:	1887383a 	mul	r3,r3,r2
+ 40226a0:	e0bffa17 	ldw	r2,-24(fp)
+ 40226a4:	1885883a 	add	r2,r3,r2
+ 40226a8:	10bfffc4 	addi	r2,r2,-1
+ 40226ac:	e0bff815 	stw	r2,-32(fp)
+ 40226b0:	00000606 	br	40226cc <display_image_from_array_v3+0x84>
 			}else{
 				pixelAddress = w+(imgW*h);
- 40226bc:	e0fffd17 	ldw	r3,-12(fp)
- 40226c0:	e0bff917 	ldw	r2,-28(fp)
- 40226c4:	1887383a 	mul	r3,r3,r2
- 40226c8:	e0bffa17 	ldw	r2,-24(fp)
- 40226cc:	1885883a 	add	r2,r3,r2
- 40226d0:	e0bff815 	stw	r2,-32(fp)
+ 40226b4:	e0fffd17 	ldw	r3,-12(fp)
+ 40226b8:	e0bff917 	ldw	r2,-28(fp)
+ 40226bc:	1887383a 	mul	r3,r3,r2
+ 40226c0:	e0bffa17 	ldw	r2,-24(fp)
+ 40226c4:	1885883a 	add	r2,r3,r2
+ 40226c8:	e0bff815 	stw	r2,-32(fp)
 
 			}
 
 			int pixelAddressOpp = imgW-w+(imgW*h)-4;
- 40226d4:	e0fffd17 	ldw	r3,-12(fp)
- 40226d8:	e0bffa17 	ldw	r2,-24(fp)
- 40226dc:	1887c83a 	sub	r3,r3,r2
- 40226e0:	e13ffd17 	ldw	r4,-12(fp)
- 40226e4:	e0bff917 	ldw	r2,-28(fp)
- 40226e8:	2085383a 	mul	r2,r4,r2
- 40226ec:	1885883a 	add	r2,r3,r2
- 40226f0:	10bfff04 	addi	r2,r2,-4
- 40226f4:	e0bffb15 	stw	r2,-20(fp)
+ 40226cc:	e0fffd17 	ldw	r3,-12(fp)
+ 40226d0:	e0bffa17 	ldw	r2,-24(fp)
+ 40226d4:	1887c83a 	sub	r3,r3,r2
+ 40226d8:	e13ffd17 	ldw	r4,-12(fp)
+ 40226dc:	e0bff917 	ldw	r2,-28(fp)
+ 40226e0:	2085383a 	mul	r2,r4,r2
+ 40226e4:	1885883a 	add	r2,r3,r2
+ 40226e8:	10bfff04 	addi	r2,r2,-4
+ 40226ec:	e0bffb15 	stw	r2,-20(fp)
 
 			if(h>imgH | w>imgW){
- 40226f8:	e0bff917 	ldw	r2,-28(fp)
- 40226fc:	e0fffc17 	ldw	r3,-16(fp)
- 4022700:	1884803a 	cmplt	r2,r3,r2
- 4022704:	1009883a 	mov	r4,r2
- 4022708:	e0bffa17 	ldw	r2,-24(fp)
- 402270c:	e0fffd17 	ldw	r3,-12(fp)
- 4022710:	1884803a 	cmplt	r2,r3,r2
- 4022714:	2084b03a 	or	r2,r4,r2
- 4022718:	10803fcc 	andi	r2,r2,255
- 402271c:	10000326 	beq	r2,zero,402272c <display_image_from_array_v3+0xdc>
+ 40226f0:	e0bff917 	ldw	r2,-28(fp)
+ 40226f4:	e0fffc17 	ldw	r3,-16(fp)
+ 40226f8:	1884803a 	cmplt	r2,r3,r2
+ 40226fc:	1009883a 	mov	r4,r2
+ 4022700:	e0bffa17 	ldw	r2,-24(fp)
+ 4022704:	e0fffd17 	ldw	r3,-12(fp)
+ 4022708:	1884803a 	cmplt	r2,r3,r2
+ 402270c:	2084b03a 	or	r2,r4,r2
+ 4022710:	10803fcc 	andi	r2,r2,255
+ 4022714:	10000326 	beq	r2,zero,4022724 <display_image_from_array_v3+0xdc>
 				pixelValue = 15;
- 4022720:	008003c4 	movi	r2,15
- 4022724:	e0bff715 	stw	r2,-36(fp)
- 4022728:	00000606 	br	4022744 <display_image_from_array_v3+0xf4>
+ 4022718:	008003c4 	movi	r2,15
+ 402271c:	e0bff715 	stw	r2,-36(fp)
+ 4022720:	00000606 	br	402273c <display_image_from_array_v3+0xf4>
 			}else{
 				pixelValue = getPixelVal(imgH,imgW,pixelAddressOpp,image_base);
- 402272c:	e1fffe17 	ldw	r7,-8(fp)
- 4022730:	e1bffb17 	ldw	r6,-20(fp)
- 4022734:	e17ffd17 	ldw	r5,-12(fp)
- 4022738:	e13ffc17 	ldw	r4,-16(fp)
- 402273c:	40223800 	call	4022380 <getPixelVal>
- 4022740:	e0bff715 	stw	r2,-36(fp)
+ 4022724:	e1fffe17 	ldw	r7,-8(fp)
+ 4022728:	e1bffb17 	ldw	r6,-20(fp)
+ 402272c:	e17ffd17 	ldw	r5,-12(fp)
+ 4022730:	e13ffc17 	ldw	r4,-16(fp)
+ 4022734:	40223780 	call	4022378 <getPixelVal>
+ 4022738:	e0bff715 	stw	r2,-36(fp)
 			}
 
 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , pixelAddress);
- 4022744:	00810134 	movhi	r2,1028
- 4022748:	10842004 	addi	r2,r2,4224
- 402274c:	e0fff817 	ldw	r3,-32(fp)
- 4022750:	10c00035 	stwio	r3,0(r2)
+ 402273c:	00810134 	movhi	r2,1028
+ 4022740:	10842004 	addi	r2,r2,4224
+ 4022744:	e0fff817 	ldw	r3,-32(fp)
+ 4022748:	10c00035 	stwio	r3,0(r2)
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
- 4022754:	00810134 	movhi	r2,1028
- 4022758:	10841c04 	addi	r2,r2,4208
- 402275c:	e0fff717 	ldw	r3,-36(fp)
- 4022760:	10c00035 	stwio	r3,0(r2)
+ 402274c:	00810134 	movhi	r2,1028
+ 4022750:	10841c04 	addi	r2,r2,4208
+ 4022754:	e0fff717 	ldw	r3,-36(fp)
+ 4022758:	10c00035 	stwio	r3,0(r2)
 void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg) {
 	// if flipImg is 1, the displayed img will be flipped
 	int pixelValue = 0;
 	int pixelAddress = 0;
 	for(int h = 0; h<=240; h=h+1){
 		for(int w = 0; w<=320; w=w+1){
- 4022764:	e0bffa17 	ldw	r2,-24(fp)
- 4022768:	10800044 	addi	r2,r2,1
- 402276c:	e0bffa15 	stw	r2,-24(fp)
- 4022770:	e0bffa17 	ldw	r2,-24(fp)
- 4022774:	10805050 	cmplti	r2,r2,321
- 4022778:	103fc31e 	bne	r2,zero,4022688 <__flash_rwdata_start+0xfffeed48>
+ 402275c:	e0bffa17 	ldw	r2,-24(fp)
+ 4022760:	10800044 	addi	r2,r2,1
+ 4022764:	e0bffa15 	stw	r2,-24(fp)
+ 4022768:	e0bffa17 	ldw	r2,-24(fp)
+ 402276c:	10805050 	cmplti	r2,r2,321
+ 4022770:	103fc31e 	bne	r2,zero,4022680 <__flash_rwdata_start+0xfffeed40>
 
 void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg) {
 	// if flipImg is 1, the displayed img will be flipped
 	int pixelValue = 0;
 	int pixelAddress = 0;
 	for(int h = 0; h<=240; h=h+1){
- 402277c:	e0bff917 	ldw	r2,-28(fp)
- 4022780:	10800044 	addi	r2,r2,1
- 4022784:	e0bff915 	stw	r2,-28(fp)
- 4022788:	e0bff917 	ldw	r2,-28(fp)
- 402278c:	10803c50 	cmplti	r2,r2,241
- 4022790:	103fbb1e 	bne	r2,zero,4022680 <__flash_rwdata_start+0xfffeed40>
+ 4022774:	e0bff917 	ldw	r2,-28(fp)
+ 4022778:	10800044 	addi	r2,r2,1
+ 402277c:	e0bff915 	stw	r2,-28(fp)
+ 4022780:	e0bff917 	ldw	r2,-28(fp)
+ 4022784:	10803c50 	cmplti	r2,r2,241
+ 4022788:	103fbb1e 	bne	r2,zero,4022678 <__flash_rwdata_start+0xfffeed38>
 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
 
 		}
 	}
 
 }
- 4022794:	0001883a 	nop
- 4022798:	e037883a 	mov	sp,fp
- 402279c:	dfc00117 	ldw	ra,4(sp)
- 40227a0:	df000017 	ldw	fp,0(sp)
- 40227a4:	dec00204 	addi	sp,sp,8
- 40227a8:	f800283a 	ret
+ 402278c:	0001883a 	nop
+ 4022790:	e037883a 	mov	sp,fp
+ 4022794:	dfc00117 	ldw	ra,4(sp)
+ 4022798:	df000017 	ldw	fp,0(sp)
+ 402279c:	dec00204 	addi	sp,sp,8
+ 40227a0:	f800283a 	ret
 
-040227ac <display_image_from_array_v2>:
+040227a4 <display_image_from_array_v2>:
 
 void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32_t display_base) {
- 40227ac:	defff004 	addi	sp,sp,-64
- 40227b0:	df000f15 	stw	fp,60(sp)
- 40227b4:	df000f04 	addi	fp,sp,60
- 40227b8:	e13ffc15 	stw	r4,-16(fp)
- 40227bc:	e17ffd15 	stw	r5,-12(fp)
- 40227c0:	e1bffe15 	stw	r6,-8(fp)
- 40227c4:	e1ffff15 	stw	r7,-4(fp)
+ 40227a4:	defff004 	addi	sp,sp,-64
+ 40227a8:	df000f15 	stw	fp,60(sp)
+ 40227ac:	df000f04 	addi	fp,sp,60
+ 40227b0:	e13ffc15 	stw	r4,-16(fp)
+ 40227b4:	e17ffd15 	stw	r5,-12(fp)
+ 40227b8:	e1bffe15 	stw	r6,-8(fp)
+ 40227bc:	e1ffff15 	stw	r7,-4(fp)
 	//FASTER FUNCTION FOR DISPLAY, DO NOT USE TILL M3
 	int pixel_count = imgH*imgW;
- 40227c8:	e0fffc17 	ldw	r3,-16(fp)
- 40227cc:	e0bffd17 	ldw	r2,-12(fp)
- 40227d0:	1885383a 	mul	r2,r3,r2
- 40227d4:	e0bff415 	stw	r2,-48(fp)
+ 40227c0:	e0fffc17 	ldw	r3,-16(fp)
+ 40227c4:	e0bffd17 	ldw	r2,-12(fp)
+ 40227c8:	1885383a 	mul	r2,r3,r2
+ 40227cc:	e0bff415 	stw	r2,-48(fp)
 	int readAddressOffset = 0;
- 40227d8:	e03ff515 	stw	zero,-44(fp)
+ 40227d0:	e03ff515 	stw	zero,-44(fp)
 	int pixel_idx = 0;
- 40227dc:	e03ff115 	stw	zero,-60(fp)
+ 40227d4:	e03ff115 	stw	zero,-60(fp)
 //	int imgH = 238;
 //	int imgW = 318;
 
 	int pixelAddress_2 = 0;
- 40227e0:	e03ff615 	stw	zero,-40(fp)
+ 40227d8:	e03ff615 	stw	zero,-40(fp)
 
 //	Address = Column + (Row * Width)
 	for(int h = 0; h<=imgH-1; h=h+1){
- 40227e4:	e03ff215 	stw	zero,-56(fp)
- 40227e8:	00003a06 	br	40228d4 <display_image_from_array_v2+0x128>
+ 40227dc:	e03ff215 	stw	zero,-56(fp)
+ 40227e0:	00003a06 	br	40228cc <display_image_from_array_v2+0x128>
 		for(int w = imgW-1; w>=0; w=w-2){
- 40227ec:	e0bffd17 	ldw	r2,-12(fp)
- 40227f0:	10bfffc4 	addi	r2,r2,-1
- 40227f4:	e0bff315 	stw	r2,-52(fp)
- 40227f8:	00003106 	br	40228c0 <display_image_from_array_v2+0x114>
+ 40227e4:	e0bffd17 	ldw	r2,-12(fp)
+ 40227e8:	10bfffc4 	addi	r2,r2,-1
+ 40227ec:	e0bff315 	stw	r2,-52(fp)
+ 40227f0:	00003106 	br	40228b8 <display_image_from_array_v2+0x114>
 
 			int pixelAddress  = w+(imgW*h);
- 40227fc:	e0fffd17 	ldw	r3,-12(fp)
- 4022800:	e0bff217 	ldw	r2,-56(fp)
- 4022804:	1887383a 	mul	r3,r3,r2
- 4022808:	e0bff317 	ldw	r2,-52(fp)
- 402280c:	1885883a 	add	r2,r3,r2
- 4022810:	e0bff715 	stw	r2,-36(fp)
+ 40227f4:	e0fffd17 	ldw	r3,-12(fp)
+ 40227f8:	e0bff217 	ldw	r2,-56(fp)
+ 40227fc:	1887383a 	mul	r3,r3,r2
+ 4022800:	e0bff317 	ldw	r2,-52(fp)
+ 4022804:	1885883a 	add	r2,r3,r2
+ 4022808:	e0bff715 	stw	r2,-36(fp)
 			int pixelValue = image_base[pixel_idx];
- 4022814:	e0bff117 	ldw	r2,-60(fp)
- 4022818:	e0fffe17 	ldw	r3,-8(fp)
- 402281c:	1885883a 	add	r2,r3,r2
- 4022820:	10800003 	ldbu	r2,0(r2)
- 4022824:	10803fcc 	andi	r2,r2,255
- 4022828:	e0bff815 	stw	r2,-32(fp)
+ 402280c:	e0bff117 	ldw	r2,-60(fp)
+ 4022810:	e0fffe17 	ldw	r3,-8(fp)
+ 4022814:	1885883a 	add	r2,r3,r2
+ 4022818:	10800003 	ldbu	r2,0(r2)
+ 402281c:	10803fcc 	andi	r2,r2,255
+ 4022820:	e0bff815 	stw	r2,-32(fp)
 			pixel_idx = pixel_idx + 1;
- 402282c:	e0bff117 	ldw	r2,-60(fp)
- 4022830:	10800044 	addi	r2,r2,1
- 4022834:	e0bff115 	stw	r2,-60(fp)
+ 4022824:	e0bff117 	ldw	r2,-60(fp)
+ 4022828:	10800044 	addi	r2,r2,1
+ 402282c:	e0bff115 	stw	r2,-60(fp)
 
 			int mask = 0x0F;
- 4022838:	008003c4 	movi	r2,15
- 402283c:	e0bff915 	stw	r2,-28(fp)
+ 4022830:	008003c4 	movi	r2,15
+ 4022834:	e0bff915 	stw	r2,-28(fp)
 
 			int unpackedValue1 = (pixelValue&mask);
- 4022840:	e0fff817 	ldw	r3,-32(fp)
- 4022844:	e0bff917 	ldw	r2,-28(fp)
- 4022848:	1884703a 	and	r2,r3,r2
- 402284c:	e0bffa15 	stw	r2,-24(fp)
+ 4022838:	e0fff817 	ldw	r3,-32(fp)
+ 402283c:	e0bff917 	ldw	r2,-28(fp)
+ 4022840:	1884703a 	and	r2,r3,r2
+ 4022844:	e0bffa15 	stw	r2,-24(fp)
 			mask = mask << 4;
- 4022850:	e0bff917 	ldw	r2,-28(fp)
- 4022854:	1004913a 	slli	r2,r2,4
- 4022858:	e0bff915 	stw	r2,-28(fp)
+ 4022848:	e0bff917 	ldw	r2,-28(fp)
+ 402284c:	1004913a 	slli	r2,r2,4
+ 4022850:	e0bff915 	stw	r2,-28(fp)
 			int unpackedValue2 = (pixelValue&mask)>>4;
- 402285c:	e0fff817 	ldw	r3,-32(fp)
- 4022860:	e0bff917 	ldw	r2,-28(fp)
- 4022864:	1884703a 	and	r2,r3,r2
- 4022868:	1005d13a 	srai	r2,r2,4
- 402286c:	e0bffb15 	stw	r2,-20(fp)
+ 4022854:	e0fff817 	ldw	r3,-32(fp)
+ 4022858:	e0bff917 	ldw	r2,-28(fp)
+ 402285c:	1884703a 	and	r2,r3,r2
+ 4022860:	1005d13a 	srai	r2,r2,4
+ 4022864:	e0bffb15 	stw	r2,-20(fp)
 
 
 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , pixelAddress);
- 4022870:	00810134 	movhi	r2,1028
- 4022874:	10842004 	addi	r2,r2,4224
- 4022878:	e0fff717 	ldw	r3,-36(fp)
- 402287c:	10c00035 	stwio	r3,0(r2)
+ 4022868:	00810134 	movhi	r2,1028
+ 402286c:	10842004 	addi	r2,r2,4224
+ 4022870:	e0fff717 	ldw	r3,-36(fp)
+ 4022874:	10c00035 	stwio	r3,0(r2)
 	    	//specific the value to be displayed
 	    	IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue1);
- 4022880:	00810134 	movhi	r2,1028
- 4022884:	10841c04 	addi	r2,r2,4208
- 4022888:	e0fffa17 	ldw	r3,-24(fp)
- 402288c:	10c00035 	stwio	r3,0(r2)
+ 4022878:	00810134 	movhi	r2,1028
+ 402287c:	10841c04 	addi	r2,r2,4208
+ 4022880:	e0fffa17 	ldw	r3,-24(fp)
+ 4022884:	10c00035 	stwio	r3,0(r2)
 
 
 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , pixelAddress+1);
- 4022890:	e0bff717 	ldw	r2,-36(fp)
- 4022894:	10c00044 	addi	r3,r2,1
- 4022898:	00810134 	movhi	r2,1028
- 402289c:	10842004 	addi	r2,r2,4224
- 40228a0:	10c00035 	stwio	r3,0(r2)
+ 4022888:	e0bff717 	ldw	r2,-36(fp)
+ 402288c:	10c00044 	addi	r3,r2,1
+ 4022890:	00810134 	movhi	r2,1028
+ 4022894:	10842004 	addi	r2,r2,4224
+ 4022898:	10c00035 	stwio	r3,0(r2)
 	    	IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue2);
- 40228a4:	00810134 	movhi	r2,1028
- 40228a8:	10841c04 	addi	r2,r2,4208
- 40228ac:	e0fffb17 	ldw	r3,-20(fp)
- 40228b0:	10c00035 	stwio	r3,0(r2)
+ 402289c:	00810134 	movhi	r2,1028
+ 40228a0:	10841c04 	addi	r2,r2,4208
+ 40228a4:	e0fffb17 	ldw	r3,-20(fp)
+ 40228a8:	10c00035 	stwio	r3,0(r2)
 
 	int pixelAddress_2 = 0;
 
 //	Address = Column + (Row * Width)
 	for(int h = 0; h<=imgH-1; h=h+1){
 		for(int w = imgW-1; w>=0; w=w-2){
- 40228b4:	e0bff317 	ldw	r2,-52(fp)
- 40228b8:	10bfff84 	addi	r2,r2,-2
- 40228bc:	e0bff315 	stw	r2,-52(fp)
- 40228c0:	e0bff317 	ldw	r2,-52(fp)
- 40228c4:	103fcd0e 	bge	r2,zero,40227fc <__flash_rwdata_start+0xfffeeebc>
+ 40228ac:	e0bff317 	ldw	r2,-52(fp)
+ 40228b0:	10bfff84 	addi	r2,r2,-2
+ 40228b4:	e0bff315 	stw	r2,-52(fp)
+ 40228b8:	e0bff317 	ldw	r2,-52(fp)
+ 40228bc:	103fcd0e 	bge	r2,zero,40227f4 <__flash_rwdata_start+0xfffeeeb4>
 //	int imgW = 318;
 
 	int pixelAddress_2 = 0;
 
 //	Address = Column + (Row * Width)
 	for(int h = 0; h<=imgH-1; h=h+1){
- 40228c8:	e0bff217 	ldw	r2,-56(fp)
- 40228cc:	10800044 	addi	r2,r2,1
- 40228d0:	e0bff215 	stw	r2,-56(fp)
- 40228d4:	e0bffc17 	ldw	r2,-16(fp)
- 40228d8:	10ffffc4 	addi	r3,r2,-1
- 40228dc:	e0bff217 	ldw	r2,-56(fp)
- 40228e0:	18bfc20e 	bge	r3,r2,40227ec <__flash_rwdata_start+0xfffeeeac>
+ 40228c0:	e0bff217 	ldw	r2,-56(fp)
+ 40228c4:	10800044 	addi	r2,r2,1
+ 40228c8:	e0bff215 	stw	r2,-56(fp)
+ 40228cc:	e0bffc17 	ldw	r2,-16(fp)
+ 40228d0:	10ffffc4 	addi	r3,r2,-1
+ 40228d4:	e0bff217 	ldw	r2,-56(fp)
+ 40228d8:	18bfc20e 	bge	r3,r2,40227e4 <__flash_rwdata_start+0xfffeeea4>
 
 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , pixelAddress+1);
 	    	IOWR(PIXEL_DATA_BASE_val, 0, unpackedValue2);
 		}
 	}
 }
- 40228e4:	0001883a 	nop
- 40228e8:	e037883a 	mov	sp,fp
- 40228ec:	df000017 	ldw	fp,0(sp)
- 40228f0:	dec00104 	addi	sp,sp,4
- 40228f4:	f800283a 	ret
+ 40228dc:	0001883a 	nop
+ 40228e0:	e037883a 	mov	sp,fp
+ 40228e4:	df000017 	ldw	fp,0(sp)
+ 40228e8:	dec00104 	addi	sp,sp,4
+ 40228ec:	f800283a 	ret
 
-040228f8 <Run_Time>:
+040228f0 <Run_Time>:
 
 void Run_Time(uint32_t before, uint32_t after) {
- 40228f8:	defff204 	addi	sp,sp,-56
- 40228fc:	dfc00d15 	stw	ra,52(sp)
- 4022900:	df000c15 	stw	fp,48(sp)
- 4022904:	df000c04 	addi	fp,sp,48
- 4022908:	e13ffe15 	stw	r4,-8(fp)
- 402290c:	e17fff15 	stw	r5,-4(fp)
+ 40228f0:	defff204 	addi	sp,sp,-56
+ 40228f4:	dfc00d15 	stw	ra,52(sp)
+ 40228f8:	df000c15 	stw	fp,48(sp)
+ 40228fc:	df000c04 	addi	fp,sp,48
+ 4022900:	e13ffe15 	stw	r4,-8(fp)
+ 4022904:	e17fff15 	stw	r5,-4(fp)
 	// prints the run time, calculates FPS to 2 decimal places and prints FPS
 	// separates the 4 digits in FPS to ten, one, tenth, hundredth
 	// hex decoder to write a 7 digit binary value to the hex pio's
 	// make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
 
 	float frameTime = after - before;  // calculates run time of the frame
- 4022910:	e0ffff17 	ldw	r3,-4(fp)
- 4022914:	e0bffe17 	ldw	r2,-8(fp)
- 4022918:	1885c83a 	sub	r2,r3,r2
- 402291c:	1009883a 	mov	r4,r2
- 4022920:	40243ac0 	call	40243ac <__floatunsisf>
- 4022924:	1007883a 	mov	r3,r2
- 4022928:	e0fff415 	stw	r3,-48(fp)
+ 4022908:	e0ffff17 	ldw	r3,-4(fp)
+ 402290c:	e0bffe17 	ldw	r2,-8(fp)
+ 4022910:	1885c83a 	sub	r2,r3,r2
+ 4022914:	1009883a 	mov	r4,r2
+ 4022918:	40243ac0 	call	40243ac <__floatunsisf>
+ 402291c:	1007883a 	mov	r3,r2
+ 4022920:	e0fff415 	stw	r3,-48(fp)
 	// printf("The Run Time for the Frame is %.2f\n", frameTime);
 
 	float fps = 1000000.0/frameTime;   // converts us to fps
- 402292c:	e17ff417 	ldw	r5,-48(fp)
- 4022930:	01125d34 	movhi	r4,18804
- 4022934:	21090004 	addi	r4,r4,9216
- 4022938:	402343c0 	call	402343c <__divsf3>
- 402293c:	1007883a 	mov	r3,r2
- 4022940:	e0fff515 	stw	r3,-44(fp)
+ 4022924:	e17ff417 	ldw	r5,-48(fp)
+ 4022928:	01125d34 	movhi	r4,18804
+ 402292c:	21090004 	addi	r4,r4,9216
+ 4022930:	402343c0 	call	402343c <__divsf3>
+ 4022934:	1007883a 	mov	r3,r2
+ 4022938:	e0fff515 	stw	r3,-44(fp)
 	// printf("The fps for the System is %.2f\n", fps);
 
 	uint16_t fps_x100 = fps*100; // Multiply the fps by 100 to retain the 2 decimal places
- 4022944:	0150b234 	movhi	r5,17096
- 4022948:	e13ff517 	ldw	r4,-44(fp)
- 402294c:	40239380 	call	4023938 <__mulsf3>
- 4022950:	1007883a 	mov	r3,r2
- 4022954:	1805883a 	mov	r2,r3
- 4022958:	1009883a 	mov	r4,r2
- 402295c:	4022d600 	call	4022d60 <__fixunssfsi>
- 4022960:	e0bff60d 	sth	r2,-40(fp)
+ 402293c:	0150b234 	movhi	r5,17096
+ 4022940:	e13ff517 	ldw	r4,-44(fp)
+ 4022944:	40239380 	call	4023938 <__mulsf3>
+ 4022948:	1007883a 	mov	r3,r2
+ 402294c:	1805883a 	mov	r2,r3
+ 4022950:	1009883a 	mov	r4,r2
+ 4022954:	4022d600 	call	4022d60 <__fixunssfsi>
+ 4022958:	e0bff60d 	sth	r2,-40(fp)
 
 	// Break into digits: ab.cd --> 1000a + 100b + 10c + d
 	uint8_t d0 = fps_x100 % 10;
- 4022964:	e0bff60b 	ldhu	r2,-40(fp)
- 4022968:	01400284 	movi	r5,10
- 402296c:	1009883a 	mov	r4,r2
- 4022970:	4022f1c0 	call	4022f1c <__umodsi3>
- 4022974:	e0bff685 	stb	r2,-38(fp)
+ 402295c:	e0bff60b 	ldhu	r2,-40(fp)
+ 4022960:	01400284 	movi	r5,10
+ 4022964:	1009883a 	mov	r4,r2
+ 4022968:	4022f1c0 	call	4022f1c <__umodsi3>
+ 402296c:	e0bff685 	stb	r2,-38(fp)
 	uint8_t d1 = (fps_x100 / 10) % 10;
- 4022978:	e0bff60b 	ldhu	r2,-40(fp)
- 402297c:	01400284 	movi	r5,10
- 4022980:	1009883a 	mov	r4,r2
- 4022984:	4022eb80 	call	4022eb8 <__udivsi3>
- 4022988:	10bfffcc 	andi	r2,r2,65535
- 402298c:	01400284 	movi	r5,10
- 4022990:	1009883a 	mov	r4,r2
- 4022994:	4022f1c0 	call	4022f1c <__umodsi3>
- 4022998:	e0bff6c5 	stb	r2,-37(fp)
+ 4022970:	e0bff60b 	ldhu	r2,-40(fp)
+ 4022974:	01400284 	movi	r5,10
+ 4022978:	1009883a 	mov	r4,r2
+ 402297c:	4022eb80 	call	4022eb8 <__udivsi3>
+ 4022980:	10bfffcc 	andi	r2,r2,65535
+ 4022984:	01400284 	movi	r5,10
+ 4022988:	1009883a 	mov	r4,r2
+ 402298c:	4022f1c0 	call	4022f1c <__umodsi3>
+ 4022990:	e0bff6c5 	stb	r2,-37(fp)
 	uint8_t d2 = (fps_x100 / 100) % 10;
- 402299c:	e0bff60b 	ldhu	r2,-40(fp)
- 40229a0:	01401904 	movi	r5,100
- 40229a4:	1009883a 	mov	r4,r2
- 40229a8:	4022eb80 	call	4022eb8 <__udivsi3>
- 40229ac:	10bfffcc 	andi	r2,r2,65535
- 40229b0:	01400284 	movi	r5,10
- 40229b4:	1009883a 	mov	r4,r2
- 40229b8:	4022f1c0 	call	4022f1c <__umodsi3>
- 40229bc:	e0bff705 	stb	r2,-36(fp)
+ 4022994:	e0bff60b 	ldhu	r2,-40(fp)
+ 4022998:	01401904 	movi	r5,100
+ 402299c:	1009883a 	mov	r4,r2
+ 40229a0:	4022eb80 	call	4022eb8 <__udivsi3>
+ 40229a4:	10bfffcc 	andi	r2,r2,65535
+ 40229a8:	01400284 	movi	r5,10
+ 40229ac:	1009883a 	mov	r4,r2
+ 40229b0:	4022f1c0 	call	4022f1c <__umodsi3>
+ 40229b4:	e0bff705 	stb	r2,-36(fp)
 	uint8_t d3 = (fps_x100 / 1000) % 10;
- 40229c0:	e0bff60b 	ldhu	r2,-40(fp)
- 40229c4:	0140fa04 	movi	r5,1000
- 40229c8:	1009883a 	mov	r4,r2
- 40229cc:	4022eb80 	call	4022eb8 <__udivsi3>
- 40229d0:	10bfffcc 	andi	r2,r2,65535
- 40229d4:	01400284 	movi	r5,10
- 40229d8:	1009883a 	mov	r4,r2
- 40229dc:	4022f1c0 	call	4022f1c <__umodsi3>
- 40229e0:	e0bff745 	stb	r2,-35(fp)
+ 40229b8:	e0bff60b 	ldhu	r2,-40(fp)
+ 40229bc:	0140fa04 	movi	r5,1000
+ 40229c0:	1009883a 	mov	r4,r2
+ 40229c4:	4022eb80 	call	4022eb8 <__udivsi3>
+ 40229c8:	10bfffcc 	andi	r2,r2,65535
+ 40229cc:	01400284 	movi	r5,10
+ 40229d0:	1009883a 	mov	r4,r2
+ 40229d4:	4022f1c0 	call	4022f1c <__umodsi3>
+ 40229d8:	e0bff745 	stb	r2,-35(fp)
 
 	// look up Table for Hex Decoder Values
 
 	uint8_t hex_lut[10] = {
- 40229e4:	00bff004 	movi	r2,-64
- 40229e8:	e0bffb05 	stb	r2,-20(fp)
- 40229ec:	00bffe44 	movi	r2,-7
- 40229f0:	e0bffb45 	stb	r2,-19(fp)
- 40229f4:	00bfe904 	movi	r2,-92
- 40229f8:	e0bffb85 	stb	r2,-18(fp)
- 40229fc:	00bfec04 	movi	r2,-80
- 4022a00:	e0bffbc5 	stb	r2,-17(fp)
- 4022a04:	00bfe644 	movi	r2,-103
- 4022a08:	e0bffc05 	stb	r2,-16(fp)
- 4022a0c:	00bfe484 	movi	r2,-110
- 4022a10:	e0bffc45 	stb	r2,-15(fp)
- 4022a14:	00bfe084 	movi	r2,-126
- 4022a18:	e0bffc85 	stb	r2,-14(fp)
- 4022a1c:	00bffe04 	movi	r2,-8
- 4022a20:	e0bffcc5 	stb	r2,-13(fp)
- 4022a24:	00bfe004 	movi	r2,-128
- 4022a28:	e0bffd05 	stb	r2,-12(fp)
- 4022a2c:	00bfe404 	movi	r2,-112
- 4022a30:	e0bffd45 	stb	r2,-11(fp)
+ 40229dc:	00bff004 	movi	r2,-64
+ 40229e0:	e0bffb05 	stb	r2,-20(fp)
+ 40229e4:	00bffe44 	movi	r2,-7
+ 40229e8:	e0bffb45 	stb	r2,-19(fp)
+ 40229ec:	00bfe904 	movi	r2,-92
+ 40229f0:	e0bffb85 	stb	r2,-18(fp)
+ 40229f4:	00bfec04 	movi	r2,-80
+ 40229f8:	e0bffbc5 	stb	r2,-17(fp)
+ 40229fc:	00bfe644 	movi	r2,-103
+ 4022a00:	e0bffc05 	stb	r2,-16(fp)
+ 4022a04:	00bfe484 	movi	r2,-110
+ 4022a08:	e0bffc45 	stb	r2,-15(fp)
+ 4022a0c:	00bfe084 	movi	r2,-126
+ 4022a10:	e0bffc85 	stb	r2,-14(fp)
+ 4022a14:	00bffe04 	movi	r2,-8
+ 4022a18:	e0bffcc5 	stb	r2,-13(fp)
+ 4022a1c:	00bfe004 	movi	r2,-128
+ 4022a20:	e0bffd05 	stb	r2,-12(fp)
+ 4022a24:	00bfe404 	movi	r2,-112
+ 4022a28:	e0bffd45 	stb	r2,-11(fp)
 		~0b01111111, // 8
 		~0b01101111  // 9
 	};
 
 	// Convert digits to 7-segment encoding
 	uint8_t seg0 = hex_lut[d0] | 0b10000000;  // rightmost digit
- 4022a34:	e0bff683 	ldbu	r2,-38(fp)
- 4022a38:	e0fffb04 	addi	r3,fp,-20
- 4022a3c:	1885883a 	add	r2,r3,r2
- 4022a40:	10c00003 	ldbu	r3,0(r2)
- 4022a44:	00bfe004 	movi	r2,-128
- 4022a48:	1884b03a 	or	r2,r3,r2
- 4022a4c:	e0bff785 	stb	r2,-34(fp)
+ 4022a2c:	e0bff683 	ldbu	r2,-38(fp)
+ 4022a30:	e0fffb04 	addi	r3,fp,-20
+ 4022a34:	1885883a 	add	r2,r3,r2
+ 4022a38:	10c00003 	ldbu	r3,0(r2)
+ 4022a3c:	00bfe004 	movi	r2,-128
+ 4022a40:	1884b03a 	or	r2,r3,r2
+ 4022a44:	e0bff785 	stb	r2,-34(fp)
 	uint8_t seg1 = hex_lut[d1] | 0b10000000;
- 4022a50:	e0bff6c3 	ldbu	r2,-37(fp)
- 4022a54:	e0fffb04 	addi	r3,fp,-20
- 4022a58:	1885883a 	add	r2,r3,r2
- 4022a5c:	10c00003 	ldbu	r3,0(r2)
- 4022a60:	00bfe004 	movi	r2,-128
- 4022a64:	1884b03a 	or	r2,r3,r2
- 4022a68:	e0bff7c5 	stb	r2,-33(fp)
+ 4022a48:	e0bff6c3 	ldbu	r2,-37(fp)
+ 4022a4c:	e0fffb04 	addi	r3,fp,-20
+ 4022a50:	1885883a 	add	r2,r3,r2
+ 4022a54:	10c00003 	ldbu	r3,0(r2)
+ 4022a58:	00bfe004 	movi	r2,-128
+ 4022a5c:	1884b03a 	or	r2,r3,r2
+ 4022a60:	e0bff7c5 	stb	r2,-33(fp)
 	uint8_t seg2 = hex_lut[d2] | 0b10000000;
- 4022a6c:	e0bff703 	ldbu	r2,-36(fp)
- 4022a70:	e0fffb04 	addi	r3,fp,-20
- 4022a74:	1885883a 	add	r2,r3,r2
- 4022a78:	10c00003 	ldbu	r3,0(r2)
- 4022a7c:	00bfe004 	movi	r2,-128
- 4022a80:	1884b03a 	or	r2,r3,r2
- 4022a84:	e0bff805 	stb	r2,-32(fp)
+ 4022a64:	e0bff703 	ldbu	r2,-36(fp)
+ 4022a68:	e0fffb04 	addi	r3,fp,-20
+ 4022a6c:	1885883a 	add	r2,r3,r2
+ 4022a70:	10c00003 	ldbu	r3,0(r2)
+ 4022a74:	00bfe004 	movi	r2,-128
+ 4022a78:	1884b03a 	or	r2,r3,r2
+ 4022a7c:	e0bff805 	stb	r2,-32(fp)
 	seg2 &= ~0b10000000;  // Set the final bit in seg2 to 0
- 4022a88:	e0bff803 	ldbu	r2,-32(fp)
- 4022a8c:	10801fcc 	andi	r2,r2,127
- 4022a90:	e0bff805 	stb	r2,-32(fp)
+ 4022a80:	e0bff803 	ldbu	r2,-32(fp)
+ 4022a84:	10801fcc 	andi	r2,r2,127
+ 4022a88:	e0bff805 	stb	r2,-32(fp)
 	uint8_t seg3 = hex_lut[d3] | 0b10000000;
- 4022a94:	e0bff743 	ldbu	r2,-35(fp)
- 4022a98:	e0fffb04 	addi	r3,fp,-20
- 4022a9c:	1885883a 	add	r2,r3,r2
- 4022aa0:	10c00003 	ldbu	r3,0(r2)
- 4022aa4:	00bfe004 	movi	r2,-128
- 4022aa8:	1884b03a 	or	r2,r3,r2
- 4022aac:	e0bff845 	stb	r2,-31(fp)
+ 4022a8c:	e0bff743 	ldbu	r2,-35(fp)
+ 4022a90:	e0fffb04 	addi	r3,fp,-20
+ 4022a94:	1885883a 	add	r2,r3,r2
+ 4022a98:	10c00003 	ldbu	r3,0(r2)
+ 4022a9c:	00bfe004 	movi	r2,-128
+ 4022aa0:	1884b03a 	or	r2,r3,r2
+ 4022aa4:	e0bff845 	stb	r2,-31(fp)
 
 	// Pack HEX0-HEX2 into first_hex_export (24-bit)
 	uint32_t first_hex_value = (seg2 << 16) | (seg1 << 8) | seg0;
- 4022ab0:	e0bff803 	ldbu	r2,-32(fp)
- 4022ab4:	1006943a 	slli	r3,r2,16
- 4022ab8:	e0bff7c3 	ldbu	r2,-33(fp)
- 4022abc:	1004923a 	slli	r2,r2,8
- 4022ac0:	1886b03a 	or	r3,r3,r2
- 4022ac4:	e0bff783 	ldbu	r2,-34(fp)
- 4022ac8:	1884b03a 	or	r2,r3,r2
- 4022acc:	e0bff915 	stw	r2,-28(fp)
+ 4022aa8:	e0bff803 	ldbu	r2,-32(fp)
+ 4022aac:	1006943a 	slli	r3,r2,16
+ 4022ab0:	e0bff7c3 	ldbu	r2,-33(fp)
+ 4022ab4:	1004923a 	slli	r2,r2,8
+ 4022ab8:	1886b03a 	or	r3,r3,r2
+ 4022abc:	e0bff783 	ldbu	r2,-34(fp)
+ 4022ac0:	1884b03a 	or	r2,r3,r2
+ 4022ac4:	e0bff915 	stw	r2,-28(fp)
 
 	// HEX3 goes into second_hex_export (just the lowest byte)
 	uint32_t second_hex_value = seg3;
- 4022ad0:	e0bff843 	ldbu	r2,-31(fp)
- 4022ad4:	e0bffa15 	stw	r2,-24(fp)
+ 4022ac8:	e0bff843 	ldbu	r2,-31(fp)
+ 4022acc:	e0bffa15 	stw	r2,-24(fp)
 
 	// Write to PIOs
 	IOWR(HEX20_BASE, 0, first_hex_value);
- 4022ad8:	e0fff917 	ldw	r3,-28(fp)
- 4022adc:	00810134 	movhi	r2,1028
- 4022ae0:	10842804 	addi	r2,r2,4256
- 4022ae4:	10c00035 	stwio	r3,0(r2)
+ 4022ad0:	e0fff917 	ldw	r3,-28(fp)
+ 4022ad4:	00810134 	movhi	r2,1028
+ 4022ad8:	10842804 	addi	r2,r2,4256
+ 4022adc:	10c00035 	stwio	r3,0(r2)
 	IOWR(HEX53_BASE, 0, second_hex_value);
- 4022ae8:	e0fffa17 	ldw	r3,-24(fp)
- 4022aec:	00810134 	movhi	r2,1028
- 4022af0:	10842404 	addi	r2,r2,4240
- 4022af4:	10c00035 	stwio	r3,0(r2)
+ 4022ae0:	e0fffa17 	ldw	r3,-24(fp)
+ 4022ae4:	00810134 	movhi	r2,1028
+ 4022ae8:	10842404 	addi	r2,r2,4240
+ 4022aec:	10c00035 	stwio	r3,0(r2)
 }
- 4022af8:	0001883a 	nop
- 4022afc:	e037883a 	mov	sp,fp
- 4022b00:	dfc00117 	ldw	ra,4(sp)
- 4022b04:	df000017 	ldw	fp,0(sp)
- 4022b08:	dec00204 	addi	sp,sp,8
- 4022b0c:	f800283a 	ret
+ 4022af0:	0001883a 	nop
+ 4022af4:	e037883a 	mov	sp,fp
+ 4022af8:	dfc00117 	ldw	ra,4(sp)
+ 4022afc:	df000017 	ldw	fp,0(sp)
+ 4022b00:	dec00204 	addi	sp,sp,8
+ 4022b04:	f800283a 	ret
 
-04022b10 <gyro_detect_tap>:
+04022b08 <gyro_detect_tap>:
 
-int gyro_detect_tap(volatile int tap_flag, int *counter) {
- 4022b10:	defffc04 	addi	sp,sp,-16
- 4022b14:	dfc00315 	stw	ra,12(sp)
- 4022b18:	df000215 	stw	fp,8(sp)
- 4022b1c:	df000204 	addi	fp,sp,8
- 4022b20:	e13ffe15 	stw	r4,-8(fp)
- 4022b24:	e17fff15 	stw	r5,-4(fp)
+void gyro_detect_tap(volatile int *tap_flag, int *counter) {
+ 4022b08:	defffc04 	addi	sp,sp,-16
+ 4022b0c:	dfc00315 	stw	ra,12(sp)
+ 4022b10:	df000215 	stw	fp,8(sp)
+ 4022b14:	df000204 	addi	fp,sp,8
+ 4022b18:	e13ffe15 	stw	r4,-8(fp)
+ 4022b1c:	e17fff15 	stw	r5,-4(fp)
 	// Prints result of triggering accelerometer double tap interrupt and adds to counter
 
 	// Print accelerometer double tap result
-	if (tap_flag == 1) {
- 4022b28:	e0bffe17 	ldw	r2,-8(fp)
- 4022b2c:	10800058 	cmpnei	r2,r2,1
- 4022b30:	1000091e 	bne	r2,zero,4022b58 <gyro_detect_tap+0x48>
+	if (*tap_flag == 1) {
+ 4022b20:	e0bffe17 	ldw	r2,-8(fp)
+ 4022b24:	10800017 	ldw	r2,0(r2)
+ 4022b28:	10800058 	cmpnei	r2,r2,1
+ 4022b2c:	10000a1e 	bne	r2,zero,4022b58 <gyro_detect_tap+0x50>
 		printf("\n\nDouble tap detected!\n\n");
- 4022b34:	01000034 	movhi	r4,0
- 4022b38:	21000e04 	addi	r4,r4,56
- 4022b3c:	402462c0 	call	402462c <puts>
-		tap_flag = 0;
- 4022b40:	e03ffe15 	stw	zero,-8(fp)
+ 4022b30:	01000034 	movhi	r4,0
+ 4022b34:	21000e04 	addi	r4,r4,56
+ 4022b38:	402462c0 	call	402462c <puts>
+		*tap_flag = 0;
+ 4022b3c:	e0bffe17 	ldw	r2,-8(fp)
+ 4022b40:	10000015 	stw	zero,0(r2)
 		*counter = *counter + 1;
  4022b44:	e0bfff17 	ldw	r2,-4(fp)
  4022b48:	10800017 	ldw	r2,0(r2)
@@ -4359,15 +4358,14 @@ int gyro_detect_tap(volatile int tap_flag, int *counter) {
  4022b58:	e0bfff17 	ldw	r2,-4(fp)
  4022b5c:	10800017 	ldw	r2,0(r2)
  4022b60:	10800110 	cmplti	r2,r2,4
- 4022b64:	1000021e 	bne	r2,zero,4022b70 <gyro_detect_tap+0x60>
+ 4022b64:	1000021e 	bne	r2,zero,4022b70 <gyro_detect_tap+0x68>
 		*counter = 0;
  4022b68:	e0bfff17 	ldw	r2,-4(fp)
  4022b6c:	10000015 	stw	zero,0(r2)
 	}
-	return tap_flag;
- 4022b70:	e0bffe17 	ldw	r2,-8(fp)
 
 }
+ 4022b70:	0001883a 	nop
  4022b74:	e037883a 	mov	sp,fp
  4022b78:	dfc00117 	ldw	ra,4(sp)
  4022b7c:	df000017 	ldw	fp,0(sp)

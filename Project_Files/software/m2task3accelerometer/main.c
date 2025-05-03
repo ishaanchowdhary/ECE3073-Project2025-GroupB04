@@ -109,7 +109,7 @@ int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr);
 int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height);
 void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void Run_Time(uint32_t before, uint32_t after);
-int gyro_detect_tap(volatile int tap_flag, int *counter);
+void gyro_detect_tap(volatile int *tap_flag, int *counter);
 int display_select(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 
@@ -170,13 +170,13 @@ int main(void){
 	alt_u8 readY = READ_Y_AXIS;
 	alt_u8 readZ = READ_Z_AXIS;
 	alt_16 xData, yData, zData;
-	alt_u8 isRes = 0xff;
+	alt_u8 isrRes = 0xff;
 
 	for (int i = 0; i < CONFIG_LENGTH; i += 2) {
 		alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 2, gyro_config + i, 0, &gyro_data_out, 0);
 	}
 
-	void* context = (void *) &isRes;
+	void* context = (void *) &isrRes;
 	IOWR(GYRO_INT_BASE, 3, 0);
 	IOWR(GYRO_INT_BASE, 2, 0x1);
 	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, gyro_isr, context, 0x0);
@@ -220,7 +220,6 @@ int main(void){
 
 			// Quad Display Mode
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,9600,&rxArrSmall,0); //SPI for SMALL res
-
 			// Flags For Copying Displays
 			int flag1 = 0;
 			int flag2 = 0;
@@ -366,17 +365,17 @@ int main(void){
 		}
 
 		// Detect double tap event and update counter
-		tap_flag = gyro_detect_tap(tap_flag, &counter);
+		gyro_detect_tap(&tap_flag, &counter);
 
 		// Print rotational data and collect rotation around y-axis
 		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
 
-		gyro_data_in = INT_SOURCE | 0x80;
-	    alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
 
 		// Run time
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
 	    Run_Time(start, end); // Call Function to Display Benchmarking
+		gyro_data_in = INT_SOURCE | 0x80;
+		alt_avalon_spi_command(SPI_CONTROLLER_BASE, 1, 1, &gyro_data_in, 1, &regData, 0x0);
 }
 }
 
@@ -394,8 +393,8 @@ void key_isr(void * context)  {
 	key_flag = 1 - key_flag;
 }
 
-void key1_isr(void* context, alt_u32 id) {
-    volatile int* edgeCapturePtr = (volatile int*) context;
+void key1_isr(void* context1, alt_u32 id) {
+    volatile int* edgeCapturePtr = (volatile int*) context1;
 
     // Read the edge capture register
     *edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
@@ -726,13 +725,13 @@ void Run_Time(uint32_t before, uint32_t after) {
 	IOWR(HEX53_BASE, 0, second_hex_value);
 }
 
-int gyro_detect_tap(volatile int tap_flag, int *counter) {
+void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 	// Prints result of triggering accelerometer double tap interrupt and adds to counter
 
 	// Print accelerometer double tap result
-	if (tap_flag == 1) {
+	if (*tap_flag == 1) {
 		printf("\n\nDouble tap detected!\n\n");
-		tap_flag = 0;
+		*tap_flag = 0;
 		*counter = *counter + 1;
 	}
 
@@ -740,7 +739,6 @@ int gyro_detect_tap(volatile int tap_flag, int *counter) {
 	if (*counter >= 4) {
 		*counter = 0;
 	}
-	return tap_flag;
 
 }
 
