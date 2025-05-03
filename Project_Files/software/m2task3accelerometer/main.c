@@ -109,7 +109,7 @@ int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr);
 int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height);
 void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void Run_Time(uint32_t before, uint32_t after);
-void gyro_detect_tap(volatile int *tap_flag, int *counter);
+int gyro_detect_tap(volatile int tap_flag, int *counter);
 int display_select(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 
@@ -366,10 +366,13 @@ int main(void){
 		}
 
 		// Detect double tap event and update counter
-		gyro_detect_tap(&tap_flag, &counter);
+		tap_flag = gyro_detect_tap(tap_flag, &counter);
 
 		// Print rotational data and collect rotation around y-axis
 		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
+
+		gyro_data_in = INT_SOURCE | 0x80;
+	    alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
 
 		// Run time
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
@@ -723,13 +726,13 @@ void Run_Time(uint32_t before, uint32_t after) {
 	IOWR(HEX53_BASE, 0, second_hex_value);
 }
 
-void gyro_detect_tap(volatile int *tap_flag, int *counter) {
+int gyro_detect_tap(volatile int tap_flag, int *counter) {
 	// Prints result of triggering accelerometer double tap interrupt and adds to counter
 
 	// Print accelerometer double tap result
-	if (*tap_flag == 1) {
+	if (tap_flag == 1) {
 		printf("\n\nDouble tap detected!\n\n");
-		*tap_flag = 0;
+		tap_flag = 0;
 		*counter = *counter + 1;
 	}
 
@@ -737,6 +740,7 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 	if (*counter >= 4) {
 		*counter = 0;
 	}
+	return tap_flag;
 
 }
 
