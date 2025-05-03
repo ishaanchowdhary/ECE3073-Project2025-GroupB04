@@ -109,7 +109,7 @@ int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr);
 int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height);
 void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void Run_Time(uint32_t before, uint32_t after);
-int gyro_detect_tap(volatile int tap_flag, int *counter);
+void gyro_detect_tap(volatile int *tap_flag, int *counter);
 int display_select(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 
@@ -366,7 +366,7 @@ int main(void){
 		}
 
 		// Detect double tap event and update counter
-		tap_flag = gyro_detect_tap(tap_flag, &counter);
+		gyro_detect_tap(&tap_flag, &counter);
 
 		// Print rotational data and collect rotation around y-axis
 		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
@@ -723,13 +723,13 @@ void Run_Time(uint32_t before, uint32_t after) {
 	IOWR(HEX53_BASE, 0, second_hex_value);
 }
 
-int gyro_detect_tap(volatile int tap_flag, int *counter) {
+void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 	// Prints result of triggering accelerometer double tap interrupt and adds to counter
 
 	// Print accelerometer double tap result
-	if (tap_flag == 1) {
+	if (*tap_flag == 1) {
 		printf("\n\nDouble tap detected!\n\n");
-		tap_flag = 0;
+		*tap_flag = 0;
 		*counter = *counter + 1;
 	}
 
@@ -738,14 +738,13 @@ int gyro_detect_tap(volatile int tap_flag, int *counter) {
 		*counter = 0;
 	}
 
-	return tap_flag;
 }
 
 int display_select(alt_16 yData) {
-    int selectedDisp = 1;
-	if (yData >= -99 && yData < -20) selectedDisp = 2;
-	else if (yData > 20 && yData <= 60) selectedDisp = 3;
-	else if (yData > 60 && yData <= 90) selectedDisp = 4;
+    int selectedDisp = 0;
+	if (yData >= -99 && yData < -20) selectedDisp = 1;
+	else if (yData > 20 && yData <= 60) selectedDisp = 2;
+	else if (yData > 60 && yData <= 90) selectedDisp = 3;
     printf("Selected Display: %d\n", selectedDisp);
 	return selectedDisp;
 }
