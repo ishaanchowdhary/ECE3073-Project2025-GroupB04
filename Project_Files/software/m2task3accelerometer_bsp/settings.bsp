@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>03/05/2025 2:59:38 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1746248378930</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>03/05/2025 6:12:19 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1746259939313</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\prana\OneDrive\Documents\ECE3073\ECE3073_task3_doubletap\ECE3073-Project2025-GroupB04\Project_Files\software\m2task3accelerometer_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\PROJECT_SYS_V2.sopcinfo</SopcDesignFile>

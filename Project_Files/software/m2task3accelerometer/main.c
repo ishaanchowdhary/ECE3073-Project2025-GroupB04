@@ -78,7 +78,7 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 	ACT_INACT_CTL, 0xff,
 	THRESH_FF, 0x09,
 	TIME_FF, 0x46,
-	TAP_THRES, 0x10,
+	TAP_THRES, 0x20,
 	TAP_AXES, 0x07,
 	LATENT, 0x85,
 	DUR, 0x40,
