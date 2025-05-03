@@ -233,7 +233,8 @@ int main(void){
 			else if (selectedDisp==1) disp2_mode = counter;
 			else if (selectedDisp==2) disp3_mode = counter;
 			else if (selectedDisp==3) disp4_mode = counter;
-			printf("Display Modes: %d, %d, %d, %d", disp1_mode, disp2_mode, disp3_mode, disp4_mode);
+			printf("Display Modes: %d, %d, %d, %d\n", disp1_mode, disp2_mode, disp3_mode, disp4_mode);
+
 			// Flip Index
 			int flipImgIdx1 = 0;
 			int flipImgIdx2 = 0;
@@ -360,12 +361,12 @@ int main(void){
 		    	convolve(&rxArr,&sobelArrY,sobelY,320,240);
 		    	combineSobelFilter(sobelArrX,sobelArrY,rxArr,320,240);
 			}
-
+			printf("Single Image Mode: %d\n", single_mode);
 			display_image_from_array_v3(240, 320, &rxArr, PIXEL_ADDRESS_BASE_val, SingleFlipImgIdx);
 		}
 
 		// Detect double tap event and update counter
-		tap_flag = gyro_detect_tap(readX, readY, readZ, xData, yData, zData, tap_flag, &counter);
+		tap_flag = gyro_detect_tap(tap_flag, &counter);
 
 		// Print rotational data and collect rotation around y-axis
 		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
