@@ -7,6 +7,8 @@
 #include "altera_avalon_pio_regs.h"
 #include "alt_types.h"
 
+
+
 #define SDRAM_BASE_ADDRESS 0x00000000
 #define IMAGE_SIZE (320*240/2)//each pixel 4 bits, top 4 bits = first pixel
 
@@ -19,8 +21,11 @@
 
 #define TIME_DISPLAY_BASE 0x4041040
 
+#define KEY10_BASE 0x40410a0
+
+
 // Global variables for key interrupt
-volatile int key1Flag = 0; // Flag for key1 interrupt
+volatile int Key1Flag = 0; // Flag for key1 interrupt
 
 int main(void){
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
@@ -69,7 +74,6 @@ int main(void){
 	uint8_t *GlobalEdge;
 
 	// Global variables for key interrupt
-	volatile int key1Flag = 0; // Flag for key1 interrupt
 	volatile int mode = 1;     // 0 = single mode, 1 = quad mode
 
 	// Initialise the interrupt before entering into the loop
@@ -78,9 +82,9 @@ int main(void){
 	while(1){
 
 
-		if (key1Flag == 0x1) {
+		if (Key1Flag == 1) {
             mode = !mode;  // Toggle mode
-            key1Flag = 0;  // Reset the flag
+            Key1Flag = 0;  // Reset the flag
         }
 
 
@@ -241,42 +245,45 @@ int main(void){
 }
 
 
-void key1_isr(void* context, alt_u32 id) {
+	void key1_isr(void* context, alt_u32 id) {
+		volatile int* edgeCapturePtr = (volatile int*) context;
 
-    volatile int* edgeCapturePtr = (volatile int*) context;
+		// Read the edge capture register
+		*edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
 
-    // Read the edge capture register
-    *edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
+		// Check if interrupt occured
+		if(*edgeCapturePtr & 0x2){
+			printf("Interrupt\n");
+			Key1Flag = 1;
+	}
 
-	// Check if interrupt occured
-	if(*edgeCapturePtr & 0x2){
-		key1Flag = 0x1;
-}
-
-    // Clear the edge capture register to enable future interrupts
-    IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
-}
-
-
+		// Clear the edge capture register to enable future interrupts
+		IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
+	}
 
 
-void initialise_key1_interrupt() {
 
-    // Clear any pending interrupts
-    IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
+	
+	void initialise_key1_interrupt() {
 
-    // Enable interrupts for KEY1 (bit 1)
-    IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x4);
+		// Clear any pending interrupts
+		IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
 
-    // Register ISR
-    alt_ic_isr_register(
-		KEY10_IRQ_INTERRUPT_CONTROLLER_ID, 
-		KEY10_IRQ, 
-		key1_isr, 
-		(void*) KEY10_BASE, 
-		0
-	);
-}
+		// Enable interrupts for KEY1 (bit 1)
+		IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x2);
+
+
+
+		// Register ISR
+		alt_ic_isr_register(
+			KEY10_IRQ_INTERRUPT_CONTROLLER_ID, 
+			KEY10_IRQ, 
+			key1_isr, 
+			(void*) KEY10_BASE, 
+			0
+		);
+
+	}
 
 
 
@@ -563,10 +570,10 @@ void Run_Time(uint32_t before, uint32_t after){
 	// make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
 
 	float frameTime = after - before;  // calculates run time of the frame
-	printf("The Run Time for the Frame is %.2f\n", frameTime);
+	//printf("The Run Time for the Frame is %.2f\n", frameTime);
 
 	float fps = 1000000.0/frameTime;   // converts us to fps
-	printf("The fps for the System is %.2f\n", fps);
+	//printf("The fps for the System is %.2f\n", fps);
 
 	uint16_t fps_x100 = fps*100; // Multiply the fps by 100 to retain the 2 decimal places
 
