@@ -3,6 +3,7 @@ module PROJECT_SYS_V2 (
 	cam_ready_export,
 	clk_clk,
 	first_hex_export,
+	gyro_int_export,
 	keys_export,
 	leds_export,
 	pixel_address_export,
@@ -27,6 +28,7 @@ module PROJECT_SYS_V2 (
 	input		cam_ready_export;
 	input		clk_clk;
 	output	[23:0]	first_hex_export;
+	input		gyro_int_export;
 	input	[1:0]	keys_export;
 	output	[9:0]	leds_export;
 	output	[16:0]	pixel_address_export;
@@ -44,7 +46,7 @@ module PROJECT_SYS_V2 (
 	input		spi_external_MISO;
 	output		spi_external_MOSI;
 	output		spi_external_SCLK;
-	output		spi_external_SS_n;
+	output	[1:0]	spi_external_SS_n;
 	input	[9:0]	switches_export;
 	input	[31:0]	time_display_export;
 endmodule
