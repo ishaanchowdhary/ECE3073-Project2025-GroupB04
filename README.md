@@ -15,7 +15,6 @@ Official Github Repository for Team B04
 - Google Drive: https://drive.google.com/drive/folders/1Io3ZJ5lEii86HpRdqcxurHwWRgZr2M0c
 - Project Outline: https://docs.google.com/document/d/1Q_rvMKkylZkh_7S5NG182kRnvroPgW-FkgPO-uKmHZA/edit?tab=t.0
 
-
 ## Project Milestone 1:
 - Document: https://docs.google.com/document/d/1dCBVDn1swcVkEB9k41yAv5fwvRmAM_QDuVHKTNi9dGI/edit?tab=t.0
 
@@ -28,6 +27,12 @@ Official Github Repository for Team B04
 5. Now open Qartus Prime Programmer in NIOS and add the .sof file, running the code on the FPGA board. 
 6. Build the Eclipse project (Ctrl + B) and then run the configuration (run > run configurations). 
 
+Or if using the zip folder:
+
+1. Unzip the folder
+2. Run the PROJECT_M1.QAR
+3. Follow step 2 from above
+
 ## Project Milestone 2:
 - Document: https://docs.google.com/document/d/17p9ONadSBzzAWHCJbZrsCfOODOhzqoRT8UTNIHmoJIc/edit?tab=t.0
 
@@ -37,10 +42,3 @@ Official Github Repository for Team B04
 2. To switch between single and quadrant image modes, press KEY1.
 3. In single display mode, tapping the glass panel twice will cycle through the display modes (normal frame, flipped, blurred and edge detection), changing the display.
 5. In quadrant mode, tilting the FPGA board rearranges the order of the sub-displays (normal frame, flipped, blurred and edge detection) shown. 
-
-
-Or if using the zip folder:
-
-1. Unzip the folder
-2. Run the PROJECT_M1.QAR
-3. Follow step 2 from above
