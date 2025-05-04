@@ -91,12 +91,11 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 
 // Interrupt Flags Define
 volatile int tap_flag = 0;	// Double Tap Interrupt Flag
-volatile int key_flag = 0;	// Key Interrupt Flag
 
-// --------------------------------------------------------------- To remove
+
 // Global variables for key interrupt
-volatile int key1Flag = 0; // Flag for key1 interrupt
-// ---------------------------------------------------------------
+volatile int Key1Flag = 0; // Flag for key1 interrupt
+
 
 // Function Declarations
 void gyro_isr(void * context);
@@ -110,7 +109,7 @@ int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width,
 void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void Run_Time(uint32_t before, uint32_t after);
 void gyro_detect_tap(volatile int *tap_flag, int *counter);
-int display_select(alt_16 yData);
+void display_select(alt_16 yData, int* selectedDisp1, int* selectedDisp2, int* selectedDisp3, int* selectedDisp4);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 
 int main(void){
@@ -186,11 +185,15 @@ int main(void){
 
 	// Initial Setup for Single and Quad Display
 	int single_mode = 0;
-	int selectedDisp = 0;
-	int disp1_mode = 0;
-	int disp2_mode = 0;
-	int disp3_mode = 0;
-	int disp4_mode = 0;
+
+	int D1;
+	int D2;
+	int D3;
+	int D4;
+
+
+
+
 
 	// Key 1 Interrupt Setup
 	while(1){
@@ -198,19 +201,10 @@ int main(void){
 		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
 
 		// Toggle for switching between Single and Quad Display
-		if (key1Flag == 0x1) {
+		if (Key1Flag == 1) {
             mode = !mode;  // Toggle mode
-            key1Flag = 0;  // Reset the flag
-			// When change occurs, set counter to whatever it was on the previous display last - ONLY USE WHEN KEY INTERRUPT TRIGGERS AS DESIRED
-//			selectedDisp = display_select(yData);
-//			if (mode) {
-//				if (selectedDisp==0) counter = disp1_mode;
-//				else if (selectedDisp==1) counter = disp2_mode;
-//				else if (selectedDisp==2) counter = disp3_mode;
-//				else if (selectedDisp==3) counter = disp4_mode;
-//			} else {
-//				counter = single_mode;
-//			}
+            Key1Flag = 0;  // Reset the flag
+
         }
 
 		// Variable For Switches
@@ -225,14 +219,9 @@ int main(void){
 			int flag2 = 0;
 
 			// Select Display using Tilt (About y-axis)
-            selectedDisp = display_select(yData);
+			
 
-			// Selected Display Mode updated by Double Tap Interrupt
-			if (selectedDisp==0) disp1_mode = counter;
-			else if (selectedDisp==1) disp2_mode = counter;
-			else if (selectedDisp==2) disp3_mode = counter;
-			else if (selectedDisp==3) disp4_mode = counter;
-			printf("Display Modes: %d, %d, %d, %d\n", disp1_mode, disp2_mode, disp3_mode, disp4_mode);
+			display_select(yData, &D1, &D2, &D3, &D4);
 
 			// Flip Index
 			int flipImgIdx1 = 0;
@@ -241,19 +230,19 @@ int main(void){
 			int flipImgIdx4 = 0;
 
 			// Handle Disp1
-			if (disp1_mode == 0) {
+			if (D1 == 0) {
 				img1 = &rxArrSmall;
-			} else if (disp1_mode == 1) {
+			} else if (D1 == 1) {
 				img1 = &rxArrSmall;
 				flipImgIdx1 = 1;
-			} else if (disp1_mode == 2) {
+			} else if (D1 == 2) {
 				if (flag1 == 0) {
 					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
 					GlobalBlur = &smallImgBuff1;
 					flag1 = 1;
 				}
 				img1 = GlobalBlur;
-			} else if (disp1_mode == 3) {
+			} else if (D1 == 3) {
 				if (flag2 == 0) {
 					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
 					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
@@ -266,19 +255,19 @@ int main(void){
 
 
 			// Handle Disp2
-			if (disp2_mode == 0) {
+			if (D2 == 0) {
 				img2 = rxArrSmall;
-			} else if (disp2_mode == 1) {
+			} else if (D2 == 1) {
 				img2 = rxArrSmall;
 				flipImgIdx2 = 1;
-			} else if (disp2_mode == 2) {
+			} else if (D2 == 2) {
 				if (flag1 == 0) {
 					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
 					GlobalBlur = &smallImgBuff1;
 					flag1 = 1;
 				}
 				img2 = GlobalBlur;
-			} else if (disp2_mode == 3) {
+			} else if (D2 == 3) {
 				if (flag2 == 0) {
 					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
 					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
@@ -290,19 +279,19 @@ int main(void){
 			}
 
 			// Handle Disp3
-			if (disp3_mode == 0) {
+			if (D3 == 0) {
 				img3 = rxArrSmall;
-			} else if (disp3_mode == 1) {
+			} else if (D3 == 1) {
 				img3 = rxArrSmall;
 				flipImgIdx3 = 1;
-			} else if (disp3_mode == 2) {
+			} else if (D3 == 2) {
 				if (flag1 == 0) {
 					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
 					GlobalBlur = &smallImgBuff1;
 					flag1 = 1;
 				}
 				img3 = GlobalBlur;
-			} else if (disp3_mode == 3) {
+			} else if (D3 == 3) {
 				if (flag2 == 0) {
 					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
 					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
@@ -314,19 +303,19 @@ int main(void){
 			}
 
 			// Handle Disp4
-			if (disp4_mode == 0) {
+			if (D4 == 0) {
 				img4 = rxArrSmall;
-			} else if (disp4_mode == 1) {
+			} else if (D4 == 1) {
 				img4 = rxArrSmall;
 				flipImgIdx4 = 1;
-			} else if (disp4_mode == 2) {
+			} else if (D4 == 2) {
 				if (flag1 == 0) {
 					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
 					GlobalBlur = &smallImgBuff1;
 					flag1 = 1;
 				}
 				img4 = GlobalBlur;
-			} else if (disp4_mode == 3) {
+			} else if (D4 == 3) {
 				if (flag2 == 0) {
 					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
 					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
@@ -386,12 +375,6 @@ void gyro_isr(void * context) {
 	tap_flag = 1; //set the tap flag when an interrupt is triggered
 }
 
-// Interrupt service routine (ISR) for key interrupt
-void key_isr(void * context)  {
-	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
-	IOWR(KEY10_BASE, 3, 0);
-	key_flag = 1 - key_flag;
-}
 
 void key1_isr(void* context1, alt_u32 id) {
     volatile int* edgeCapturePtr = (volatile int*) context1;
@@ -401,7 +384,8 @@ void key1_isr(void* context1, alt_u32 id) {
 
 	// Check if interrupt occured
 	if(*edgeCapturePtr & 0x2){
-		key1Flag = 0x1;
+		printf("KEY1 Interrupt Detected.\n");
+		Key1Flag = 1;
 }
     // Clear the edge capture register to enable future interrupts
     IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
@@ -413,7 +397,7 @@ void initialise_key1_interrupt() {
     IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
 
     // Enable interrupts for KEY1 (bit 1)
-    IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x4);
+    IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x2);
 
     // Register ISR
     alt_ic_isr_register(
@@ -742,16 +726,31 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 
 }
 
-int display_select(alt_16 yData) {
-    int selectedDisp = 0;
-    if (yData >= -30 && yData <= 30) {
-    	selectedDisp = 0;
+void display_select(alt_16 yData, int* selectedDisp1, int* selectedDisp2, int* selectedDisp3, int* selectedDisp4) {
+    if (yData >= -265 && yData < -127) {
+        *selectedDisp1 = 0;
+        *selectedDisp2 = 1;
+        *selectedDisp3 = 2;
+        *selectedDisp4 = 3;
     }
-    else if (yData >= -110 && yData < -30) selectedDisp = 1;
-	else if (yData > 30 && yData <= 70) selectedDisp = 2;
-	else if (yData > 70 && yData <= 100) selectedDisp = 3;
-    printf("Selected Display: %d\n", selectedDisp);
-	return selectedDisp;
+    else if (yData >= -127 && yData < 0) {
+        *selectedDisp1 = 3;
+        *selectedDisp2 = 0;
+        *selectedDisp3 = 1;
+        *selectedDisp4 = 2;
+    }
+    else if (yData >= 0 && yData < 127) {
+        *selectedDisp1 = 2;
+        *selectedDisp2 = 3;
+        *selectedDisp3 = 0;
+        *selectedDisp4 = 1;
+    }
+    else if (yData >= 127 && yData <= 265) {
+        *selectedDisp1 = 1;
+        *selectedDisp2 = 2;
+        *selectedDisp3 = 3;
+        *selectedDisp4 = 0;
+    }
 }
 
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData) {
