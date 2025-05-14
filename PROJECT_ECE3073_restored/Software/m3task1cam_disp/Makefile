@@ -142,7 +142,7 @@ ACDS_VERSION := 18.1
 ELF := m3task1cam_disp.elf
 
 # Paths to C, C++, and assembly source files.
-C_SRCS := hello_world_small.c
+C_SRCS := main0.c
 CXX_SRCS :=
 ASM_SRCS :=
 

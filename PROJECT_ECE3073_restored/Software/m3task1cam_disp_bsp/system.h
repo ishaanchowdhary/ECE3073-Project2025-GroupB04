@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_CAM_DISP' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Wed May 14 14:30:40 EST 2025
+ * Generated: Wed May 14 15:55:03 EST 2025
  */
 
 /*
@@ -61,7 +61,7 @@
  */
 
 #define ALT_MODULE_CLASS_CAM_READY altera_avalon_pio
-#define CAM_READY_BASE 0x4001040
+#define CAM_READY_BASE 0x4001030
 #define CAM_READY_BIT_CLEARING_EDGE_REGISTER 0
 #define CAM_READY_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define CAM_READY_CAPTURE 0
@@ -174,7 +174,6 @@
 #define __ALTERA_AVALON_PIO
 #define __ALTERA_AVALON_TIMER
 #define __ALTERA_NIOS2_GEN2
-#define __ALTPLL
 
 
 /*
@@ -183,7 +182,7 @@
  */
 
 #define ALT_MODULE_CLASS_HEX20 altera_avalon_pio
-#define HEX20_BASE 0x4001080
+#define HEX20_BASE 0x4001070
 #define HEX20_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX20_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX20_CAPTURE 0
@@ -210,7 +209,7 @@
  */
 
 #define ALT_MODULE_CLASS_HEX53 altera_avalon_pio
-#define HEX53_BASE 0x4001070
+#define HEX53_BASE 0x4001060
 #define HEX53_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX53_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX53_CAPTURE 0
@@ -237,7 +236,7 @@
  */
 
 #define ALT_MODULE_CLASS_KEY10 altera_avalon_pio
-#define KEY10_BASE 0x4001090
+#define KEY10_BASE 0x4001080
 #define KEY10_BIT_CLEARING_EDGE_REGISTER 0
 #define KEY10_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define KEY10_CAPTURE 1
@@ -264,7 +263,7 @@
  */
 
 #define ALT_MODULE_CLASS_LEDR90 altera_avalon_pio
-#define LEDR90_BASE 0x40010b0
+#define LEDR90_BASE 0x40010a0
 #define LEDR90_BIT_CLEARING_EDGE_REGISTER 0
 #define LEDR90_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define LEDR90_CAPTURE 0
@@ -291,7 +290,7 @@
  */
 
 #define ALT_MODULE_CLASS_PIXEL_ADDRESS altera_avalon_pio
-#define PIXEL_ADDRESS_BASE 0x4001060
+#define PIXEL_ADDRESS_BASE 0x4001050
 #define PIXEL_ADDRESS_BIT_CLEARING_EDGE_REGISTER 0
 #define PIXEL_ADDRESS_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PIXEL_ADDRESS_CAPTURE 0
@@ -318,7 +317,7 @@
  */
 
 #define ALT_MODULE_CLASS_PIXEL_DATA altera_avalon_pio
-#define PIXEL_DATA_BASE 0x4001050
+#define PIXEL_DATA_BASE 0x4001040
 #define PIXEL_DATA_BIT_CLEARING_EDGE_REGISTER 0
 #define PIXEL_DATA_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PIXEL_DATA_CAPTURE 0
@@ -379,26 +378,12 @@
 
 
 /*
- * SDRAM_PLL configuration
- *
- */
-
-#define ALT_MODULE_CLASS_SDRAM_PLL altpll
-#define SDRAM_PLL_BASE 0x4001020
-#define SDRAM_PLL_IRQ -1
-#define SDRAM_PLL_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define SDRAM_PLL_NAME "/dev/SDRAM_PLL"
-#define SDRAM_PLL_SPAN 16
-#define SDRAM_PLL_TYPE "altpll"
-
-
-/*
  * SW configuration
  *
  */
 
 #define ALT_MODULE_CLASS_SW altera_avalon_pio
-#define SW_BASE 0x40010a0
+#define SW_BASE 0x4001090
 #define SW_BIT_CLEARING_EDGE_REGISTER 0
 #define SW_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define SW_CAPTURE 0
@@ -435,19 +420,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_0"
-#define ALT_STDERR_BASE 0x40010c8
+#define ALT_STDERR_BASE 0x40010b8
 #define ALT_STDERR_DEV jtag_uart_0
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_0"
-#define ALT_STDIN_BASE 0x40010c8
+#define ALT_STDIN_BASE 0x40010b8
 #define ALT_STDIN_DEV jtag_uart_0
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_0"
-#define ALT_STDOUT_BASE 0x40010c8
+#define ALT_STDOUT_BASE 0x40010b8
 #define ALT_STDOUT_DEV jtag_uart_0
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -461,7 +446,7 @@
  */
 
 #define ALT_MODULE_CLASS_TIME_DISPLAY altera_avalon_pio
-#define TIME_DISPLAY_BASE 0x4001030
+#define TIME_DISPLAY_BASE 0x4001020
 #define TIME_DISPLAY_BIT_CLEARING_EDGE_REGISTER 0
 #define TIME_DISPLAY_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define TIME_DISPLAY_CAPTURE 0
@@ -499,7 +484,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_0 altera_avalon_jtag_uart
-#define JTAG_UART_0_BASE 0x40010c8
+#define JTAG_UART_0_BASE 0x40010b8
 #define JTAG_UART_0_IRQ 1
 #define JTAG_UART_0_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_0_NAME "/dev/jtag_uart_0"
@@ -517,7 +502,7 @@
  */
 
 #define ALT_MODULE_CLASS_mutex_0 altera_avalon_mutex
-#define MUTEX_0_BASE 0x40010c0
+#define MUTEX_0_BASE 0x40010b0
 #define MUTEX_0_IRQ -1
 #define MUTEX_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define MUTEX_0_NAME "/dev/mutex_0"

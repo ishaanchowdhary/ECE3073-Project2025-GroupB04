@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_SPI_ACCEL' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Wed May 14 14:29:33 EST 2025
+ * Generated: Wed May 14 15:55:17 EST 2025
  */
 
 /*
@@ -147,7 +147,6 @@
 #define __ALTERA_AVALON_PIO
 #define __ALTERA_AVALON_SPI
 #define __ALTERA_NIOS2_GEN2
-#define __ALTPLL
 
 
 /*
@@ -156,7 +155,7 @@
  */
 
 #define ALT_MODULE_CLASS_GYRO_INT altera_avalon_pio
-#define GYRO_INT_BASE 0x4001030
+#define GYRO_INT_BASE 0x4001020
 #define GYRO_INT_BIT_CLEARING_EDGE_REGISTER 0
 #define GYRO_INT_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define GYRO_INT_CAPTURE 1
@@ -217,20 +216,6 @@
 
 
 /*
- * SDRAM_PLL configuration
- *
- */
-
-#define ALT_MODULE_CLASS_SDRAM_PLL altpll
-#define SDRAM_PLL_BASE 0x4001020
-#define SDRAM_PLL_IRQ -1
-#define SDRAM_PLL_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define SDRAM_PLL_NAME "/dev/SDRAM_PLL"
-#define SDRAM_PLL_SPAN 16
-#define SDRAM_PLL_TYPE "altpll"
-
-
-/*
  * System configuration
  *
  */
@@ -246,19 +231,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_1"
-#define ALT_STDERR_BASE 0x4001040
+#define ALT_STDERR_BASE 0x4001030
 #define ALT_STDERR_DEV jtag_uart_1
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_1"
-#define ALT_STDIN_BASE 0x4001040
+#define ALT_STDIN_BASE 0x4001030
 #define ALT_STDIN_DEV jtag_uart_1
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_1"
-#define ALT_STDOUT_BASE 0x4001040
+#define ALT_STDOUT_BASE 0x4001030
 #define ALT_STDOUT_DEV jtag_uart_1
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -283,7 +268,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_1 altera_avalon_jtag_uart
-#define JTAG_UART_1_BASE 0x4001040
+#define JTAG_UART_1_BASE 0x4001030
 #define JTAG_UART_1_IRQ 0
 #define JTAG_UART_1_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_1_NAME "/dev/jtag_uart_1"
@@ -301,7 +286,7 @@
  */
 
 #define ALT_MODULE_CLASS_mutex_0 altera_avalon_mutex
-#define MUTEX_0_BASE 0x40010c0
+#define MUTEX_0_BASE 0x40010b0
 #define MUTEX_0_IRQ -1
 #define MUTEX_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define MUTEX_0_NAME "/dev/mutex_0"

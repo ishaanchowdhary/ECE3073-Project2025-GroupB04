@@ -2,10 +2,10 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>14/05/2025 2:29:31 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1747196971767</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>C:\Users\prana\OneDrive\Documents\ECE3073\M3_task1_attempt\ECE3073-Project2025-GroupB04\PROJECT_ECE3073_restored\software\m3task1spi_accel_bsp</BspGeneratedLocation>
-        <BspSettingsFile>.\settings.bsp</BspSettingsFile>
+        <BspGeneratedTimeStamp>14/05/2025 3:55:16 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1747202116707</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>C:\Users\prana\OneDrive\Documents\ECE3073\M3_task1_attempt\ECE3073-Project2025-GroupB04\PROJECT_ECE3073_restored\Software\m3task1spi_accel_bsp</BspGeneratedLocation>
+        <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\PROJECT_SYS_V2.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
         <Cpu>nios_SPI_ACCEL</Cpu>
@@ -911,26 +911,20 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>SDRAM_PLL</slaveDescriptor>
+                <slaveDescriptor>GYRO_INT</slaveDescriptor>
                 <addressRange>0x04001020 - 0x0400102F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>GYRO_INT</slaveDescriptor>
-                <addressRange>0x04001030 - 0x0400103F</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>jtag_uart_1</slaveDescriptor>
-                <addressRange>0x04001040 - 0x04001047</addressRange>
+                <addressRange>0x04001030 - 0x04001037</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>mutex_0</slaveDescriptor>
-                <addressRange>0x040010C0 - 0x040010C7</addressRange>
+                <addressRange>0x040010B0 - 0x040010B7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>

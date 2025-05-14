@@ -3,7 +3,7 @@ Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
 */
 #include "io.h"
 #include "system.h"
-#include "stdio.h"
+#include "sys/alt_stdio.h"
 #include "stdint.h"
 #include <altera_avalon_spi.h>
 #include <altera_avalon_spi_regs.h>

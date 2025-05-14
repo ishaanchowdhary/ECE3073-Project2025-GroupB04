@@ -142,7 +142,7 @@ ACDS_VERSION := 18.1
 ELF := m3task1spi_accel.elf
 
 # Paths to C, C++, and assembly source files.
-C_SRCS := hello_world_small.c
+C_SRCS := main1.c
 CXX_SRCS :=
 ASM_SRCS :=
 

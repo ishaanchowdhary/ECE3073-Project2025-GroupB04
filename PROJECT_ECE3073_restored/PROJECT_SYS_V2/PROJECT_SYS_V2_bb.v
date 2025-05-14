@@ -17,7 +17,6 @@ module PROJECT_SYS_V2 (
 	sdram_dqm,
 	sdram_ras_n,
 	sdram_we_n,
-	sdram_pll_clk,
 	second_hex_export,
 	spi_external_MISO,
 	spi_external_MOSI,
@@ -43,7 +42,6 @@ module PROJECT_SYS_V2 (
 	output	[1:0]	sdram_dqm;
 	output		sdram_ras_n;
 	output		sdram_we_n;
-	output		sdram_pll_clk;
 	output	[23:0]	second_hex_export;
 	input		spi_external_MISO;
 	output		spi_external_MOSI;

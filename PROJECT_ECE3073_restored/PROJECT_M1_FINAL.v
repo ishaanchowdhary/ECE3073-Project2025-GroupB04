@@ -108,6 +108,10 @@ PLL_CLK vga_clock(
 	.c0(VGA_CLK)
 );
 
+SDRAM_PLL sdram_pll(
+	.inclk0(CLOCK_50),
+	.c0(DRAM_CLK)
+);
 
 PIXEL_BUFFER pixel_buff(
 	.data(write_value), //what we putting in wraddress when write enable is high
@@ -157,7 +161,6 @@ PROJECT_SYS_V2 project_nios(
 	.pixel_data_export(write_value),	
 	
 	// SDRAM I/O 
-	.sdram_pll_clk    (DRAM_CLK),
 	.sdram_addr       (DRAM_ADDR),
 	.sdram_ba         (DRAM_BA),      			
 	.sdram_cas_n      (DRAM_CAS_N),
