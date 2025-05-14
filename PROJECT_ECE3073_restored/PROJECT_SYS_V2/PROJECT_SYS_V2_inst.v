@@ -16,13 +16,13 @@
 		.sdram_dqm            (<connected-to-sdram_dqm>),            //              .dqm
 		.sdram_ras_n          (<connected-to-sdram_ras_n>),          //              .ras_n
 		.sdram_we_n           (<connected-to-sdram_we_n>),           //              .we_n
+		.sdram_pll_clk        (<connected-to-sdram_pll_clk>),        //     sdram_pll.clk
 		.second_hex_export    (<connected-to-second_hex_export>),    //    second_hex.export
 		.spi_external_MISO    (<connected-to-spi_external_MISO>),    //  spi_external.MISO
 		.spi_external_MOSI    (<connected-to-spi_external_MOSI>),    //              .MOSI
 		.spi_external_SCLK    (<connected-to-spi_external_SCLK>),    //              .SCLK
 		.spi_external_SS_n    (<connected-to-spi_external_SS_n>),    //              .SS_n
 		.switches_export      (<connected-to-switches_export>),      //      switches.export
-		.time_display_export  (<connected-to-time_display_export>),  //  time_display.export
-		.sdram_pll_clk        (<connected-to-sdram_pll_clk>)         //     sdram_pll.clk
+		.time_display_export  (<connected-to-time_display_export>)   //  time_display.export
 	);
 
