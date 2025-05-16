@@ -46,7 +46,7 @@ alt_mutex_dev* mutex;
 int received = 0;
 int valueFromP1 = 0;
 
-void KEY_ISR(void *isr_context, alt_u32 id){
+void key_isr(void *isr_context, alt_u32 id){
 	//should be triggered when P1 send signal to us
 
 	//reading from shared buffer
@@ -411,7 +411,7 @@ int main()
 	alt_putstr("Hello from Nios II!\n");
 	IOWR(INPUT_PROC0_BASE,3,0x1);
 	IOWR(INPUT_PROC0_BASE,2,0x1);
-	alt_irq_register(INPUT_PROC0_IRQ, &context, KEY_ISR);
+	alt_irq_register(INPUT_PROC0_IRQ, &context, key_isr);
 	int counter  = 0;
 
 
@@ -419,13 +419,10 @@ int main()
 
 	*display1Ready  = 1;
 	uint32_t readBuffer = SHARED_BUFF_1_BASE;
-	uint32_t start = IORD(TIME_DISPLAY_BASE, 0);
+	uint32_t start = IORD(TIMER_0_BASE, 0);
 
 	uint32_t img3 = 0x0;
 	uint32_t img4 = 0x0;
-
-
-
 
 	int blurFilter = 1;
 
