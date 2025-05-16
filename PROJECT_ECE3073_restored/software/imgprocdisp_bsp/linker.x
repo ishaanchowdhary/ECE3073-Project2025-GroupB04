@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_CAM_DISP' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Fri May 16 17:02:40 EST 2025
+ * Generated: Fri May 16 17:28:17 EST 2025
  */
 
 /*
@@ -52,7 +52,7 @@ MEMORY
 {
     reset : ORIGIN = 0x0, LENGTH = 32
     exceptionregion : ORIGIN = 0x20, LENGTH = 65504
-    SDRAM : ORIGIN = 0x200000, LENGTH = 1048576
+    SDRAM : ORIGIN = 0x3200000, LENGTH = 2621440
 }
 
 /* Define symbols for each memory base-address */
@@ -368,7 +368,7 @@ SECTIONS
 /*
  * Don't override this, override the __alt_stack_* symbols instead.
  */
-__alt_data_end = 0x300000;
+__alt_data_end = 0x3480000;
 
 /*
  * The next two symbols define the location of the default stack.  You can
@@ -384,4 +384,4 @@ PROVIDE( __alt_stack_limit   = __alt_stack_base );
  * Override this symbol to put the heap in a different memory.
  */
 PROVIDE( __alt_heap_start    = end );
-PROVIDE( __alt_heap_limit    = 0x300000 );
+PROVIDE( __alt_heap_limit    = 0x3480000 );
