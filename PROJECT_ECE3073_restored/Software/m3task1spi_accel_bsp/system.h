@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_SPI_ACCEL' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Wed May 14 15:55:17 EST 2025
+ * Generated: Fri May 16 13:56:36 EST 2025
  */
 
 /*
@@ -53,6 +53,33 @@
 
 /* Include definitions from linker script generator */
 #include "linker.h"
+
+
+/*
+ * CAM_READY configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_CAM_READY altera_avalon_pio
+#define CAM_READY_BASE 0x4001040
+#define CAM_READY_BIT_CLEARING_EDGE_REGISTER 0
+#define CAM_READY_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define CAM_READY_CAPTURE 0
+#define CAM_READY_DATA_WIDTH 1
+#define CAM_READY_DO_TEST_BENCH_WIRING 0
+#define CAM_READY_DRIVEN_SIM_VALUE 0
+#define CAM_READY_EDGE_TYPE "NONE"
+#define CAM_READY_FREQ 50000000
+#define CAM_READY_HAS_IN 1
+#define CAM_READY_HAS_OUT 0
+#define CAM_READY_HAS_TRI 0
+#define CAM_READY_IRQ -1
+#define CAM_READY_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define CAM_READY_IRQ_TYPE "NONE"
+#define CAM_READY_NAME "/dev/CAM_READY"
+#define CAM_READY_RESET_VALUE 0
+#define CAM_READY_SPAN 16
+#define CAM_READY_TYPE "altera_avalon_pio"
 
 
 /*
@@ -155,7 +182,7 @@
  */
 
 #define ALT_MODULE_CLASS_GYRO_INT altera_avalon_pio
-#define GYRO_INT_BASE 0x4001020
+#define GYRO_INT_BASE 0x4001050
 #define GYRO_INT_BIT_CLEARING_EDGE_REGISTER 0
 #define GYRO_INT_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define GYRO_INT_CAPTURE 1
@@ -174,6 +201,33 @@
 #define GYRO_INT_RESET_VALUE 0
 #define GYRO_INT_SPAN 16
 #define GYRO_INT_TYPE "altera_avalon_pio"
+
+
+/*
+ * PIXEL_ADDRESS configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_PIXEL_ADDRESS altera_avalon_pio
+#define PIXEL_ADDRESS_BASE 0x4001060
+#define PIXEL_ADDRESS_BIT_CLEARING_EDGE_REGISTER 0
+#define PIXEL_ADDRESS_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define PIXEL_ADDRESS_CAPTURE 0
+#define PIXEL_ADDRESS_DATA_WIDTH 17
+#define PIXEL_ADDRESS_DO_TEST_BENCH_WIRING 0
+#define PIXEL_ADDRESS_DRIVEN_SIM_VALUE 0
+#define PIXEL_ADDRESS_EDGE_TYPE "NONE"
+#define PIXEL_ADDRESS_FREQ 50000000
+#define PIXEL_ADDRESS_HAS_IN 0
+#define PIXEL_ADDRESS_HAS_OUT 1
+#define PIXEL_ADDRESS_HAS_TRI 0
+#define PIXEL_ADDRESS_IRQ -1
+#define PIXEL_ADDRESS_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define PIXEL_ADDRESS_IRQ_TYPE "NONE"
+#define PIXEL_ADDRESS_NAME "/dev/PIXEL_ADDRESS"
+#define PIXEL_ADDRESS_RESET_VALUE 0
+#define PIXEL_ADDRESS_SPAN 16
+#define PIXEL_ADDRESS_TYPE "altera_avalon_pio"
 
 
 /*
@@ -231,19 +285,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_1"
-#define ALT_STDERR_BASE 0x4001030
+#define ALT_STDERR_BASE 0x4001070
 #define ALT_STDERR_DEV jtag_uart_1
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_1"
-#define ALT_STDIN_BASE 0x4001030
+#define ALT_STDIN_BASE 0x4001070
 #define ALT_STDIN_DEV jtag_uart_1
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_1"
-#define ALT_STDOUT_BASE 0x4001030
+#define ALT_STDOUT_BASE 0x4001070
 #define ALT_STDOUT_DEV jtag_uart_1
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -263,12 +317,39 @@
 
 
 /*
+ * input_proc1 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_input_proc1 altera_avalon_pio
+#define INPUT_PROC1_BASE 0x4001030
+#define INPUT_PROC1_BIT_CLEARING_EDGE_REGISTER 1
+#define INPUT_PROC1_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define INPUT_PROC1_CAPTURE 1
+#define INPUT_PROC1_DATA_WIDTH 1
+#define INPUT_PROC1_DO_TEST_BENCH_WIRING 0
+#define INPUT_PROC1_DRIVEN_SIM_VALUE 0
+#define INPUT_PROC1_EDGE_TYPE "RISING"
+#define INPUT_PROC1_FREQ 50000000
+#define INPUT_PROC1_HAS_IN 1
+#define INPUT_PROC1_HAS_OUT 0
+#define INPUT_PROC1_HAS_TRI 0
+#define INPUT_PROC1_IRQ 3
+#define INPUT_PROC1_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define INPUT_PROC1_IRQ_TYPE "EDGE"
+#define INPUT_PROC1_NAME "/dev/input_proc1"
+#define INPUT_PROC1_RESET_VALUE 0
+#define INPUT_PROC1_SPAN 16
+#define INPUT_PROC1_TYPE "altera_avalon_pio"
+
+
+/*
  * jtag_uart_1 configuration
  *
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_1 altera_avalon_jtag_uart
-#define JTAG_UART_1_BASE 0x4001030
+#define JTAG_UART_1_BASE 0x4001070
 #define JTAG_UART_1_IRQ 0
 #define JTAG_UART_1_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_1_NAME "/dev/jtag_uart_1"
@@ -286,7 +367,7 @@
  */
 
 #define ALT_MODULE_CLASS_mutex_0 altera_avalon_mutex
-#define MUTEX_0_BASE 0x40010b0
+#define MUTEX_0_BASE 0x40010c0
 #define MUTEX_0_IRQ -1
 #define MUTEX_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define MUTEX_0_NAME "/dev/mutex_0"
@@ -296,6 +377,33 @@
 #define MUTEX_0_TYPE "altera_avalon_mutex"
 #define MUTEX_0_VALUE_INIT 0
 #define MUTEX_0_VALUE_WIDTH 16
+
+
+/*
+ * output_proc1 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_output_proc1 altera_avalon_pio
+#define OUTPUT_PROC1_BASE 0x4001020
+#define OUTPUT_PROC1_BIT_CLEARING_EDGE_REGISTER 0
+#define OUTPUT_PROC1_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define OUTPUT_PROC1_CAPTURE 0
+#define OUTPUT_PROC1_DATA_WIDTH 1
+#define OUTPUT_PROC1_DO_TEST_BENCH_WIRING 0
+#define OUTPUT_PROC1_DRIVEN_SIM_VALUE 0
+#define OUTPUT_PROC1_EDGE_TYPE "NONE"
+#define OUTPUT_PROC1_FREQ 50000000
+#define OUTPUT_PROC1_HAS_IN 0
+#define OUTPUT_PROC1_HAS_OUT 1
+#define OUTPUT_PROC1_HAS_TRI 0
+#define OUTPUT_PROC1_IRQ -1
+#define OUTPUT_PROC1_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define OUTPUT_PROC1_IRQ_TYPE "NONE"
+#define OUTPUT_PROC1_NAME "/dev/output_proc1"
+#define OUTPUT_PROC1_RESET_VALUE 0
+#define OUTPUT_PROC1_SPAN 16
+#define OUTPUT_PROC1_TYPE "altera_avalon_pio"
 
 
 /*
