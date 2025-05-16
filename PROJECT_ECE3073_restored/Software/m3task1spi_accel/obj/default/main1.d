@@ -3,6 +3,7 @@ obj/default/main1.o: main1.c \
  ../m3task1spi_accel_bsp/system.h ../m3task1spi_accel_bsp/linker.h \
  ../m3task1spi_accel_bsp//HAL/inc/io.h \
  ../m3task1spi_accel_bsp//HAL/inc/alt_types.h \
+ ../m3task1spi_accel_bsp//drivers/inc/altera_avalon_pio_regs.h \
  ../m3task1spi_accel_bsp//drivers/inc/altera_avalon_mutex.h \
  ../m3task1spi_accel_bsp//HAL/inc/priv/alt_dev_llist.h \
  ../m3task1spi_accel_bsp//HAL/inc/sys/alt_llist.h \
@@ -21,6 +22,8 @@ obj/default/main1.o: main1.c \
 ../m3task1spi_accel_bsp//HAL/inc/io.h:
 
 ../m3task1spi_accel_bsp//HAL/inc/alt_types.h:
+
+../m3task1spi_accel_bsp//drivers/inc/altera_avalon_pio_regs.h:
 
 ../m3task1spi_accel_bsp//drivers/inc/altera_avalon_mutex.h:
 

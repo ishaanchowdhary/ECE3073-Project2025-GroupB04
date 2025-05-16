@@ -1,11 +1,12 @@
-/*
-Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
-*/
-#include "io.h"
-#include "system.h"
+// Display Processor
+
 #include "sys/alt_stdio.h"
-#include "stdint.h"
+#include "system.h"
+#include "io.h"
+#include <stdlib.h>
+#include <stdint.h>
 #include <altera_avalon_pio_regs.h>
+#include "altera_avalon_mutex.h"
 
 #define SDRAM_BASE_ADDRESS 0x00000000
 #define IMAGE_SIZE (320*240/2)//each pixel 4 bits, top 4 bits = first pixel
@@ -19,84 +20,15 @@ Student IDs: Student IDs: 33115303, 33867860, 33893012, 3311316
 
 #define TIME_DISPLAY_BASE 0x4041050
 
-// Gyroscope Addresses
-#define GYRO_INT_BASE 0x4041040
-#define GYRO_INT_IRQ 3
-#define GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID 0
-
 // Keys Addresses
 #define KEY10_BASE 0x40410b0
 #define KEY10_IRQ 4
 #define KEY10_IRQ_INTERRUPT_CONTROLLER_ID 0
 
-// SPI CHIP SELECTS
-#define CS_ACCEL 1
-#define CS_CAM 0
-
-// Gyroscope Configuration
-
-// Gyroscope Write Registers
-#define BW_RATE 0x2C
-#define POWER_CONTROL 0x2d
-#define DATA_FORMAT 0x31
-#define INT_ENABLE 0x2E
-#define INT_MAP 0x2F
-#define THRESH_ACT 0x24
-#define THRESH_INACT 0x25
-#define TIME_INACT 0x26
-#define ACT_INACT_CTL 0x27
-#define THRESH_FF 0x28
-#define TIME_FF 0x29
-#define TAP_AXES 0x2a
-#define TAP_THRES 0x1d
-#define DUR 0x21
-#define LATENT 0x22
-#define WINDOW 0x23
-// Gyroscope Read Registers
-#define INT_SOURCE 0x30
-#define X_LB 0x32
-#define X_HB 0x33
-#define Y_LB 0x34
-#define Y_HB 0x35
-#define Z_LB 0x36
-#define Z_HB 0x37
-#define CONFIG_LENGTH 16 * 2
-#define MAX_COUNT 500000
-// Gyroscope Read Axis Values
-#define READ_X_AXIS (0xc0 | X_LB)
-#define READ_Y_AXIS (0xc0 | Y_LB)
-#define READ_Z_AXIS (0xc0 | Z_LB)
-
-// Functionality to initialise the accelerometer for double tap detection
-alt_u8 gyro_config[CONFIG_LENGTH] = {
-	DATA_FORMAT, 0x0b,		// 4-wire SPI, full resolution, +/- 16g
-	THRESH_ACT, 0x04,
-	THRESH_INACT, 0x02,
-	TIME_INACT, 0x02,
-	ACT_INACT_CTL, 0xff,
-	THRESH_FF, 0x09,
-	TIME_FF, 0x46,
-	TAP_THRES, 0x20,
-	TAP_AXES, 0x07,
-	LATENT, 0x85,
-	DUR, 0x40,
-	WINDOW, 0xc0,
-	BW_RATE, 0x0a,
-	INT_ENABLE, 0x60,
-	INT_MAP, 0x20,
-	POWER_CONTROL, 0x08
-};
-
-// Interrupt Flags Define
-volatile int tap_flag = 0;	// Double Tap Interrupt Flag
-
-
 // Global variables for key interrupt
 volatile int Key1Flag = 0; // Flag for key1 interrupt
 
-
 // Function Declarations
-void gyro_isr(void * context);
 void key_isr(void * context);
 void key1_isr(void* context, alt_u32 id); // Current one in use
 void initialise_key1_interrupt();
@@ -106,11 +38,10 @@ int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr);
 int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height);
 void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void Run_Time(uint32_t before, uint32_t after);
-void gyro_detect_tap(volatile int *tap_flag, int *counter);
-void display_select(alt_16 yData, int* selectedDisp1, int* selectedDisp2, int* selectedDisp3, int* selectedDisp4);
-alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 
-int main(void){
+int main() {
+	alt_putstr("Image Display Processor Initialised\n");
+
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
 	alt_u8 sendBuffSmall = 0x16; //send buffer for packed data, small res
 
@@ -161,26 +92,6 @@ int main(void){
 	// Initialise the interrupt before entering into the loop
 	initialise_key1_interrupt();
 
-	// Accelerometer Setup
-	alt_u8 gyro_data_in, gyro_data_out, regData;
-	alt_u8 readX = READ_X_AXIS;
-	alt_u8 readY = READ_Y_AXIS;
-	alt_u8 readZ = READ_Z_AXIS;
-	alt_16 xData, yData, zData;
-	alt_u8 isrRes = 0xff;
-
-	for (int i = 0; i < CONFIG_LENGTH; i += 2) {
-		alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 2, gyro_config + i, 0, &gyro_data_out, 0);
-	}
-
-	void* context = (void *) &isrRes;
-	IOWR(GYRO_INT_BASE, 3, 0);
-	IOWR(GYRO_INT_BASE, 2, 0x1);
-	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, gyro_isr, context, 0x0);
-
-	// Initialising Double Tap Counter for updating Display
-	int counter = 0;
-
 	// Initial Setup for Single and Quad Display
 	int single_mode = 0;
 
@@ -189,11 +100,6 @@ int main(void){
 	int D3;
 	int D4;
 
-
-
-
-
-	// Key 1 Interrupt Setup
 	while(1){
 		// Run time
 		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
@@ -202,175 +108,16 @@ int main(void){
 		if (Key1Flag == 1) {
             mode = !mode;  // Toggle mode
             Key1Flag = 0;  // Reset the flag
-
         }
 
-		// Variable For Switches
-		//int sw = IORD(SW_BASE, 0);
-
-		if (mode) {
-
-			// Quad Display Mode
-			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,9600,&rxArrSmall,0); //SPI for SMALL res
-			// Flags For Copying Displays
-			int flag1 = 0;
-			int flag2 = 0;
-
-			// Select Display using Tilt (About y-axis)
-
-
-			display_select(yData, &D1, &D2, &D3, &D4);
-
-			// Flip Index
-			int flipImgIdx1 = 0;
-			int flipImgIdx2 = 0;
-			int flipImgIdx3 = 0;
-			int flipImgIdx4 = 0;
-
-			// Handle Disp1
-			if (D1 == 0) {
-				img1 = &rxArrSmall;
-			} else if (D1 == 1) {
-				img1 = &rxArrSmall;
-				flipImgIdx1 = 1;
-			} else if (D1 == 2) {
-				if (flag1 == 0) {
-					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
-					GlobalBlur = &smallImgBuff1;
-					flag1 = 1;
-				}
-				img1 = GlobalBlur;
-			} else if (D1 == 3) {
-				if (flag2 == 0) {
-					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
-					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
-					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
-					GlobalEdge = &sobelArrCombined;
-					flag2 = 1;
-				}
-				img1 = GlobalEdge;
-			}
-
-
-			// Handle Disp2
-			if (D2 == 0) {
-				img2 = rxArrSmall;
-			} else if (D2 == 1) {
-				img2 = rxArrSmall;
-				flipImgIdx2 = 1;
-			} else if (D2 == 2) {
-				if (flag1 == 0) {
-					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
-					GlobalBlur = &smallImgBuff1;
-					flag1 = 1;
-				}
-				img2 = GlobalBlur;
-			} else if (D2 == 3) {
-				if (flag2 == 0) {
-					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
-					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
-					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
-					GlobalEdge = &sobelArrCombined;
-					flag2 = 1;
-				}
-				img2 = GlobalEdge;
-			}
-
-			// Handle Disp3
-			if (D3 == 0) {
-				img3 = rxArrSmall;
-			} else if (D3 == 1) {
-				img3 = rxArrSmall;
-				flipImgIdx3 = 1;
-			} else if (D3 == 2) {
-				if (flag1 == 0) {
-					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
-					GlobalBlur = &smallImgBuff1;
-					flag1 = 1;
-				}
-				img3 = GlobalBlur;
-			} else if (D3 == 3) {
-				if (flag2 == 0) {
-					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
-					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
-					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
-					GlobalEdge = &sobelArrCombined;
-					flag2 = 1;
-				}
-				img3 = GlobalEdge;
-			}
-
-			// Handle Disp4
-			if (D4 == 0) {
-				img4 = rxArrSmall;
-			} else if (D4 == 1) {
-				img4 = rxArrSmall;
-				flipImgIdx4 = 1;
-			} else if (D4 == 2) {
-				if (flag1 == 0) {
-					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
-					GlobalBlur = &smallImgBuff1;
-					flag1 = 1;
-				}
-				img4 = GlobalBlur;
-			} else if (D4 == 3) {
-				if (flag2 == 0) {
-					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
-					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
-					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
-					GlobalEdge = &sobelArrCombined;
-					flag2 = 1;
-				}
-				img4 = GlobalEdge;
-			}
-
-			display_4_images(img1, img2, img3, img4, PIXEL_ADDRESS_BASE_val, flipImgIdx1, flipImgIdx2, flipImgIdx3, flipImgIdx4);
-
-		} else {
-
-			// Single Display Mode
-
-			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
-
-			single_mode = counter; // Uses double tap counter to assign the mode (Normal, Flipped, Blurred or Edge)
-			int SingleFlipImgIdx = 0;
-
-			if (single_mode == 0) {
-				// Displays normally into the quadrant
-			} else if (single_mode == 1) {
-				// this will set a variable to be called in the function "display_4_images" as the last input "int flipImgIdx"
-				SingleFlipImgIdx = 1;
-			} else if (single_mode == 2) {
-				int numOutPixel = convolve(&rxArr,&rxArr,kernel,320,240);
-			} else if (single_mode == 3) {
-				convolve(&rxArr,&sobelArrX,sobelX,320,240);
-		    	convolve(&rxArr,&sobelArrY,sobelY,320,240);
-		    	combineSobelFilter(sobelArrX,sobelArrY,rxArr,320,240);
-			}
-			printf("Single Image Mode: %d\n", single_mode);
-			display_image_from_array_v3(240, 320, &rxArr, PIXEL_ADDRESS_BASE_val, SingleFlipImgIdx);
-		}
-
-		// Detect double tap event and update counter
-		gyro_detect_tap(&tap_flag, &counter);
-
-		// Print rotational data and collect rotation around y-axis
-		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
 
 
 		// Run time
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
 	    Run_Time(start, end); // Call Function to Display Benchmarking
-		gyro_data_in = INT_SOURCE | 0x80;
-		alt_avalon_spi_command(SPI_CONTROLLER_BASE, 1, 1, &gyro_data_in, 1, &regData, 0x0);
-}
-}
+	}
 
-// Interrupt service routine (ISR) for accelerometer interrupt
-void gyro_isr(void * context) {
-	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0); //clear interrupt
-	IOWR(GYRO_INT_BASE, 3, 0);
-	tap_flag = 1; //set the tap flag when an interrupt is triggered
+	return 0;
 }
 
 
@@ -707,59 +454,3 @@ void Run_Time(uint32_t before, uint32_t after) {
 	IOWR(HEX53_BASE, 0, second_hex_value);
 }
 
-void gyro_detect_tap(volatile int *tap_flag, int *counter) {
-	// Prints result of triggering accelerometer double tap interrupt and adds to counter
-
-	// Print accelerometer double tap result
-	if (*tap_flag == 1) {
-		printf("\n\nDouble tap detected!\n\n");
-		*tap_flag = 0;
-		*counter = *counter + 1;
-	}
-
-	// Reset Counter if over 3
-	if (*counter >= 4) {
-		*counter = 0;
-	}
-
-}
-
-void display_select(alt_16 yData, int* selectedDisp1, int* selectedDisp2, int* selectedDisp3, int* selectedDisp4) {
-    if (yData >= -265 && yData < -127) {
-        *selectedDisp1 = 0;
-        *selectedDisp2 = 1;
-        *selectedDisp3 = 2;
-        *selectedDisp4 = 3;
-    }
-    else if (yData >= -127 && yData < 0) {
-        *selectedDisp1 = 3;
-        *selectedDisp2 = 0;
-        *selectedDisp3 = 1;
-        *selectedDisp4 = 2;
-    }
-    else if (yData >= 0 && yData < 127) {
-        *selectedDisp1 = 2;
-        *selectedDisp2 = 3;
-        *selectedDisp3 = 0;
-        *selectedDisp4 = 1;
-    }
-    else if (yData >= 127 && yData <= 265) {
-        *selectedDisp1 = 1;
-        *selectedDisp2 = 2;
-        *selectedDisp3 = 3;
-        *selectedDisp4 = 0;
-    }
-}
-
-alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData) {
-	// Prints rotational data from gyroscope and returns Y-axis rotational data
-
-	// Read accelerometer rotation data
-	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readX, 2, &xData, 0x0);
-	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readY, 2, &yData, 0x0);
-	alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 1, &readZ, 2, &zData, 0x0);
-
-	printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", xData, yData, zData);
-
-	return yData;
-}

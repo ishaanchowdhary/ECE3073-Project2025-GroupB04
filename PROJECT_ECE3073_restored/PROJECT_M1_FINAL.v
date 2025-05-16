@@ -101,6 +101,11 @@ assign GSENSOR_SCLK = spi_clk;
 assign GSENSOR_CS_N = spi_cs[1]; 
 
 assign spi_miso = (spi_cs[0] == 1'b0) ? GPIO[7] : (spi_cs[1] == 1'b0)  ? GSENSOR_SDO : 1'bz; 
+
+wire p0_out, p0_in, p1_out, p1_in; 
+
+assign p1_in = p0_out; 
+assign p0_in = p1_out;
 // Instantiate Modules
 
 PLL_CLK vga_clock(
@@ -178,9 +183,12 @@ PROJECT_SYS_V2 project_nios(
 	.spi_external_SS_n(spi_cs),    // .SS_n
 	.gyro_int_export(GSENSOR_INT[2:1]),
 	// COUNT
-	.time_display_export		(count_ext)			// 32 bit time display
-
-    );
+	.time_display_export		(count_ext),	// 32 bit time display
+	.input_p0_export        (p0_in),
+	.input_p1_export (p1_in),
+	.output_p0_export (p0_out),
+	.output_p1_export (p1_out)    
+);
 
 endmodule
 

@@ -23,7 +23,11 @@ module PROJECT_SYS_V2 (
 	spi_external_SCLK,
 	spi_external_SS_n,
 	switches_export,
-	time_display_export);	
+	time_display_export,
+	input_p0_export,
+	output_p0_export,
+	input_p1_export,
+	output_p1_export);	
 
 	input		cam_ready_export;
 	input		clk_clk;
@@ -49,4 +53,8 @@ module PROJECT_SYS_V2 (
 	output	[1:0]	spi_external_SS_n;
 	input	[9:0]	switches_export;
 	input	[31:0]	time_display_export;
+	input		input_p0_export;
+	output		output_p0_export;
+	input		input_p1_export;
+	output		output_p1_export;
 endmodule
