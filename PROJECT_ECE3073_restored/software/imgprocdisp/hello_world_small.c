@@ -44,7 +44,7 @@ alt_mutex_dev* mutex;
 int received = 0;
 int valueFromP1 = 0;
 
-void key_isr(void *isr_context, alt_u32 id){
+void proc0_isr(void *isr_context, alt_u32 id){
 	//should be triggered when P1 send signal to us
 
 	//reading from shared buffer
@@ -409,7 +409,7 @@ int main()
 	alt_putstr("Hello from Nios II!\n");
 	IOWR(INPUT_PROC0_BASE,3,0x1);
 	IOWR(INPUT_PROC0_BASE,2,0x1);
-	alt_irq_register(INPUT_PROC0_IRQ, &context, key_isr);
+	alt_irq_register(INPUT_PROC0_IRQ, &context, proc0_isr);
 	int counter  = 0;
 
 
