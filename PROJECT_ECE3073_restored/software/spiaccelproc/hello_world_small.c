@@ -89,7 +89,7 @@ volatile int tap_flag = 0;	// Double Tap Interrupt Flag
 // Function Declarations
 void gyro_isr(void * context);
 void gyro_detect_tap(volatile int *tap_flag, int *counter);
-void display_select(alt_16 yData, int* selectedDisp1, int* selectedDisp2, int* selectedDisp3, int* selectedDisp4);
+void display_select_configuration(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 
 int main() {
@@ -116,8 +116,14 @@ int main() {
 	int counter = 0;
 
 	while(1){
-
-
+		// pseudocode
+		// Required functionality: take bit from display proc to inform which display mode is being used (0 for quad, 1 for single)
+		// if Quad:
+		// int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,9600,&rxArrSmall,0); //SPI for SMALL res
+		// quad_config_mode = display_select_configuration(yData);
+		// send quad_config_mode over sdram
+		// if Single:
+		// int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
 
 		gyro_data_in = INT_SOURCE | 0x80;
 		alt_avalon_spi_command(SPI_CONTROLLER_BASE, 1, 1, &gyro_data_in, 1, &regData, 0x0);
@@ -151,32 +157,22 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 
 }
 
-void display_select(alt_16 yData, int* selectedDisp1, int* selectedDisp2, int* selectedDisp3, int* selectedDisp4) {
-    if (yData >= -265 && yData < -127) {
-        *selectedDisp1 = 0;
-        *selectedDisp2 = 1;
-        *selectedDisp3 = 2;
-        *selectedDisp4 = 3;
+void display_select_configuration(alt_16 yData) {
+	// selects the configureation mode for Quad Display (loaded into other proc)
+	if (yData >= -265 && yData < -127) {
+        int config_mode = 0;
     }
     else if (yData >= -127 && yData < 0) {
-        *selectedDisp1 = 3;
-        *selectedDisp2 = 0;
-        *selectedDisp3 = 1;
-        *selectedDisp4 = 2;
+        int config_mode = 1;
     }
     else if (yData >= 0 && yData < 127) {
-        *selectedDisp1 = 2;
-        *selectedDisp2 = 3;
-        *selectedDisp3 = 0;
-        *selectedDisp4 = 1;
+        int config_mode = 2;
     }
     else if (yData >= 127 && yData <= 265) {
-        *selectedDisp1 = 1;
-        *selectedDisp2 = 2;
-        *selectedDisp3 = 3;
-        *selectedDisp4 = 0;
+        int config_mode = 3;
     }
 }
+
 
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData) {
 	// Prints rotational data from gyroscope and returns Y-axis rotational data
