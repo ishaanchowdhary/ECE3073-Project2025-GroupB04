@@ -75,7 +75,7 @@ int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width,
 //void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void Run_Time(uint32_t before, uint32_t after);
-
+void display_select(int config_mode, int* selectedDisp1, int* selectedDisp2, int* selectedDisp3, int* selectedDisp4);
 void send_msg(int msg);
 
 int main() {
@@ -137,7 +137,8 @@ int main() {
 	int D2;
 	int D3;
 	int D4;
-	
+	int config_mode;
+
 	while(1){
 		// Run time
 		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
@@ -150,6 +151,122 @@ int main() {
 
 		if (mode) {
 			// Quad Display Mode
+			// Run on other proc: int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,9600,&rxArrSmall,0); //SPI for SMALL res
+			// Flags For Copying Displays
+			int flag1 = 0;
+			int flag2 = 0;
+			// TODO ---------------------------------Load config mode val from SDRAM
+			config_mode = 0;
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			display_select(config_mode, &D1, &D2, &D3, &D4);
+
+			// All the same from here
+
+			// Flip Index
+			int flipImgIdx1 = 0;
+			int flipImgIdx2 = 0;
+			int flipImgIdx3 = 0;
+			int flipImgIdx4 = 0;
+
+			// Handle Disp1
+			if (D1 == 0) {
+				img1 = &rxArrSmall;
+			} else if (D1 == 1) {
+				img1 = &rxArrSmall;
+				flipImgIdx1 = 1;
+			} else if (D1 == 2) {
+				if (flag1 == 0) {
+					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img1 = GlobalBlur;
+			} else if (D1 == 3) {
+				if (flag2 == 0) {
+					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img1 = GlobalEdge;
+			}
+
+
+			// Handle Disp2
+			if (D2 == 0) {
+				img2 = rxArrSmall;
+			} else if (D2 == 1) {
+				img2 = rxArrSmall;
+				flipImgIdx2 = 1;
+			} else if (D2 == 2) {
+				if (flag1 == 0) {
+					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img2 = GlobalBlur;
+			} else if (D2 == 3) {
+				if (flag2 == 0) {
+					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img2 = GlobalEdge;
+			}
+
+			// Handle Disp3
+			if (D3 == 0) {
+				img3 = rxArrSmall;
+			} else if (D3 == 1) {
+				img3 = rxArrSmall;
+				flipImgIdx3 = 1;
+			} else if (D3 == 2) {
+				if (flag1 == 0) {
+					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img3 = GlobalBlur;
+			} else if (D3 == 3) {
+				if (flag2 == 0) {
+					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img3 = GlobalEdge;
+			}
+
+			// Handle Disp4
+			if (D4 == 0) {
+				img4 = rxArrSmall;
+			} else if (D4 == 1) {
+				img4 = rxArrSmall;
+				flipImgIdx4 = 1;
+			} else if (D4 == 2) {
+				if (flag1 == 0) {
+					int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img4 = GlobalBlur;
+			} else if (D4 == 3) {
+				if (flag2 == 0) {
+					convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img4 = GlobalEdge;
+			}
+
+			display_4_images(img1, img2, img3, img4, PIXEL_ADDRESS_BASE_val, flipImgIdx1, flipImgIdx2, flipImgIdx3, flipImgIdx4);
+
 		} else {
 			// Single Display Mode
 
@@ -517,6 +634,33 @@ void Run_Time(uint32_t before, uint32_t after) {
 	// Write to PIOs
 	IOWR(HEX20_BASE, 0, first_hex_value);
 	IOWR(HEX53_BASE, 0, second_hex_value);
+}
+
+void display_select(int config_mode, int* selectedDisp1, int* selectedDisp2, int* selectedDisp3, int* selectedDisp4) {
+    if (config_mode == 0) {
+        *selectedDisp1 = 0;
+        *selectedDisp2 = 1;
+        *selectedDisp3 = 2;
+        *selectedDisp4 = 3;
+    }
+    else if (config_mode == 1) {
+        *selectedDisp1 = 3;
+        *selectedDisp2 = 0;
+        *selectedDisp3 = 1;
+        *selectedDisp4 = 2;
+    }
+    else if (config_mode == 2) {
+        *selectedDisp1 = 2;
+        *selectedDisp2 = 3;
+        *selectedDisp3 = 0;
+        *selectedDisp4 = 1;
+    }
+    else if (config_mode == 3) {
+        *selectedDisp1 = 1;
+        *selectedDisp2 = 2;
+        *selectedDisp3 = 3;
+        *selectedDisp4 = 0;
+    }
 }
 
 void send_msg(int msg){
