@@ -10,6 +10,8 @@
 #include "altera_avalon_mutex.h"
 #include "altera_avalon_pio_regs.h"
 
+
+// ------------- TODO: Remove address values and change to match in code ---------------------------
 #define SDRAM_BASE_ADDRESS 0x00000000
 #define IMAGE_SIZE (320*240/2)//each pixel 4 bits, top 4 bits = first pixel
 
@@ -27,11 +29,43 @@
 #define KEY10_IRQ 4
 #define KEY10_IRQ_INTERRUPT_CONTROLLER_ID 0
 
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Keep these: modify to correct val---------------------------------------------------------------------
+int *display1Ready = (int*)0x03600010;
+int *display2Ready = (int*)0x03500020;
+
+int *bufferFlag1 = (int*)0x03200030; //use as buffer idx
+int *frame1Ready = (int*)0x03200040;
+
+
+int *sharedMsgBuff = (int*)0x03500000;
+
+int *needBlur = (int*)0x03200070;
+int *quadImgMode = (int*)0x0320080;
+int *needEdgeDetect = (int*)0x03200000;
+
+int *frame2Ready = (int*)0x03200090;
+
+#define SHARED_BUFF_1_BASE  0x03300100
+#define SHARED_BUFF_2_BASE  0x033096ff
+
+#define SHARED_BUFF_3_BASE	0x03310000
+#define SHARED_BUFF_4_BASE	0x03320000
+
+#define CONV_RESULT_BASE_1 0x03400000
+#define CONV_RESULT_BASE_2 0x03410000
+
+void *context;
+alt_mutex_dev* mutex;
+int received = 0;
+int valueFromP1 = 0;
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 // Global variables for key interrupt
 volatile int Key1Flag = 0; // Flag for key1 interrupt
 
 // Function Declarations
-void key_isr(void * context);
 void key1_isr(void* context, alt_u32 id); // Current one in use
 void initialise_key1_interrupt();
 void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH);
@@ -41,6 +75,8 @@ int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width,
 //void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void Run_Time(uint32_t before, uint32_t after);
+
+void send_msg(int msg);
 
 int main() {
 	alt_putstr("Image Display Processor Initialised\n");
@@ -88,8 +124,7 @@ int main() {
 	uint8_t *GlobalBlur;
 	uint8_t *GlobalEdge;
 
-	// Global variables for key interrupt
-	volatile int key1Flag = 0; // Flag for key1 interrupt
+	// Variable for key interrupt
 	volatile int mode = 1;     // 0 = single mode, 1 = quad mode
 
 	// Initialise the interrupt before entering into the loop
@@ -113,7 +148,34 @@ int main() {
             Key1Flag = 0;  // Reset the flag
         }
 
+		if (mode) {
+			// Quad Display Mode
+		} else {
+			// Single Display Mode
 
+			//int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
+			// Run this line in other processor ^^^^^
+			single_mode = 0; // TODO: ------------------------ Connect to counter from double tap on other processor by storing two bits (0-3) in sdram and load here
+			int SingleFlipImgIdx = 0;
+
+			// Mode Selection
+			if (single_mode == 0) {
+				// Default Mode
+			} else if (single_mode == 1) {
+				// Flipped Mode
+				SingleFlipImgIdx = 1; // this will set a variable to be called in the function "display_4_images" as the last input "int flipImgIdx"
+			} else if (single_mode == 2) {
+				// Blurred Mode
+				int numOutPixel = convolve(&rxArr,&rxArr,kernel,320,240);
+			} else if (single_mode == 3) {
+				// Edge Detection Mode
+				convolve(&rxArr,&sobelArrX,sobelX,320,240);
+		    	convolve(&rxArr,&sobelArrY,sobelY,320,240);
+		    	combineSobelFilter(sobelArrX,sobelArrY,rxArr,320,240);
+			}
+			printf("Single Image Mode: %d\n", single_mode);
+			display_image_from_array_v2(240, 320, &rxArr, PIXEL_ADDRESS_BASE_val, SingleFlipImgIdx);
+		}
 
 		// Run time
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
@@ -457,3 +519,18 @@ void Run_Time(uint32_t before, uint32_t after) {
 	IOWR(HEX53_BASE, 0, second_hex_value);
 }
 
+void send_msg(int msg){
+
+//	altera_avalon_mutex_lock(mutex,1);
+	*sharedMsgBuff = msg;
+//	alt_dcache_flush_all();  // After writing
+
+	alt_dcache_flush_all();  // After writing
+//	altera_avalon_mutex_unlock(mutex);
+
+	//pulsing the output
+	IOWR(OUTPUT_PROC0_BASE,0,1);
+	IOWR(OUTPUT_PROC0_BASE,0,0);
+
+	printf("P0: sending %d to P1 \n",msg);
+}
