@@ -3,8 +3,12 @@
 		.clk_clk              (<connected-to-clk_clk>),              //           clk.clk
 		.first_hex_export     (<connected-to-first_hex_export>),     //     first_hex.export
 		.gyro_int_export      (<connected-to-gyro_int_export>),      //      gyro_int.export
+		.input_p0_export      (<connected-to-input_p0_export>),      //      input_p0.export
+		.input_p1_export      (<connected-to-input_p1_export>),      //      input_p1.export
 		.keys_export          (<connected-to-keys_export>),          //          keys.export
 		.leds_export          (<connected-to-leds_export>),          //          leds.export
+		.output_p0_export     (<connected-to-output_p0_export>),     //     output_p0.export
+		.output_p1_export     (<connected-to-output_p1_export>),     //     output_p1.export
 		.pixel_address_export (<connected-to-pixel_address_export>), // pixel_address.export
 		.pixel_data_export    (<connected-to-pixel_data_export>),    //    pixel_data.export
 		.sdram_addr           (<connected-to-sdram_addr>),           //         sdram.addr
@@ -22,10 +26,6 @@
 		.spi_external_SCLK    (<connected-to-spi_external_SCLK>),    //              .SCLK
 		.spi_external_SS_n    (<connected-to-spi_external_SS_n>),    //              .SS_n
 		.switches_export      (<connected-to-switches_export>),      //      switches.export
-		.time_display_export  (<connected-to-time_display_export>),  //  time_display.export
-		.input_p0_export      (<connected-to-input_p0_export>),      //      input_p0.export
-		.output_p0_export     (<connected-to-output_p0_export>),     //     output_p0.export
-		.input_p1_export      (<connected-to-input_p1_export>),      //      input_p1.export
-		.output_p1_export     (<connected-to-output_p1_export>)      //     output_p1.export
+		.time_display_export  (<connected-to-time_display_export>)   //  time_display.export
 	);
 

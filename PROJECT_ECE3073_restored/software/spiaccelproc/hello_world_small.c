@@ -125,6 +125,35 @@ int main() {
 		// if Single:
 		// int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
 
+		//psuedo code attempt:
+		// need to get the data from the other soure
+		int display_mode = IORD(KEY10_BASE, 0);
+		//2. handle acceleroometer tap
+		gyro_detect_tap(&tap_flag, &counter);
+
+		// 3. read gyroscope axis data dn get yData
+		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
+
+
+		if(display_mode == 0) {
+
+			alt_u8 sendBuffPtrSmall[9600];
+			alt_u8 rxArrSmall[9600];
+
+			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrSmall, 9600, rxArrSmall, 0);
+			int config_mode = display_select_configuration(yData);
+			IOWR_32DIREC(SDRAM_BASE_ADDRESS, 0, config_mode);
+
+
+
+
+		} else if (display_mode = 1) {
+			alt_u8 sendBuffPtrFull[38400];
+			alt_u8 rxArr[38400];
+
+			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrFull, 38400, rxArr, 0);
+		}
+
 		gyro_data_in = INT_SOURCE | 0x80;
 		alt_avalon_spi_command(SPI_CONTROLLER_BASE, 1, 1, &gyro_data_in, 1, &regData, 0x0);
 	}

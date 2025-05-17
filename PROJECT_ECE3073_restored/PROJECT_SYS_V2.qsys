@@ -629,7 +629,7 @@
   <parameter name="casLatency" value="3" />
   <parameter name="clockRate" value="50000000" />
   <parameter name="columnWidth" value="10" />
-  <parameter name="componentName">PROJECT_SYS_V2_SDRAM</parameter>
+  <parameter name="componentName" value="$${FILENAME}_SDRAM" />
   <parameter name="dataWidth" value="16" />
   <parameter name="generateSimulationModel" value="false" />
   <parameter name="initNOPDelay" value="0.0" />
