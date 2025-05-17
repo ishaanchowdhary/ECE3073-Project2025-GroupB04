@@ -36,7 +36,8 @@ void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int 
 void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx1 ,int flipImgIdx2 ,int flipImgIdx3 ,int flipImgIdx4);
 int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr);
 int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width, int height);
-void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
+//void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
+void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void Run_Time(uint32_t before, uint32_t after);
 
 int main() {
@@ -363,7 +364,7 @@ void display_image_from_array_v3(int imgH, int imgW, uint8_t *image_base, uint32
 
 }
 
-void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32_t display_base) {
+void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg) {
 	//FASTER FUNCTION FOR DISPLAY, DO NOT USE TILL M3
 	int pixel_count = imgH*imgW;
 	int readAddressOffset = 0;
