@@ -1,12 +1,14 @@
 // Display Processor
 
 #include "sys/alt_stdio.h"
-#include "system.h"
-#include "io.h"
+#include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <altera_avalon_pio_regs.h>
+#include "stdint.h"
+#include "io.h"
+#include "system.h"
+#include "sys/alt_irq.h"
 #include "altera_avalon_mutex.h"
+#include "altera_avalon_pio_regs.h"
 
 #define SDRAM_BASE_ADDRESS 0x00000000
 #define IMAGE_SIZE (320*240/2)//each pixel 4 bits, top 4 bits = first pixel

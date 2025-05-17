@@ -7,7 +7,6 @@
 #include "sys/alt_irq.h"
 #include "altera_avalon_mutex.h"
 #include "altera_avalon_pio_regs.h"
-#include <stdio.h>
 
 //int *sharedMsgBuff = (int*)0x03200000;
 
