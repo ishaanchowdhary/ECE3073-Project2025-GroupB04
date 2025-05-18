@@ -76,13 +76,13 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 	INT_MAP, 0x20,
 	POWER_CONTROL, 0x08
 };
-
-// shared buffer
-int *sharedMsgBuff = (int*)0x03500000;
+volatile int tap_flag;
+// shared SDRAM
 // Interrupt Flags Define
-volatile int tap_flag = 0;	// Double Tap Interrupt Flag
-
-
+volatile int *tap_flag_shared = (int*)0x00100004;	// Double Tap Interrupt Flag
+int *display_mode_shared = (int*)0x00100008;
+int *ydatas_shared = (int*) 0x0010000C;
+int *sharedMsgBuff = (int*) 0x001000010;
 // Function Declarations
 void gyro_isr(void * context);
 void gyro_detect_tap(volatile int *tap_flag, int *counter);
@@ -115,6 +115,10 @@ int main() {
 	int counter = 0;
 
 	while(1){
+
+		gyro_data_in = INT_SOURCE | 0x80;
+		// Read the interrupt source
+		alt_avalon_spi_command(SPI_CONTROLLER_BASE, 1, 1, &gyro_data_in, 1, &regData, 0x0);
 		// pseudocode
 		// Required functionality: take bit from display proc to inform which display mode is being used (0 for quad, 1 for single)
 		// if Quad:
@@ -158,8 +162,7 @@ int main() {
 
 		}
 
-		gyro_data_in = INT_SOURCE | 0x80;
-		alt_avalon_spi_command(SPI_CONTROLLER_BASE, 1, 1, &gyro_data_in, 1, &regData, 0x0);
+
 	}
 
 	return 0;
@@ -179,6 +182,7 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 	// Print accelerometer double tap result
 	if (*tap_flag == 1) {
 		printf("\n\nDouble tap detected!\n\n");
+		send_msg(4);
 		*tap_flag = 0;
 		*counter = *counter + 1;
 	}
@@ -188,23 +192,24 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 	if (*counter >= 4) {
 		*counter = 0;
 	}
-	send_msg(4);
+
 
 }
 
 int display_select_configuration(alt_16 yData) {
+	int config_mode;
 	// selects the configureation mode for Quad Display (loaded into other proc)
 	if (yData >= -265 && yData < -127) {
-        int config_mode = 0;
+        return config_mode = 0;
     }
     else if (yData >= -127 && yData < 0) {
-        int config_mode = 1;
+        return config_mode = 1;
     }
     else if (yData >= 0 && yData < 127) {
-        int config_mode = 2;
+        return config_mode = 2;
     }
     else if (yData >= 127 && yData <= 265) {
-        int config_mode = 3;
+        return config_mode = 3;
     }
 	return 0;
 }

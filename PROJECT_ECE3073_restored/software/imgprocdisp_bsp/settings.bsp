@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>18/05/2025 1:56:31 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1747540591259</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 18, 2025 9:44:06 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1747568646774</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\prana\OneDrive\Documents\ECE3073\M3_task1_attempt\ECE3073-Project2025-GroupB04\PROJECT_ECE3073_restored\software\imgprocdisp_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\PROJECT_SYS_V2.sopcinfo</SopcDesignFile>
@@ -917,10 +917,10 @@
         <LinkerRegion>
                 <regionName>SDRAM</regionName>
                 <memoryName>SDRAM</memoryName>
-                <offset>52428800</offset>
-                <size>2621440</size>
-                <baseAddress>0x3200000</baseAddress>
-                <addressRange>0x03200000 - 0x0347FFFF</addressRange>
+                <offset>2097152</offset>
+                <size>1048576</size>
+                <baseAddress>0x200000</baseAddress>
+                <addressRange>0x00200000 - 0x002FFFFF</addressRange>
         </LinkerRegion>
         <MemoryMap>
                 <slaveDescriptor>SDRAM</slaveDescriptor>
