@@ -55,6 +55,8 @@ alt_mutex_dev* mutex;
 #define READ_Y_AXIS (0xc0 | Y_LB)
 #define READ_Z_AXIS (0xc0 | Z_LB)
 
+#define INPUT_PROC1_IRQ 3
+#define INPUT_PROC1_IRQ_INTERRUPT_CONTROLLER_ID 0
 // Functionality to initialise the accelerometer for double tap detection
 alt_u8 gyro_config[CONFIG_LENGTH] = {
 	DATA_FORMAT, 0x0b,		// 4-wire SPI, full resolution, +/- 16g
@@ -86,7 +88,7 @@ void gyro_isr(void * context);
 void gyro_detect_tap(volatile int *tap_flag, int *counter);
 int display_select_configuration(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
-
+void input_proc1_isr(void* context);
 int main() {
 	alt_putstr("Camera/Accelerometer Processor Initialised\n");
 	IOWR(INPUT_PROC1_BASE, 3, 0x1);
@@ -147,7 +149,7 @@ int main() {
 
 
 
-		} else if (display_mode = 1) {
+		} else if (display_mode == 1) {
 			alt_u8 sendBuffPtrFull[38400];
 			alt_u8 rxArr[38400];
 
