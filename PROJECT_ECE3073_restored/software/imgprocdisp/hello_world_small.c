@@ -164,7 +164,10 @@ int main() {
 			int flag1 = 0;
 			int flag2 = 0;
 			// TODO ---------------------------------Load config mode val from SDRAM
-			config_mode = 0;
+			altera_avalon_mutex_lock(mutex,1);
+			int config_mode = *sharedMsgBuff;
+			alt_dcache_flush_all();
+			altera_avalon_mutex_unlock(mutex);
 			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 			display_select(config_mode, &D1, &D2, &D3, &D4);
 

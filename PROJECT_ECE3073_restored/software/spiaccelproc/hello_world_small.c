@@ -29,6 +29,8 @@
 #define CS_ACCEL 1
 #define CS_CAM 0
 
+void *context;
+alt_mutex_dev* mutex;
 // Gyroscope Configuration
 // Gyroscope Write Registers
 #define BW_RATE 0x2C
@@ -82,9 +84,10 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 	POWER_CONTROL, 0x08
 };
 
+// Communication processor
+#define OUTPUT_PROC1_BASE 0x4001020
 // shared buffer
-void *context;
-alt_mutex_dev* mutex;
+
 int *sharedMsgBuff = (int*)0x03500000;
 // Interrupt Flags Define
 volatile int tap_flag = 0;	// Double Tap Interrupt Flag
@@ -93,7 +96,7 @@ volatile int tap_flag = 0;	// Double Tap Interrupt Flag
 // Function Declarations
 void gyro_isr(void * context);
 void gyro_detect_tap(volatile int *tap_flag, int *counter);
-void display_select_configuration(alt_16 yData);
+int display_select_configuration(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 
 int main() {
@@ -133,6 +136,7 @@ int main() {
 		// need to get the data from the other soure
 		altera_avalon_mutex_lock(mutex,1);
 		int display_mode = *sharedMsgBuff;
+		altera_avalon_mutex_unlock(mutex);
 		//2. handle acceleroometer tap
 		gyro_detect_tap(&tap_flag, &counter);
 
@@ -147,7 +151,8 @@ int main() {
 
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrSmall, 9600, rxArrSmall, 0);
 			int config_mode = display_select_configuration(yData);
-			IOWR_32DIREC(SDRAM_BASE_ADDRESS, 0, config_mode);
+			send_msg(config_mode);
+			IOWR_32DIRECT(SDRAM_BASE_ADDRESS, 0, config_mode);
 
 
 
@@ -157,6 +162,8 @@ int main() {
 			alt_u8 rxArr[38400];
 
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrFull, 38400, rxArr, 0);
+
+
 		}
 
 		gyro_data_in = INT_SOURCE | 0x80;
@@ -191,7 +198,7 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 
 }
 
-void display_select_configuration(alt_16 yData) {
+int display_select_configuration(alt_16 yData) {
 	// selects the configureation mode for Quad Display (loaded into other proc)
 	if (yData >= -265 && yData < -127) {
         int config_mode = 0;
@@ -205,6 +212,7 @@ void display_select_configuration(alt_16 yData) {
     else if (yData >= 127 && yData <= 265) {
         int config_mode = 3;
     }
+	return 0;
 }
 
 
@@ -219,4 +227,19 @@ alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData,
 	printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", xData, yData, zData);
 
 	return yData;
+}
+
+void send_msg(int msg) {
+	altera_avalon_mutex_lock(mutex, 1);
+
+	*sharedMsgBuff = msg;
+
+	alt_dcache_flush_all();
+	altera_avalon_mutex_unlock(mutex);
+
+	IOWR(OUTPUT_PROC1_BASE, 0, 1);
+	IOWR(OUTPUT_PROC1_BASE, 0, 0);
+
+	alt_printf("SPI Processor: sneding %d to other processor\n", msg);
+
 }

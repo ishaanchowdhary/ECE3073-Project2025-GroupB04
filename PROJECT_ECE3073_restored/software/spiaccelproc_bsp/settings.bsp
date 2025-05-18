@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 16, 2025 5:27:49 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1747380469677</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>18/05/2025 1:56:57 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1747540617958</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\prana\OneDrive\Documents\ECE3073\M3_task1_attempt\ECE3073-Project2025-GroupB04\PROJECT_ECE3073_restored\software\spiaccelproc_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\PROJECT_SYS_V2.sopcinfo</SopcDesignFile>
