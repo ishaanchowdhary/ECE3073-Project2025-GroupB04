@@ -66,6 +66,7 @@ void send_msg(int msg);
 int main() {
 	alt_putstr("Image Display Processor Initialised\n");
 
+
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
 	alt_u8 sendBuffSmall = 0x16; //send buffer for packed data, small res
 
@@ -98,6 +99,12 @@ int main() {
 	uint8_t sobelArrX[38400];
 	uint8_t sobelArrY[38400];
 	uint8_t sobelArrCombined[38400];
+
+	// Set up input pio interrupt
+	IOWR(INPUT_PROC0_BASE, 3, 0x1);
+	IOWR(INPUT_PROC0_BASE, 2, 0x1);
+	alt_irq_register(INPUT_PROC0_BASE, &context, key1_isr);
+
 
 	// Image Variables
 	uint8_t *img1;

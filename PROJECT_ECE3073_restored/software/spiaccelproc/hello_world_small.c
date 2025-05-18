@@ -14,17 +14,8 @@
 #define PIXEL_ADDRESS_BASE_val 0x4041080
 #define PIXEL_DATA_BASE_val 0x4041070
 
-#define CAM_READY_BASE 0x4041060
 //==========SPI constants==========
 #define SPI_CONTROLLER_BASE 0x4041000
-
-#define TIME_DISPLAY_BASE 0x4041050
-
-// Gyroscope Addresses
-#define GYRO_INT_BASE 0x4041040
-#define GYRO_INT_IRQ 3
-#define GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID 0
-
 // SPI CHIP SELECTS
 #define CS_ACCEL 1
 #define CS_CAM 0
@@ -84,10 +75,7 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 	POWER_CONTROL, 0x08
 };
 
-// Communication processor
-#define OUTPUT_PROC1_BASE 0x4001020
 // shared buffer
-
 int *sharedMsgBuff = (int*)0x03500000;
 // Interrupt Flags Define
 volatile int tap_flag = 0;	// Double Tap Interrupt Flag
