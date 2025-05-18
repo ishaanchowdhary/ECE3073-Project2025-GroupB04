@@ -11,31 +11,10 @@
 #include "altera_avalon_pio_regs.h"
 
 
-// ------------- TODO: Remove address values and change to match in code ---------------------------
-#define SDRAM_BASE_ADDRESS 0x00000000
 #define IMAGE_SIZE (320*240/2)//each pixel 4 bits, top 4 bits = first pixel
 
 #define PIXEL_ADDRESS_BASE_val 0x4041080
 #define PIXEL_DATA_BASE_val 0x4041070
-
-#define CAM_READY_BASE 0x4041060
-//==========SPI constants==========
-#define SPI_CONTROLLER_BASE 0x4041000
-
-#define TIME_DISPLAY_BASE 0x4041050
-
-// Keys Addresses
-#define KEY10_BASE 0x40410b0
-#define KEY10_IRQ 4
-#define KEY10_IRQ_INTERRUPT_CONTROLLER_ID 0
-
-//input and output proc 0
-#define INPUT_PROC0_BASE 0x4001030
-#define OUTPUT_PROC0_BASE 0x4001020
-
-// HEX
-#define HEX20_BASE 0x4001080
-#define HEX53_BASE 0x4001070
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Keep these: modify to correct val---------------------------------------------------------------------

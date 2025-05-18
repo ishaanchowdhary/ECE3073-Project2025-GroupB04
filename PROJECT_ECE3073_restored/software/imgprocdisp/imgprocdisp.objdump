@@ -37,11 +37,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   8 .debug_aranges 000005d8  00000000  00000000  00005b98  2**3
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_info   00007e03  00000000  00000000  00006170  2**0
+  9 .debug_info   00007e02  00000000  00000000  00006170  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_abbrev 00002ea0  00000000  00000000  0000df73  2**0
+ 10 .debug_abbrev 00002ea0  00000000  00000000  0000df72  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_line   0000335c  00000000  00000000  00010e13  2**0
+ 11 .debug_line   0000335c  00000000  00000000  00010e12  2**0
                   CONTENTS, READONLY, DEBUGGING
  12 .debug_frame  000009dc  00000000  00000000  00014170  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -710,7 +710,7 @@ void key1_isr(void* context1, alt_u32 id) {
 
     // Read the edge capture register
     *edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
- 320004c:	00810134 	movhi	r2,1028
+ 320004c:	00810034 	movhi	r2,1024
 
 	return 0;
 }
@@ -722,7 +722,7 @@ void key1_isr(void* context1, alt_u32 id) {
 
     // Read the edge capture register
     *edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
- 3200054:	10842f04 	addi	r2,r2,4284
+ 3200054:	10842704 	addi	r2,r2,4252
 
 	return 0;
 }
@@ -768,7 +768,7 @@ void initialise_key1_interrupt() {
  32000a0:	defffe04 	addi	sp,sp,-8
     // Clear any pending interrupts
     IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
- 32000a4:	00810134 	movhi	r2,1028
+ 32000a4:	00810034 	movhi	r2,1024
     // Clear the edge capture register to enable future interrupts
     IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
 }
@@ -778,22 +778,22 @@ void initialise_key1_interrupt() {
  32000a8:	dfc00115 	stw	ra,4(sp)
     // Clear any pending interrupts
     IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
- 32000ac:	10842f04 	addi	r2,r2,4284
+ 32000ac:	10842704 	addi	r2,r2,4252
  32000b0:	10000035 	stwio	zero,0(r2)
 
     // Enable interrupts for KEY1 (bit 1)
     IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x2);
- 32000b4:	00810134 	movhi	r2,1028
- 32000b8:	10842e04 	addi	r2,r2,4280
+ 32000b4:	00810034 	movhi	r2,1024
+ 32000b8:	10842604 	addi	r2,r2,4248
  32000bc:	00c00084 	movi	r3,2
  32000c0:	10c00035 	stwio	r3,0(r2)
 
     // Register ISR
     alt_ic_isr_register(
- 32000c4:	01c10134 	movhi	r7,1028
+ 32000c4:	01c10034 	movhi	r7,1024
  32000c8:	0180c834 	movhi	r6,800
  32000cc:	d8000015 	stw	zero,0(sp)
- 32000d0:	39c42c04 	addi	r7,r7,4272
+ 32000d0:	39c42404 	addi	r7,r7,4240
  32000d4:	31801304 	addi	r6,r6,76
  32000d8:	01400104 	movi	r5,4
  32000dc:	0009883a 	mov	r4,zero
@@ -2267,8 +2267,8 @@ int main() {
 	while(1){
 		// Run time
 		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
- 3200aa8:	01010134 	movhi	r4,1028
- 3200aac:	21041404 	addi	r4,r4,4176
+ 3200aa8:	01010034 	movhi	r4,1024
+ 3200aac:	21041004 	addi	r4,r4,4160
  3200ab0:	21400037 	ldwio	r5,0(r4)
 
 		// Toggle for switching between Single and Quad Display
@@ -3261,8 +3261,8 @@ int main() {
 		// Run time
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
 	    Run_Time(start, end); // Call Function to Display Benchmarking
- 320128c:	00810134 	movhi	r2,1028
- 3201290:	10841404 	addi	r2,r2,4176
+ 320128c:	00810034 	movhi	r2,1024
+ 3201290:	10841004 	addi	r2,r2,4160
  3201294:	11400037 	ldwio	r5,0(r2)
  3201298:	008000f4 	movhi	r2,3
  320129c:	10a8e504 	addi	r2,r2,-23660
