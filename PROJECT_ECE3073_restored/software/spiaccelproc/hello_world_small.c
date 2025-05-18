@@ -140,7 +140,6 @@ int main() {
 
 			alt_u8 sendBuffPtrSmall[9600];
 			alt_u8 rxArrSmall[9600];
-
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrSmall, 9600, rxArrSmall, 0);
 			int config_mode = display_select_configuration(yData);
 			send_msg(config_mode);
@@ -152,6 +151,7 @@ int main() {
 		} else if (display_mode == 1) {
 			alt_u8 sendBuffPtrFull[38400];
 			alt_u8 rxArr[38400];
+
 
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrFull, 38400, rxArr, 0);
 
@@ -183,10 +183,12 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 		*counter = *counter + 1;
 	}
 
+
 	// Reset Counter if over 3
 	if (*counter >= 4) {
 		*counter = 0;
 	}
+	send_msg(4);
 
 }
 

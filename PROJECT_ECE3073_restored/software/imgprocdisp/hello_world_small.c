@@ -266,10 +266,19 @@ int main() {
 
 		} else {
 			// Single Display Mode
+			altera_avalon_mutex_lock(mutex, 1);
+			int msg = *sharedMsgBuff;
+			alt_dcache_flush_all();
+			altera_avalon_mutex_unlock(mutex);
 
 			//int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
 			// Run this line in other processor ^^^^^
-			single_mode = 0; // TODO: ------------------------ Connect to counter from double tap on other processor by storing two bits (0-3) in sdram and load here
+//			single_mode = 0; // TODO: ------------------------ Connect to counter from double tap on other processor by storing two bits (0-3) in sdram and load here
+			if (msg == 4) {
+				single_mode = (single_mode + 1) % 4;
+				*sharedMsgBuff = 0;
+			}
+
 			int SingleFlipImgIdx = 0;
 
 			// Mode Selection
