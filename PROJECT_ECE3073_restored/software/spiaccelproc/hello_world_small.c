@@ -89,7 +89,9 @@ alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData,
 
 int main() {
 	alt_putstr("Camera/Accelerometer Processor Initialised\n");
-
+	IOWR(INPUT_PROC1_BASE, 3, 0x1);
+	IOWR(INPUT_PROC1_BASE, 2, 0x1);
+	alt_irq_register(INPUT_PROC1_IRQ_INTERRUPT_CONTROLLER_ID, INPUT_PROC1_IRQ, input_proc1_isr, NULL, 0x0);
 	// Accelerometer Setup
 	alt_u8 gyro_data_in, gyro_data_out, regData;
 	alt_u8 readX = READ_X_AXIS;
@@ -217,6 +219,9 @@ alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData,
 	return yData;
 }
 
+void input_proc1_isr(void* context) {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(INPUT_PROC1_BASE, 0);
+}
 void send_msg(int msg) {
 	altera_avalon_mutex_lock(mutex, 1);
 
