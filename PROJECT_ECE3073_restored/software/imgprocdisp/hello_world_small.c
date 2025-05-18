@@ -153,9 +153,11 @@ int main() {
 		if (Key1Flag == 1) {
             mode = !mode;  // Toggle mode
             Key1Flag = 0;  // Reset the flag
+            send_msg(mode);
         }
 
 		if (mode) {
+
 			// Quad Display Mode
 			// Run on other proc: int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,9600,&rxArrSmall,0); //SPI for SMALL res
 			// Flags For Copying Displays
@@ -671,12 +673,12 @@ void display_select(int config_mode, int* selectedDisp1, int* selectedDisp2, int
 
 void send_msg(int msg){
 
-//	altera_avalon_mutex_lock(mutex,1);
+	altera_avalon_mutex_lock(mutex,1);
 	*sharedMsgBuff = msg;
 //	alt_dcache_flush_all();  // After writing
 
 	alt_dcache_flush_all();  // After writing
-//	altera_avalon_mutex_unlock(mutex);
+	altera_avalon_mutex_unlock(mutex);
 
 	//pulsing the output
 	IOWR(OUTPUT_PROC0_BASE,0,1);

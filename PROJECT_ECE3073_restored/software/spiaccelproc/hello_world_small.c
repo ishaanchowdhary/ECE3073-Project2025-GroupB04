@@ -82,6 +82,10 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 	POWER_CONTROL, 0x08
 };
 
+// shared buffer
+void *context;
+alt_mutex_dev* mutex;
+int *sharedMsgBuff = (int*)0x03500000;
 // Interrupt Flags Define
 volatile int tap_flag = 0;	// Double Tap Interrupt Flag
 
@@ -127,7 +131,8 @@ int main() {
 
 		//psuedo code attempt:
 		// need to get the data from the other soure
-		int display_mode = IORD(KEY10_BASE, 0);
+		altera_avalon_mutex_lock(mutex,1);
+		int display_mode = *sharedMsgBuff;
 		//2. handle acceleroometer tap
 		gyro_detect_tap(&tap_flag, &counter);
 
