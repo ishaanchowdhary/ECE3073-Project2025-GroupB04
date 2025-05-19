@@ -96,8 +96,11 @@ void input_proc1_isr(void* context);
 void send_msg(int msg, volatile int* sharedMsgBuffTarget);
 int main() {
 	alt_putstr("Camera/Accelerometer Processor Initialised\n");
-
-
+	mutex = altera_avalon_mutex_open("/dev/mutex_0");
+	if (mutex == NULL) {
+	    alt_printf("Failed to open mutex!\n");
+	    return 1;
+	}
 	// Accelerometer Setup
 	alt_u8 gyro_data_in, gyro_data_out, regData;
 	alt_u8 readX = READ_X_AXIS;
@@ -144,8 +147,7 @@ int main() {
 		alt_dcache_flush_all();
 		display_mode = *display_mode_shared;
 		altera_avalon_mutex_unlock(mutex);
-		//2. handle acceleroometer tap
-		gyro_detect_tap(&tap_flag, &counter);
+
 
 		// 3. read gyroscope axis data dn get yData
 		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
@@ -157,7 +159,7 @@ int main() {
 			alt_u8 rxArrSmall[9600];
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrSmall, 9600, rxArrSmall, 0);
 			int config_mode = display_select_configuration(yData);
-			send_msg(config_mode, config_mode_shared);
+			send_msg(config_mode, *config_mode_shared);
 
 
 
@@ -168,7 +170,8 @@ int main() {
 
 
 			alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrFull, 38400, rxArr, 0);
-
+			//2. handle acceleroometer tap
+			gyro_detect_tap(&tap_flag, &counter);
 
 		}
 
@@ -202,7 +205,7 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 		*counter = 0;
 	}
 
-	send_msg(*counter, double_tap_counter);
+	send_msg(*counter, *double_tap_counter);
 
 
 }

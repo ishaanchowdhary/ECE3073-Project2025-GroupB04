@@ -68,7 +68,11 @@ void send_msg(int msg, volatile int* sharedMsgBuffTarget);
 
 int main() {
 	alt_putstr("Image Display Processor Initialised\n");
-
+	mutex = altera_avalon_mutex_open("/dev/mutex_0");
+	if (mutex == NULL) {
+	    alt_printf("Failed to open mutex!\n");
+	    return 1;
+	}
 
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
 	alt_u8 sendBuffSmall = 0x16; //send buffer for packed data, small res
