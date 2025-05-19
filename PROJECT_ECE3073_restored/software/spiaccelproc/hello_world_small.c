@@ -20,8 +20,6 @@
 #define CS_ACCEL 1
 #define CS_CAM 0
 
-void *context;
-alt_mutex_dev* mutex;
 // Gyroscope Configuration
 // Gyroscope Write Registers
 #define BW_RATE 0x2C
@@ -57,6 +55,8 @@ alt_mutex_dev* mutex;
 
 #define INPUT_PROC1_IRQ 3
 #define INPUT_PROC1_IRQ_INTERRUPT_CONTROLLER_ID 0
+
+
 // Functionality to initialise the accelerometer for double tap detection
 alt_u8 gyro_config[CONFIG_LENGTH] = {
 	DATA_FORMAT, 0x0b,		// 4-wire SPI, full resolution, +/- 16g
@@ -77,23 +77,26 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 	POWER_CONTROL, 0x08
 };
 volatile int tap_flag;
+void *context;
+// mutex
+alt_mutex_dev *mutex;
 // shared SDRAM
 // Interrupt Flags Define
-volatile int *tap_flag_shared = (int*)0x00100004;	// Double Tap Interrupt Flag
-int *display_mode_shared = (int*)0x00100008;
-int *ydatas_shared = (int*) 0x0010000C;
-int *sharedMsgBuff = (int*) 0x001000010;
+int *display_mode_shared = (int*)0x03500000;
+int *config_mode_shared = (int*) 0x3500004;
+int *double_tap_counter = (int*) 0x3500008;
+int *key_flag_shared = (int*) 0x350000C;
 // Function Declarations
 void gyro_isr(void * context);
 void gyro_detect_tap(volatile int *tap_flag, int *counter);
 int display_select_configuration(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 void input_proc1_isr(void* context);
+void send_msg(int msg, volatile int* sharedMsgBuffTarget);
 int main() {
 	alt_putstr("Camera/Accelerometer Processor Initialised\n");
-	IOWR(INPUT_PROC1_BASE, 3, 0x1);
-	IOWR(INPUT_PROC1_BASE, 2, 0x1);
-	alt_irq_register(INPUT_PROC1_IRQ_INTERRUPT_CONTROLLER_ID, INPUT_PROC1_IRQ, input_proc1_isr, NULL, 0x0);
+
+
 	// Accelerometer Setup
 	alt_u8 gyro_data_in, gyro_data_out, regData;
 	alt_u8 readX = READ_X_AXIS;
@@ -106,10 +109,16 @@ int main() {
 		alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_ACCEL, 2, gyro_config + i, 0, &gyro_data_out, 0);
 	}
 
+	// gyro interrupt
 	void* context = (void *) &isrRes;
 	IOWR(GYRO_INT_BASE, 3, 0);
 	IOWR(GYRO_INT_BASE, 2, 0x1);
 	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, gyro_isr, context, 0x0);
+
+	// input processor interrupt
+	IOWR(INPUT_PROC1_BASE, 3, 0x1);
+	IOWR(INPUT_PROC1_BASE, 2, 0x1);
+	alt_irq_register(INPUT_PROC1_IRQ_INTERRUPT_CONTROLLER_ID, INPUT_PROC1_IRQ, input_proc1_isr, context, 0x0);
 
 	// Initialising Double Tap Counter for updating Display
 	int counter = 0;
@@ -131,7 +140,7 @@ int main() {
 		//psuedo code attempt:
 		// need to get the data from the other soure
 		altera_avalon_mutex_lock(mutex,1);
-		int display_mode = *sharedMsgBuff;
+		int display_mode = *display_mode_shared;
 		altera_avalon_mutex_unlock(mutex);
 		//2. handle acceleroometer tap
 		gyro_detect_tap(&tap_flag, &counter);
@@ -146,8 +155,7 @@ int main() {
 			alt_u8 rxArrSmall[9600];
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrSmall, 9600, rxArrSmall, 0);
 			int config_mode = display_select_configuration(yData);
-			send_msg(config_mode);
-			IOWR_32DIRECT(SDRAM_BASE_ADDRESS, 0, config_mode);
+			send_msg(config_mode, *config_mode_shared);
 
 
 
@@ -182,7 +190,6 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 	// Print accelerometer double tap result
 	if (*tap_flag == 1) {
 		printf("\n\nDouble tap detected!\n\n");
-		send_msg(4);
 		*tap_flag = 0;
 		*counter = *counter + 1;
 	}
@@ -192,6 +199,8 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 	if (*counter >= 4) {
 		*counter = 0;
 	}
+
+	send_msg(counter, *double_tap_counter);
 
 
 }
@@ -230,11 +239,12 @@ alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData,
 
 void input_proc1_isr(void* context) {
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(INPUT_PROC1_BASE, 0);
+	IOWR(INPUT_PROC1_BASE, 3, 0);
 }
-void send_msg(int msg) {
+void send_msg(int msg, volatile int* sharedMsgBuffTarget) {
 	altera_avalon_mutex_lock(mutex, 1);
 
-	*sharedMsgBuff = msg;
+	*sharedMsgBuffTarget = msg;
 
 	alt_dcache_flush_all();
 	altera_avalon_mutex_unlock(mutex);
@@ -242,6 +252,6 @@ void send_msg(int msg) {
 	IOWR(OUTPUT_PROC1_BASE, 0, 1);
 	IOWR(OUTPUT_PROC1_BASE, 0, 0);
 
-	alt_printf("SPI Processor: sneding %d to other processor\n", msg);
+	alt_printf("SPI Processor: sending %d to other processor\n", msg);
 
 }

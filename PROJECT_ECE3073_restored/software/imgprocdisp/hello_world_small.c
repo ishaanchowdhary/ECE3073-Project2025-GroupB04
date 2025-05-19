@@ -24,7 +24,10 @@ int *bufferFlag1 = (int*)0x03200030; //use as buffer idx
 int *frame1Ready = (int*)0x03200040;
 
 
-int *sharedMsgBuff = (int*)0x03500000;
+
+int *display_mode_shared = (int*)0x03500000;
+int *config_mode_shared = (int*) 0x3500004;
+int *double_tap_counter = (int*) 0x3500008;
 
 int *needBlur = (int*)0x03200070;
 int *quadImgMode = (int*)0x0320080;
@@ -42,7 +45,7 @@ int *frame2Ready = (int*)0x03200090;
 #define CONV_RESULT_BASE_2 0x03410000
 
 void *context;
-alt_mutex_dev* mutex;
+alt_mutex_dev *mutex;
 int received = 0;
 int valueFromP1 = 0;
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -61,7 +64,7 @@ int convolve(uint8_t * inputImg, uint8_t * outputImg, float * kernel, int width,
 void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base, uint32_t display_base,int flipImg);
 void Run_Time(uint32_t before, uint32_t after);
 void display_select(int config_mode, int* selectedDisp1, int* selectedDisp2, int* selectedDisp3, int* selectedDisp4);
-void send_msg(int msg);
+void send_msg(int msg, volatile int* sharedMsgBuffTarget);
 
 int main() {
 	alt_putstr("Image Display Processor Initialised\n");
@@ -138,8 +141,9 @@ int main() {
 		// Toggle for switching between Single and Quad Display
 		if (Key1Flag == 1) {
             mode = !mode;  // Toggle mode
+            send_msg(mode, display_mode_shared);
             Key1Flag = 0;  // Reset the flag
-            send_msg(mode);
+
         }
 
 		if (mode) {
@@ -151,7 +155,7 @@ int main() {
 			int flag2 = 0;
 			// TODO ---------------------------------Load config mode val from SDRAM
 			altera_avalon_mutex_lock(mutex,1);
-			int config_mode = *sharedMsgBuff;
+			int config_mode = *config_mode_shared;
 			alt_dcache_flush_all();
 			altera_avalon_mutex_unlock(mutex);
 			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -267,17 +271,13 @@ int main() {
 		} else {
 			// Single Display Mode
 			altera_avalon_mutex_lock(mutex, 1);
-			int msg = *sharedMsgBuff;
+			int single_mode = *double_tap_counter;
 			alt_dcache_flush_all();
 			altera_avalon_mutex_unlock(mutex);
 
 			//int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
 			// Run this line in other processor ^^^^^
 //			single_mode = 0; // TODO: ------------------------ Connect to counter from double tap on other processor by storing two bits (0-3) in sdram and load here
-			if (msg == 4) {
-				single_mode = (single_mode + 1) % 4;
-				*sharedMsgBuff = 0;
-			}
 
 			int SingleFlipImgIdx = 0;
 
@@ -669,11 +669,10 @@ void display_select(int config_mode, int* selectedDisp1, int* selectedDisp2, int
     }
 }
 
-void send_msg(int msg){
+void send_msg(int msg, volatile int* sharedMsgBuffTarget){
 
 	altera_avalon_mutex_lock(mutex,1);
-	*sharedMsgBuff = msg;
-//	alt_dcache_flush_all();  // After writing
+	*sharedMsgBuffTarget = msg;
 
 	alt_dcache_flush_all();  // After writing
 	altera_avalon_mutex_unlock(mutex);

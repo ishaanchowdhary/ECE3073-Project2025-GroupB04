@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 18, 2025 10:17:50 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1747570670607</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 19, 2025 12:42:02 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1747622522322</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\prana\OneDrive\Documents\ECE3073\M3_task1_attempt\ECE3073-Project2025-GroupB04\PROJECT_ECE3073_restored\software\spiaccelproc_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\PROJECT_SYS_V2.sopcinfo</SopcDesignFile>
@@ -917,10 +917,10 @@
         <LinkerRegion>
                 <regionName>SDRAM</regionName>
                 <memoryName>SDRAM</memoryName>
-                <offset>1048576</offset>
-                <size>1048576</size>
-                <baseAddress>0x100000</baseAddress>
-                <addressRange>0x00100000 - 0x001FFFFF</addressRange>
+                <offset>33554432</offset>
+                <size>33554432</size>
+                <baseAddress>0x2000000</baseAddress>
+                <addressRange>0x02000000 - 0x03FFFFFF</addressRange>
         </LinkerRegion>
         <MemoryMap>
                 <slaveDescriptor>SDRAM</slaveDescriptor>
@@ -947,13 +947,13 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>CAM_READY</slaveDescriptor>
+                <slaveDescriptor>TIME_DISPLAY</slaveDescriptor>
                 <addressRange>0x04001040 - 0x0400104F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>GYRO_INT</slaveDescriptor>
+                <slaveDescriptor>PIXEL_DATA</slaveDescriptor>
                 <addressRange>0x04001050 - 0x0400105F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
@@ -965,8 +965,32 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>CAM_READY</slaveDescriptor>
+                <addressRange>0x04001070 - 0x0400107F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>GYRO_INT</slaveDescriptor>
+                <addressRange>0x04001080 - 0x0400108F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>KEY10</slaveDescriptor>
+                <addressRange>0x04001090 - 0x0400109F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>SW</slaveDescriptor>
+                <addressRange>0x040010A0 - 0x040010AF</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>jtag_uart_1</slaveDescriptor>
-                <addressRange>0x04001070 - 0x04001077</addressRange>
+                <addressRange>0x040010B0 - 0x040010B7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>

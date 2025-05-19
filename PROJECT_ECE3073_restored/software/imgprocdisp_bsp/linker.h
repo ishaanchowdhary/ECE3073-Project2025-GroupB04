@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_CAM_DISP' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Sun May 18 21:44:07 EST 2025
+ * Generated: Mon May 19 12:39:22 EST 2025
  */
 
 /*
@@ -69,8 +69,8 @@
 #define EXCEPTIONREGION_REGION_SPAN 65504
 #define RESET_REGION_BASE 0x0
 #define RESET_REGION_SPAN 32
-#define SDRAM_REGION_BASE 0x200000
-#define SDRAM_REGION_SPAN 1048576
+#define SDRAM_REGION_BASE 0x2000000
+#define SDRAM_REGION_SPAN 33554432
 
 
 /*

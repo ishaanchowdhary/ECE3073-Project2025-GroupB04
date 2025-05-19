@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_SPI_ACCEL' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Fri May 16 16:46:57 EST 2025
+ * Generated: Mon May 19 11:34:11 EST 2025
  */
 
 /*
@@ -61,7 +61,7 @@
  */
 
 #define ALT_MODULE_CLASS_CAM_READY altera_avalon_pio
-#define CAM_READY_BASE 0x4001040
+#define CAM_READY_BASE 0x4001070
 #define CAM_READY_BIT_CLEARING_EDGE_REGISTER 0
 #define CAM_READY_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define CAM_READY_CAPTURE 0
@@ -182,7 +182,7 @@
  */
 
 #define ALT_MODULE_CLASS_GYRO_INT altera_avalon_pio
-#define GYRO_INT_BASE 0x4001050
+#define GYRO_INT_BASE 0x4001080
 #define GYRO_INT_BIT_CLEARING_EDGE_REGISTER 0
 #define GYRO_INT_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define GYRO_INT_CAPTURE 1
@@ -201,6 +201,33 @@
 #define GYRO_INT_RESET_VALUE 0
 #define GYRO_INT_SPAN 16
 #define GYRO_INT_TYPE "altera_avalon_pio"
+
+
+/*
+ * KEY10 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_KEY10 altera_avalon_pio
+#define KEY10_BASE 0x4001090
+#define KEY10_BIT_CLEARING_EDGE_REGISTER 0
+#define KEY10_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define KEY10_CAPTURE 1
+#define KEY10_DATA_WIDTH 2
+#define KEY10_DO_TEST_BENCH_WIRING 0
+#define KEY10_DRIVEN_SIM_VALUE 0
+#define KEY10_EDGE_TYPE "RISING"
+#define KEY10_FREQ 50000000
+#define KEY10_HAS_IN 1
+#define KEY10_HAS_OUT 0
+#define KEY10_HAS_TRI 0
+#define KEY10_IRQ -1
+#define KEY10_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define KEY10_IRQ_TYPE "EDGE"
+#define KEY10_NAME "/dev/KEY10"
+#define KEY10_RESET_VALUE 0
+#define KEY10_SPAN 16
+#define KEY10_TYPE "altera_avalon_pio"
 
 
 /*
@@ -228,6 +255,33 @@
 #define PIXEL_ADDRESS_RESET_VALUE 0
 #define PIXEL_ADDRESS_SPAN 16
 #define PIXEL_ADDRESS_TYPE "altera_avalon_pio"
+
+
+/*
+ * PIXEL_DATA configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_PIXEL_DATA altera_avalon_pio
+#define PIXEL_DATA_BASE 0x4001050
+#define PIXEL_DATA_BIT_CLEARING_EDGE_REGISTER 0
+#define PIXEL_DATA_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define PIXEL_DATA_CAPTURE 0
+#define PIXEL_DATA_DATA_WIDTH 4
+#define PIXEL_DATA_DO_TEST_BENCH_WIRING 0
+#define PIXEL_DATA_DRIVEN_SIM_VALUE 0
+#define PIXEL_DATA_EDGE_TYPE "NONE"
+#define PIXEL_DATA_FREQ 50000000
+#define PIXEL_DATA_HAS_IN 0
+#define PIXEL_DATA_HAS_OUT 1
+#define PIXEL_DATA_HAS_TRI 0
+#define PIXEL_DATA_IRQ -1
+#define PIXEL_DATA_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define PIXEL_DATA_IRQ_TYPE "NONE"
+#define PIXEL_DATA_NAME "/dev/PIXEL_DATA"
+#define PIXEL_DATA_RESET_VALUE 0
+#define PIXEL_DATA_SPAN 16
+#define PIXEL_DATA_TYPE "altera_avalon_pio"
 
 
 /*
@@ -270,6 +324,33 @@
 
 
 /*
+ * SW configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_SW altera_avalon_pio
+#define SW_BASE 0x40010a0
+#define SW_BIT_CLEARING_EDGE_REGISTER 0
+#define SW_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define SW_CAPTURE 0
+#define SW_DATA_WIDTH 10
+#define SW_DO_TEST_BENCH_WIRING 0
+#define SW_DRIVEN_SIM_VALUE 0
+#define SW_EDGE_TYPE "NONE"
+#define SW_FREQ 50000000
+#define SW_HAS_IN 1
+#define SW_HAS_OUT 0
+#define SW_HAS_TRI 0
+#define SW_IRQ -1
+#define SW_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define SW_IRQ_TYPE "NONE"
+#define SW_NAME "/dev/SW"
+#define SW_RESET_VALUE 0
+#define SW_SPAN 16
+#define SW_TYPE "altera_avalon_pio"
+
+
+/*
  * System configuration
  *
  */
@@ -285,24 +366,51 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_1"
-#define ALT_STDERR_BASE 0x4001070
+#define ALT_STDERR_BASE 0x40010b0
 #define ALT_STDERR_DEV jtag_uart_1
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_1"
-#define ALT_STDIN_BASE 0x4001070
+#define ALT_STDIN_BASE 0x40010b0
 #define ALT_STDIN_DEV jtag_uart_1
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_1"
-#define ALT_STDOUT_BASE 0x4001070
+#define ALT_STDOUT_BASE 0x40010b0
 #define ALT_STDOUT_DEV jtag_uart_1
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
 #define ALT_STDOUT_TYPE "altera_avalon_jtag_uart"
 #define ALT_SYSTEM_NAME "PROJECT_SYS_V2"
+
+
+/*
+ * TIME_DISPLAY configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_TIME_DISPLAY altera_avalon_pio
+#define TIME_DISPLAY_BASE 0x4001040
+#define TIME_DISPLAY_BIT_CLEARING_EDGE_REGISTER 0
+#define TIME_DISPLAY_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define TIME_DISPLAY_CAPTURE 0
+#define TIME_DISPLAY_DATA_WIDTH 32
+#define TIME_DISPLAY_DO_TEST_BENCH_WIRING 0
+#define TIME_DISPLAY_DRIVEN_SIM_VALUE 0
+#define TIME_DISPLAY_EDGE_TYPE "NONE"
+#define TIME_DISPLAY_FREQ 50000000
+#define TIME_DISPLAY_HAS_IN 1
+#define TIME_DISPLAY_HAS_OUT 0
+#define TIME_DISPLAY_HAS_TRI 0
+#define TIME_DISPLAY_IRQ -1
+#define TIME_DISPLAY_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define TIME_DISPLAY_IRQ_TYPE "NONE"
+#define TIME_DISPLAY_NAME "/dev/TIME_DISPLAY"
+#define TIME_DISPLAY_RESET_VALUE 0
+#define TIME_DISPLAY_SPAN 16
+#define TIME_DISPLAY_TYPE "altera_avalon_pio"
 
 
 /*
@@ -349,7 +457,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_1 altera_avalon_jtag_uart
-#define JTAG_UART_1_BASE 0x4001070
+#define JTAG_UART_1_BASE 0x40010b0
 #define JTAG_UART_1_IRQ 0
 #define JTAG_UART_1_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_1_NAME "/dev/jtag_uart_1"

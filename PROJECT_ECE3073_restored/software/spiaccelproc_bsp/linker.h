@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_SPI_ACCEL' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Sun May 18 21:45:35 EST 2025
+ * Generated: Mon May 19 12:41:58 EST 2025
  */
 
 /*
@@ -69,8 +69,8 @@
 #define EXCEPTIONREGION_REGION_SPAN 65504
 #define RESET_REGION_BASE 0x0
 #define RESET_REGION_SPAN 32
-#define SDRAM_REGION_BASE 0x100000
-#define SDRAM_REGION_SPAN 1048576
+#define SDRAM_REGION_BASE 0x2000000
+#define SDRAM_REGION_SPAN 33554432
 
 
 /*
