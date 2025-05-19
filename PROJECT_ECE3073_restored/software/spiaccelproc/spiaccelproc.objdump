@@ -37,43 +37,43 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   8 .debug_aranges 000004e0  00000000  00000000  00003a60  2**3
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_info   0000630f  00000000  00000000  00003f40  2**0
+  9 .debug_info   00006313  00000000  00000000  00003f40  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_abbrev 000025a8  00000000  00000000  0000a24f  2**0
+ 10 .debug_abbrev 000025a8  00000000  00000000  0000a253  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_line   000025d5  00000000  00000000  0000c7f7  2**0
+ 11 .debug_line   000025d5  00000000  00000000  0000c7fb  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_frame  0000076c  00000000  00000000  0000edcc  2**2
+ 12 .debug_frame  0000076c  00000000  00000000  0000edd0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_str    00001ac4  00000000  00000000  0000f538  2**0
+ 13 .debug_str    00001ac4  00000000  00000000  0000f53c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_loc    0000221f  00000000  00000000  00010ffc  2**0
+ 14 .debug_loc    00002209  00000000  00000000  00011000  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_alt_sim_info 00000030  00000000  00000000  0001321c  2**2
+ 15 .debug_alt_sim_info 00000030  00000000  00000000  0001320c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_ranges 00000398  00000000  00000000  00013250  2**3
+ 16 .debug_ranges 00000398  00000000  00000000  00013240  2**3
                   CONTENTS, READONLY, DEBUGGING
- 17 .thread_model 00000003  00000000  00000000  00014e2a  2**0
+ 17 .thread_model 00000003  00000000  00000000  00014e1a  2**0
                   CONTENTS, READONLY
- 18 .cpu          0000000e  00000000  00000000  00014e2d  2**0
+ 18 .cpu          0000000e  00000000  00000000  00014e1d  2**0
                   CONTENTS, READONLY
- 19 .qsys         00000001  00000000  00000000  00014e3b  2**0
+ 19 .qsys         00000001  00000000  00000000  00014e2b  2**0
                   CONTENTS, READONLY
- 20 .simulation_enabled 00000001  00000000  00000000  00014e3c  2**0
+ 20 .simulation_enabled 00000001  00000000  00000000  00014e2c  2**0
                   CONTENTS, READONLY
- 21 .stderr_dev   0000000b  00000000  00000000  00014e3d  2**0
+ 21 .stderr_dev   0000000b  00000000  00000000  00014e2d  2**0
                   CONTENTS, READONLY
- 22 .stdin_dev    0000000b  00000000  00000000  00014e48  2**0
+ 22 .stdin_dev    0000000b  00000000  00000000  00014e38  2**0
                   CONTENTS, READONLY
- 23 .stdout_dev   0000000b  00000000  00000000  00014e53  2**0
+ 23 .stdout_dev   0000000b  00000000  00000000  00014e43  2**0
                   CONTENTS, READONLY
- 24 .sopc_system_name 0000000e  00000000  00000000  00014e5e  2**0
+ 24 .sopc_system_name 0000000e  00000000  00000000  00014e4e  2**0
                   CONTENTS, READONLY
- 25 .quartus_project_dir 00000070  00000000  00000000  00014e6c  2**0
+ 25 .quartus_project_dir 00000070  00000000  00000000  00014e5c  2**0
                   CONTENTS, READONLY
- 26 .jdi          0000c546  00000000  00000000  00014edc  2**0
+ 26 .jdi          0000c546  00000000  00000000  00014ecc  2**0
                   CONTENTS, READONLY
- 27 .sopcinfo     000b848d  00000000  00000000  00021422  2**0
+ 27 .sopcinfo     000b848d  00000000  00000000  00021412  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 00000000 l    d  .entry	00000000 .entry
@@ -1262,92 +1262,85 @@ int main() {
 		altera_avalon_mutex_lock(mutex,1);
  200042c:	d1205a17 	ldw	r4,-32408(gp)
  2000430:	800b883a 	mov	r5,r16
-		display_mode = *display_mode_shared;
-		altera_avalon_mutex_unlock(mutex);
-
-
-		// 3. read gyroscope axis data dn get yData
-		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
- 2000434:	94bfffcc 	andi	r18,r18,65535
-		// if Single:
-		// int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
-
-		//psuedo code attempt:
-		// need to get the data from the other soure
-		altera_avalon_mutex_lock(mutex,1);
- 2000438:	20014e40 	call	20014e4 <altera_avalon_mutex_lock>
+ 2000434:	20014e40 	call	20014e4 <altera_avalon_mutex_lock>
 		alt_dcache_flush_all();
- 200043c:	2000f340 	call	2000f34 <alt_dcache_flush_all>
+ 2000438:	2000f340 	call	2000f34 <alt_dcache_flush_all>
 		display_mode = *display_mode_shared;
- 2000440:	d0a00317 	ldw	r2,-32756(gp)
+ 200043c:	d0a00317 	ldw	r2,-32756(gp)
 		altera_avalon_mutex_unlock(mutex);
- 2000444:	d1205a17 	ldw	r4,-32408(gp)
-
-
-		// 3. read gyroscope axis data dn get yData
-		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
- 2000448:	94a0001c 	xori	r18,r18,32768
+ 2000440:	d1205a17 	ldw	r4,-32408(gp)
 
 		//psuedo code attempt:
 		// need to get the data from the other soure
 		altera_avalon_mutex_lock(mutex,1);
 		alt_dcache_flush_all();
 		display_mode = *display_mode_shared;
- 200044c:	14400017 	ldw	r17,0(r2)
+ 2000444:	14400017 	ldw	r17,0(r2)
 		altera_avalon_mutex_unlock(mutex);
-
+ 2000448:	20015300 	call	2001530 <altera_avalon_mutex_unlock>
 
 		// 3. read gyroscope axis data dn get yData
-		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
- 2000450:	94a00004 	addi	r18,r18,-32768
-		//psuedo code attempt:
-		// need to get the data from the other soure
-		altera_avalon_mutex_lock(mutex,1);
-		alt_dcache_flush_all();
-		display_mode = *display_mode_shared;
-		altera_avalon_mutex_unlock(mutex);
- 2000454:	20015300 	call	2001530 <altera_avalon_mutex_unlock>
 
-
-		// 3. read gyroscope axis data dn get yData
-		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
- 2000458:	000f883a 	mov	r7,zero
- 200045c:	dc800015 	stw	r18,0(sp)
- 2000460:	d8000115 	stw	zero,4(sp)
- 2000464:	01803d84 	movi	r6,246
- 2000468:	01403d04 	movi	r5,244
- 200046c:	01003c84 	movi	r4,242
- 2000470:	20000dc0 	call	20000dc <gyro_process_data>
- 2000474:	1025883a 	mov	r18,r2
 
 
 		if(display_mode == 0) {
- 2000478:	88001c1e 	bne	r17,zero,20004ec <main+0x24c>
+ 200044c:	8800271e 	bne	r17,zero,20004ec <main+0x24c>
 			altera_avalon_mutex_lock(mutex,1);
- 200047c:	d1205a17 	ldw	r4,-32408(gp)
- 2000480:	800b883a 	mov	r5,r16
- 2000484:	20014e40 	call	20014e4 <altera_avalon_mutex_lock>
+ 2000450:	d1205a17 	ldw	r4,-32408(gp)
+ 2000454:	800b883a 	mov	r5,r16
 			alt_dcache_flush_all();
- 2000488:	2000f340 	call	2000f34 <alt_dcache_flush_all>
 			alt_u8 sendBuffPtrSmall[9600];
 			alt_u8 rxArrSmall[9600];
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrSmall, 9600, rxArrSmall, 0);
- 200048c:	d8800304 	addi	r2,sp,12
- 2000490:	d9000304 	addi	r4,sp,12
- 2000494:	01e58014 	movui	r7,38400
- 2000498:	21cf883a 	add	r7,r4,r7
- 200049c:	d8800115 	stw	r2,4(sp)
- 20004a0:	01010134 	movhi	r4,1028
- 20004a4:	00896004 	movi	r2,9600
- 20004a8:	800d883a 	mov	r6,r16
- 20004ac:	000b883a 	mov	r5,zero
- 20004b0:	d8000215 	stw	zero,8(sp)
- 20004b4:	d8800015 	stw	r2,0(sp)
- 20004b8:	21040004 	addi	r4,r4,4096
- 20004bc:	20015880 	call	2001588 <alt_avalon_spi_command>
 			altera_avalon_mutex_unlock(mutex);
- 20004c0:	d1205a17 	ldw	r4,-32408(gp)
- 20004c4:	20015300 	call	2001530 <altera_avalon_mutex_unlock>
+			yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
+ 2000458:	94bfffcc 	andi	r18,r18,65535
+		// 3. read gyroscope axis data dn get yData
+
+
+
+		if(display_mode == 0) {
+			altera_avalon_mutex_lock(mutex,1);
+ 200045c:	20014e40 	call	20014e4 <altera_avalon_mutex_lock>
+			alt_dcache_flush_all();
+ 2000460:	2000f340 	call	2000f34 <alt_dcache_flush_all>
+			alt_u8 sendBuffPtrSmall[9600];
+			alt_u8 rxArrSmall[9600];
+			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrSmall, 9600, rxArrSmall, 0);
+ 2000464:	d8800304 	addi	r2,sp,12
+ 2000468:	d9000304 	addi	r4,sp,12
+ 200046c:	01e58014 	movui	r7,38400
+ 2000470:	21cf883a 	add	r7,r4,r7
+ 2000474:	d8800115 	stw	r2,4(sp)
+ 2000478:	01010134 	movhi	r4,1028
+ 200047c:	00896004 	movi	r2,9600
+ 2000480:	800d883a 	mov	r6,r16
+ 2000484:	000b883a 	mov	r5,zero
+ 2000488:	d8000215 	stw	zero,8(sp)
+ 200048c:	d8800015 	stw	r2,0(sp)
+ 2000490:	21040004 	addi	r4,r4,4096
+ 2000494:	20015880 	call	2001588 <alt_avalon_spi_command>
+			altera_avalon_mutex_unlock(mutex);
+ 2000498:	d1205a17 	ldw	r4,-32408(gp)
+			yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
+ 200049c:	94a0001c 	xori	r18,r18,32768
+ 20004a0:	94a00004 	addi	r18,r18,-32768
+			altera_avalon_mutex_lock(mutex,1);
+			alt_dcache_flush_all();
+			alt_u8 sendBuffPtrSmall[9600];
+			alt_u8 rxArrSmall[9600];
+			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrSmall, 9600, rxArrSmall, 0);
+			altera_avalon_mutex_unlock(mutex);
+ 20004a4:	20015300 	call	2001530 <altera_avalon_mutex_unlock>
+			yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
+ 20004a8:	000f883a 	mov	r7,zero
+ 20004ac:	dc800015 	stw	r18,0(sp)
+ 20004b0:	01803d84 	movi	r6,246
+ 20004b4:	01403d04 	movi	r5,244
+ 20004b8:	d8000115 	stw	zero,4(sp)
+ 20004bc:	01003c84 	movi	r4,242
+ 20004c0:	20000dc0 	call	20000dc <gyro_process_data>
+ 20004c4:	1025883a 	mov	r18,r2
 			int config_mode = display_select_configuration(yData);
  20004c8:	913fffcc 	andi	r4,r18,65535
  20004cc:	2120001c 	xori	r4,r4,32768

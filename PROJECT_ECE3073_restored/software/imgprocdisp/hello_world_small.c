@@ -301,7 +301,6 @@ int main() {
 		    	combineSobelFilter(sobelArrX,sobelArrY,rxArr,320,240);
 			}
 			printf("Single Image Mode: %d\n", single_mode);
-			printf("Single Image Mode: %d\n", *display_mode_shared);
 			display_image_from_array_v2(240, 320, &rxArr, PIXEL_ADDRESS_BASE_val, SingleFlipImgIdx);
 		}
 

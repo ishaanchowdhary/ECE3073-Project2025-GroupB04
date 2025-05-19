@@ -150,7 +150,7 @@ int main() {
 
 
 		// 3. read gyroscope axis data dn get yData
-		yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
+
 
 
 		if(display_mode == 0) {
@@ -160,6 +160,7 @@ int main() {
 			alt_u8 rxArrSmall[9600];
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrSmall, 9600, rxArrSmall, 0);
 			altera_avalon_mutex_unlock(mutex);
+			yData = gyro_process_data(readX, readY, readZ, xData, yData, zData);
 			int config_mode = display_select_configuration(yData);
 			send_msg(config_mode, *config_mode_shared);
 
