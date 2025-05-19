@@ -1,18 +1,19 @@
 // Camera and Accelerometer Processor
 
 #include "sys/alt_stdio.h"
-#include "system.h"
-#include "io.h"
+#include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <altera_avalon_pio_regs.h>
+#include "stdint.h"
+#include "io.h"
+#include "system.h"
+#include "sys/alt_irq.h"
 #include "altera_avalon_mutex.h"
+#include "altera_avalon_pio_regs.h"
 
-#define SDRAM_BASE_ADDRESS 0x00000000
 #define IMAGE_SIZE (320*240/2)//each pixel 4 bits, top 4 bits = first pixel
 
-#define PIXEL_ADDRESS_BASE_val 0x4041080
-#define PIXEL_DATA_BASE_val 0x4041070
+#define PIXEL_ADDRESS_BASE_val 0x4001060
+#define PIXEL_DATA_BASE_val 0x4001050
 
 //==========SPI constants==========
 #define SPI_CONTROLLER_BASE 0x4041000
@@ -122,7 +123,7 @@ int main() {
 
 	// Initialising Double Tap Counter for updating Display
 	int counter = 0;
-
+	int display_mode;
 	while(1){
 
 		gyro_data_in = INT_SOURCE | 0x80;
@@ -140,7 +141,8 @@ int main() {
 		//psuedo code attempt:
 		// need to get the data from the other soure
 		altera_avalon_mutex_lock(mutex,1);
-		int display_mode = *display_mode_shared;
+		alt_dcache_flush_all();
+		display_mode = *display_mode_shared;
 		altera_avalon_mutex_unlock(mutex);
 		//2. handle acceleroometer tap
 		gyro_detect_tap(&tap_flag, &counter);
@@ -155,7 +157,7 @@ int main() {
 			alt_u8 rxArrSmall[9600];
 			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrSmall, 9600, rxArrSmall, 0);
 			int config_mode = display_select_configuration(yData);
-			send_msg(config_mode, *config_mode_shared);
+			send_msg(config_mode, config_mode_shared);
 
 
 
@@ -165,7 +167,7 @@ int main() {
 			alt_u8 rxArr[38400];
 
 
-			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrFull, 38400, rxArr, 0);
+			alt_avalon_spi_command(SPI_CONTROLLER_BASE, CS_CAM, 1, sendBuffPtrFull, 38400, rxArr, 0);
 
 
 		}
@@ -200,7 +202,7 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
 		*counter = 0;
 	}
 
-	send_msg(counter, *double_tap_counter);
+	send_msg(*counter, double_tap_counter);
 
 
 }
@@ -255,3 +257,5 @@ void send_msg(int msg, volatile int* sharedMsgBuffTarget) {
 	alt_printf("SPI Processor: sending %d to other processor\n", msg);
 
 }
+
+

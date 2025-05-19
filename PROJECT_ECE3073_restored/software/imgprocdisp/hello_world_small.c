@@ -13,8 +13,8 @@
 
 #define IMAGE_SIZE (320*240/2)//each pixel 4 bits, top 4 bits = first pixel
 
-#define PIXEL_ADDRESS_BASE_val 0x4041080
-#define PIXEL_DATA_BASE_val 0x4041070
+#define PIXEL_ADDRESS_BASE_val 0x4001060
+#define PIXEL_DATA_BASE_val 0x4001050
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Keep these: modify to correct val---------------------------------------------------------------------
@@ -141,8 +141,8 @@ int main() {
 		// Toggle for switching between Single and Quad Display
 		if (Key1Flag == 1) {
             mode = !mode;  // Toggle mode
-            send_msg(mode, display_mode_shared);
             Key1Flag = 0;  // Reset the flag
+            send_msg(mode, display_mode_shared);
 
         }
 
@@ -155,8 +155,8 @@ int main() {
 			int flag2 = 0;
 			// TODO ---------------------------------Load config mode val from SDRAM
 			altera_avalon_mutex_lock(mutex,1);
-			int config_mode = *config_mode_shared;
 			alt_dcache_flush_all();
+			config_mode = *config_mode_shared;
 			altera_avalon_mutex_unlock(mutex);
 			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 			display_select(config_mode, &D1, &D2, &D3, &D4);
@@ -271,8 +271,8 @@ int main() {
 		} else {
 			// Single Display Mode
 			altera_avalon_mutex_lock(mutex, 1);
-			int single_mode = *double_tap_counter;
 			alt_dcache_flush_all();
+			single_mode = *double_tap_counter;
 			altera_avalon_mutex_unlock(mutex);
 
 			//int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
