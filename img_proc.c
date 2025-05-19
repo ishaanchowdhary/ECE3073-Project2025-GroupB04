@@ -79,7 +79,7 @@ void display_select(int config_mode, int* selectedDisp1, int* selectedDisp2, int
 void send_msg(int msg);
 
 int main() {
-	alt_putstr("Image Display Processor Initialised\n");
+	alt_putstr("Image Processing Processor Initialised\n");
 
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
 	alt_u8 sendBuffSmall = 0x16; //send buffer for packed data, small res
