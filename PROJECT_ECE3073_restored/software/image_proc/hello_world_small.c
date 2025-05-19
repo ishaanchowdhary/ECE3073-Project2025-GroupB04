@@ -80,12 +80,8 @@
 
 #include "sys/alt_stdio.h"
 
-int main()
-{ 
-  alt_putstr("Hello from Image Processor!\n");
-
-  /* Event loop never exits. */
-  while (1);
+int main() {
+	alt_putstr("Hello from Image Processor!\n");
 
   return 0;
 }
