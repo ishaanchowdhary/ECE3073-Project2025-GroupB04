@@ -147,47 +147,53 @@ usec_timer timer(
 
 );
 
-PROJECT_SYS_V2 project_nios(
-	.clk_clk          (CLOCK_50),
-//	.reset_reset_n(1'b0),
-	// Camera
-	.cam_ready_export(GPIO[2]),
-	// HEX Display
-	.first_hex_export(first_hex_data),		// Use this for the first 3 HEXS (Ones, Tenths and Hundreths)
-	.second_hex_export(second_hex_data),		// Use this for the 4th HEX (tens place)
-	// Switches
-	.switches_export(SW),
-	// Keys
-	.keys_export(KEY),
-	.leds_export(LEDR),
-	
-	// Pixel buffer I/O
-	.pixel_address_export(wraddress),
-	.pixel_data_export(write_value),	
-	
-	// SDRAM I/O 
-	.sdram_addr       (DRAM_ADDR),
-	.sdram_ba         (DRAM_BA),      			
-	.sdram_cas_n      (DRAM_CAS_N),
-	.sdram_cke        (DRAM_CKE),
-	.sdram_cs_n       (DRAM_CS_N),
-	.sdram_dq         (DRAM_DQ),
-	.sdram_dqm        ({DRAM_UDQM, DRAM_LDQM}),
-	.sdram_ras_n      (DRAM_RAS_N),
-	.sdram_we_n       (DRAM_WE_N)  ,
-	
-	// SPI I/O
-	.spi_external_MISO(spi_miso),
-	.spi_external_MOSI(spi_mosi),    // .MOSI
-	.spi_external_SCLK(spi_clk),    // .SCLK
-	.spi_external_SS_n(spi_cs),    // .SS_n
-	.gyro_int_export(GSENSOR_INT[2:1]),
-	// COUNT
-	.time_display_export		(count_ext),	// 32 bit time display
-	.input_p0_export        (p0_in),
-	.input_p1_export (p1_in),
-	.output_p0_export (p0_out),
-	.output_p1_export (p1_out)    
+TripleProcessor triple_processor_inst (
+    // Clock
+    .clk_clk           (CLOCK_50),
+
+    // Camera
+    .cam_ready_export  (GPIO[2]),
+
+    // HEX Display
+    .first_hex_export  (first_hex_data),       // HEX0-2
+    .second_hex_export (second_hex_data),      // HEX3
+
+    // Switches, Keys, LEDs
+    .switches_export   (SW),
+    .keys_export       (KEY),
+    .leds_export       (LEDR),
+
+    // Pixel buffer
+    .pixel_address_export (wraddress),
+    .pixel_data_export    (write_value),
+
+    // SDRAM
+    .sdram_addr        (DRAM_ADDR),
+    .sdram_ba          (DRAM_BA),
+    .sdram_cas_n       (DRAM_CAS_N),
+    .sdram_cke         (DRAM_CKE),
+    .sdram_cs_n        (DRAM_CS_N),
+    .sdram_dq          (DRAM_DQ),
+    .sdram_dqm         ({DRAM_UDQM, DRAM_LDQM}),
+    .sdram_ras_n       (DRAM_RAS_N),
+    .sdram_we_n        (DRAM_WE_N),
+
+    // SPI
+    .spi_external_MISO (spi_miso),
+    .spi_external_MOSI (spi_mosi),
+    .spi_external_SCLK (spi_clk),
+    .spi_external_SS_n (spi_cs),
+
+    // Timer
+    .time_display_export (count_ext),
+
+    // Processor Communication (Loopback)
+    .p0_in_export   (p0_in),
+    .p0_out_export  (p0_out),
+    .p1_in_export   (p1_in),
+    .p1_out_export  (p1_out),
+    .p2_in_export   (1'b0),         // Not used
+    .p2_out_export  (1'b0)	         // Not used
 );
 
 endmodule
