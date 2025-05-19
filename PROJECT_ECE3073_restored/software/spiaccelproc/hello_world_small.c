@@ -79,6 +79,8 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 };
 volatile int tap_flag;
 void *context;
+
+
 // mutex
 alt_mutex_dev *mutex;
 // shared SDRAM
@@ -87,6 +89,8 @@ int *display_mode_shared = (int*)0x03500000;
 int *config_mode_shared = (int*) 0x3500004;
 int *double_tap_counter = (int*) 0x3500008;
 int *key_flag_shared = (int*) 0x350000C;
+
+
 // Function Declarations
 void gyro_isr(void * context);
 void gyro_detect_tap(volatile int *tap_flag, int *counter);
@@ -94,7 +98,11 @@ int display_select_configuration(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 void input_proc1_isr(void* context);
 void send_msg(int msg, volatile int* sharedMsgBuffTarget);
+
+
 int main() {
+
+
 	alt_putstr("Camera/Accelerometer Processor Initialised\n");
 	mutex = altera_avalon_mutex_open("/dev/mutex_0");
 	if (mutex == NULL) {

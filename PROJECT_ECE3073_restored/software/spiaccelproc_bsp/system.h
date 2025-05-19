@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_SPI_ACCEL' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Mon May 19 11:34:11 EST 2025
+ * Generated: Mon May 19 19:41:31 EST 2025
  */
 
 /*
@@ -61,7 +61,7 @@
  */
 
 #define ALT_MODULE_CLASS_CAM_READY altera_avalon_pio
-#define CAM_READY_BASE 0x4001070
+#define CAM_READY_BASE 0x4001090
 #define CAM_READY_BIT_CLEARING_EDGE_REGISTER 0
 #define CAM_READY_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define CAM_READY_CAPTURE 0
@@ -182,7 +182,7 @@
  */
 
 #define ALT_MODULE_CLASS_GYRO_INT altera_avalon_pio
-#define GYRO_INT_BASE 0x4001080
+#define GYRO_INT_BASE 0x40010b0
 #define GYRO_INT_BIT_CLEARING_EDGE_REGISTER 0
 #define GYRO_INT_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define GYRO_INT_CAPTURE 1
@@ -204,30 +204,57 @@
 
 
 /*
- * KEY10 configuration
+ * HEX20 configuration
  *
  */
 
-#define ALT_MODULE_CLASS_KEY10 altera_avalon_pio
-#define KEY10_BASE 0x4001090
-#define KEY10_BIT_CLEARING_EDGE_REGISTER 0
-#define KEY10_BIT_MODIFYING_OUTPUT_REGISTER 0
-#define KEY10_CAPTURE 1
-#define KEY10_DATA_WIDTH 2
-#define KEY10_DO_TEST_BENCH_WIRING 0
-#define KEY10_DRIVEN_SIM_VALUE 0
-#define KEY10_EDGE_TYPE "RISING"
-#define KEY10_FREQ 50000000
-#define KEY10_HAS_IN 1
-#define KEY10_HAS_OUT 0
-#define KEY10_HAS_TRI 0
-#define KEY10_IRQ -1
-#define KEY10_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define KEY10_IRQ_TYPE "EDGE"
-#define KEY10_NAME "/dev/KEY10"
-#define KEY10_RESET_VALUE 0
-#define KEY10_SPAN 16
-#define KEY10_TYPE "altera_avalon_pio"
+#define ALT_MODULE_CLASS_HEX20 altera_avalon_pio
+#define HEX20_BASE 0x4001080
+#define HEX20_BIT_CLEARING_EDGE_REGISTER 0
+#define HEX20_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define HEX20_CAPTURE 0
+#define HEX20_DATA_WIDTH 24
+#define HEX20_DO_TEST_BENCH_WIRING 0
+#define HEX20_DRIVEN_SIM_VALUE 0
+#define HEX20_EDGE_TYPE "NONE"
+#define HEX20_FREQ 50000000
+#define HEX20_HAS_IN 0
+#define HEX20_HAS_OUT 1
+#define HEX20_HAS_TRI 0
+#define HEX20_IRQ -1
+#define HEX20_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HEX20_IRQ_TYPE "NONE"
+#define HEX20_NAME "/dev/HEX20"
+#define HEX20_RESET_VALUE 0
+#define HEX20_SPAN 16
+#define HEX20_TYPE "altera_avalon_pio"
+
+
+/*
+ * HEX53 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_HEX53 altera_avalon_pio
+#define HEX53_BASE 0x4001070
+#define HEX53_BIT_CLEARING_EDGE_REGISTER 0
+#define HEX53_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define HEX53_CAPTURE 0
+#define HEX53_DATA_WIDTH 24
+#define HEX53_DO_TEST_BENCH_WIRING 0
+#define HEX53_DRIVEN_SIM_VALUE 0
+#define HEX53_EDGE_TYPE "NONE"
+#define HEX53_FREQ 50000000
+#define HEX53_HAS_IN 0
+#define HEX53_HAS_OUT 1
+#define HEX53_HAS_TRI 0
+#define HEX53_IRQ -1
+#define HEX53_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HEX53_IRQ_TYPE "NONE"
+#define HEX53_NAME "/dev/HEX53"
+#define HEX53_RESET_VALUE 0
+#define HEX53_SPAN 16
+#define HEX53_TYPE "altera_avalon_pio"
 
 
 /*
@@ -366,19 +393,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_1"
-#define ALT_STDERR_BASE 0x40010b0
+#define ALT_STDERR_BASE 0x40010c8
 #define ALT_STDERR_DEV jtag_uart_1
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_1"
-#define ALT_STDIN_BASE 0x40010b0
+#define ALT_STDIN_BASE 0x40010c8
 #define ALT_STDIN_DEV jtag_uart_1
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_1"
-#define ALT_STDOUT_BASE 0x40010b0
+#define ALT_STDOUT_BASE 0x40010c8
 #define ALT_STDOUT_DEV jtag_uart_1
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -457,7 +484,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_1 altera_avalon_jtag_uart
-#define JTAG_UART_1_BASE 0x40010b0
+#define JTAG_UART_1_BASE 0x40010c8
 #define JTAG_UART_1_IRQ 0
 #define JTAG_UART_1_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_1_NAME "/dev/jtag_uart_1"

@@ -146,7 +146,7 @@ int main() {
 		if (Key1Flag == 1) {
             mode = !mode;  // Toggle mode
             Key1Flag = 0;  // Reset the flag
-            send_msg(mode, display_mode_shared);
+            send_msg(mode, *display_mode_shared);
 
         }
 

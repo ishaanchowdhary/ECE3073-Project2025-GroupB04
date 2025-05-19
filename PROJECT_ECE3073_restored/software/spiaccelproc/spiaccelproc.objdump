@@ -37,43 +37,43 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   8 .debug_aranges 000004e0  00000000  00000000  00003a60  2**3
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_info   00006313  00000000  00000000  00003f40  2**0
+  9 .debug_info   00006318  00000000  00000000  00003f40  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_abbrev 000025a8  00000000  00000000  0000a253  2**0
+ 10 .debug_abbrev 000025e0  00000000  00000000  0000a258  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_line   000025d5  00000000  00000000  0000c7fb  2**0
+ 11 .debug_line   000025d5  00000000  00000000  0000c838  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_frame  0000076c  00000000  00000000  0000edd0  2**2
+ 12 .debug_frame  0000076c  00000000  00000000  0000ee10  2**2
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_str    00001ac4  00000000  00000000  0000f53c  2**0
+ 13 .debug_str    00001ac4  00000000  00000000  0000f57c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_loc    00002209  00000000  00000000  00011000  2**0
+ 14 .debug_loc    00002209  00000000  00000000  00011040  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_alt_sim_info 00000030  00000000  00000000  0001320c  2**2
+ 15 .debug_alt_sim_info 00000030  00000000  00000000  0001324c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_ranges 00000398  00000000  00000000  00013240  2**3
+ 16 .debug_ranges 00000398  00000000  00000000  00013280  2**3
                   CONTENTS, READONLY, DEBUGGING
- 17 .thread_model 00000003  00000000  00000000  00014e1a  2**0
+ 17 .thread_model 00000003  00000000  00000000  00014e5a  2**0
                   CONTENTS, READONLY
- 18 .cpu          0000000e  00000000  00000000  00014e1d  2**0
+ 18 .cpu          0000000e  00000000  00000000  00014e5d  2**0
                   CONTENTS, READONLY
- 19 .qsys         00000001  00000000  00000000  00014e2b  2**0
+ 19 .qsys         00000001  00000000  00000000  00014e6b  2**0
                   CONTENTS, READONLY
- 20 .simulation_enabled 00000001  00000000  00000000  00014e2c  2**0
+ 20 .simulation_enabled 00000001  00000000  00000000  00014e6c  2**0
                   CONTENTS, READONLY
- 21 .stderr_dev   0000000b  00000000  00000000  00014e2d  2**0
+ 21 .stderr_dev   0000000b  00000000  00000000  00014e6d  2**0
                   CONTENTS, READONLY
- 22 .stdin_dev    0000000b  00000000  00000000  00014e38  2**0
+ 22 .stdin_dev    0000000b  00000000  00000000  00014e78  2**0
                   CONTENTS, READONLY
- 23 .stdout_dev   0000000b  00000000  00000000  00014e43  2**0
+ 23 .stdout_dev   0000000b  00000000  00000000  00014e83  2**0
                   CONTENTS, READONLY
- 24 .sopc_system_name 0000000e  00000000  00000000  00014e4e  2**0
+ 24 .sopc_system_name 0000000e  00000000  00000000  00014e8e  2**0
                   CONTENTS, READONLY
- 25 .quartus_project_dir 00000070  00000000  00000000  00014e5c  2**0
+ 25 .quartus_project_dir 00000070  00000000  00000000  00014e9c  2**0
                   CONTENTS, READONLY
- 26 .jdi          0000c546  00000000  00000000  00014ecc  2**0
+ 26 .jdi          0000c546  00000000  00000000  00014f0c  2**0
                   CONTENTS, READONLY
- 27 .sopcinfo     000b848d  00000000  00000000  00021412  2**0
+ 27 .sopcinfo     000b8b2e  00000000  00000000  00021452  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 00000000 l    d  .entry	00000000 .entry
@@ -684,7 +684,7 @@ void gyro_isr(void * context) {
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0); //clear interrupt
  200004c:	00810034 	movhi	r2,1024
  2000050:	0007883a 	mov	r3,zero
- 2000054:	10842304 	addi	r2,r2,4236
+ 2000054:	10842f04 	addi	r2,r2,4284
  2000058:	10c00035 	stwio	r3,0(r2)
 	IOWR(GYRO_INT_BASE, 3, 0);
  200005c:	10c00035 	stwio	r3,0(r2)
@@ -1040,22 +1040,24 @@ void gyro_detect_tap(volatile int *tap_flag, int *counter) {
  200029c:	20001c01 	jmpi	20001c0 <send_msg>
 
 020002a0 <main>:
-void gyro_detect_tap(volatile int *tap_flag, int *counter);
-int display_select_configuration(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 void input_proc1_isr(void* context);
 void send_msg(int msg, volatile int* sharedMsgBuffTarget);
+
+
 int main() {
  20002a0:	023ffff4 	movhi	r8,65535
  20002a4:	defff804 	addi	sp,sp,-32
  20002a8:	4234fb04 	addi	r8,r8,-11284
+
+
 	alt_putstr("Camera/Accelerometer Processor Initialised\n");
  20002ac:	01008034 	movhi	r4,512
-void gyro_detect_tap(volatile int *tap_flag, int *counter);
-int display_select_configuration(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 void input_proc1_isr(void* context);
 void send_msg(int msg, volatile int* sharedMsgBuffTarget);
+
+
 int main() {
  20002b0:	dfc00715 	stw	ra,28(sp)
  20002b4:	dd800615 	stw	r22,24(sp)
@@ -1065,15 +1067,19 @@ int main() {
  20002c4:	dc800215 	stw	r18,8(sp)
  20002c8:	dc400115 	stw	r17,4(sp)
  20002cc:	dc000015 	stw	r16,0(sp)
+
+
 	alt_putstr("Camera/Accelerometer Processor Initialised\n");
  20002d0:	21062b04 	addi	r4,r4,6316
-void gyro_detect_tap(volatile int *tap_flag, int *counter);
-int display_select_configuration(alt_16 yData);
 alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 void input_proc1_isr(void* context);
 void send_msg(int msg, volatile int* sharedMsgBuffTarget);
+
+
 int main() {
  20002d4:	da37883a 	add	sp,sp,r8
+
+
 	alt_putstr("Camera/Accelerometer Processor Initialised\n");
  20002d8:	20013980 	call	2001398 <alt_putstr>
 	mutex = altera_avalon_mutex_open("/dev/mutex_0");
@@ -1156,11 +1162,11 @@ int main() {
 	void* context = (void *) &isrRes;
 	IOWR(GYRO_INT_BASE, 3, 0);
  2000350:	00810034 	movhi	r2,1024
- 2000354:	10842304 	addi	r2,r2,4236
+ 2000354:	10842f04 	addi	r2,r2,4284
  2000358:	10000035 	stwio	zero,0(r2)
 	IOWR(GYRO_INT_BASE, 2, 0x1);
  200035c:	00810034 	movhi	r2,1024
- 2000360:	10842204 	addi	r2,r2,4232
+ 2000360:	10842e04 	addi	r2,r2,4280
  2000364:	14000035 	stwio	r16,0(r2)
 	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, gyro_isr, context, 0x0);
  2000368:	01c00074 	movhi	r7,1
@@ -1389,8 +1395,8 @@ int main() {
  200053c:	d1205c04 	addi	r4,gp,-32400
  2000540:	20002300 	call	2000230 <gyro_detect_tap>
  2000544:	003fae06 	br	2000400 <__alt_data_end+0xfe000400>
-void send_msg(int msg, volatile int* sharedMsgBuffTarget);
-int main() {
+
+
 	alt_putstr("Camera/Accelerometer Processor Initialised\n");
 	mutex = altera_avalon_mutex_open("/dev/mutex_0");
 	if (mutex == NULL) {
