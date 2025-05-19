@@ -1,87 +1,182 @@
-/* 
- * "Small Hello World" example. 
- * 
- * This example prints 'Hello from Nios II' to the STDOUT stream. It runs on
- * the Nios II 'standard', 'full_featured', 'fast', and 'low_cost' example 
- * designs. It requires a STDOUT  device in your system's hardware. 
- *
- * The purpose of this example is to demonstrate the smallest possible Hello 
- * World application, using the Nios II HAL library.  The memory footprint
- * of this hosted application is ~332 bytes by default using the standard 
- * reference design.  For a more fully featured Hello World application
- * example, see the example titled "Hello World".
- *
- * The memory footprint of this example has been reduced by making the
- * following changes to the normal "Hello World" example.
- * Check in the Nios II Software Developers Manual for a more complete 
- * description.
- * 
- * In the SW Application project (small_hello_world):
- *
- *  - In the C/C++ Build page
- * 
- *    - Set the Optimization Level to -Os
- * 
- * In System Library project (small_hello_world_syslib):
- *  - In the C/C++ Build page
- * 
- *    - Set the Optimization Level to -Os
- * 
- *    - Define the preprocessor option ALT_NO_INSTRUCTION_EMULATION 
- *      This removes software exception handling, which means that you cannot 
- *      run code compiled for Nios II cpu with a hardware multiplier on a core 
- *      without a the multiply unit. Check the Nios II Software Developers 
- *      Manual for more details.
- *
- *  - In the System Library page:
- *    - Set Periodic system timer and Timestamp timer to none
- *      This prevents the automatic inclusion of the timer driver.
- *
- *    - Set Max file descriptors to 4
- *      This reduces the size of the file handle pool.
- *
- *    - Check Main function does not exit
- *    - Uncheck Clean exit (flush buffers)
- *      This removes the unneeded call to exit when main returns, since it
- *      won't.
- *
- *    - Check Don't use C++
- *      This builds without the C++ support code.
- *
- *    - Check Small C library
- *      This uses a reduced functionality C library, which lacks  
- *      support for buffering, file IO, floating point and getch(), etc. 
- *      Check the Nios II Software Developers Manual for a complete list.
- *
- *    - Check Reduced device drivers
- *      This uses reduced functionality drivers if they're available. For the
- *      standard design this means you get polled UART and JTAG UART drivers,
- *      no support for the LCD driver and you lose the ability to program 
- *      CFI compliant flash devices.
- *
- *    - Check Access device drivers directly
- *      This bypasses the device file system to access device drivers directly.
- *      This eliminates the space required for the device file system services.
- *      It also provides a HAL version of libc services that access the drivers
- *      directly, further reducing space. Only a limited number of libc
- *      functions are available in this configuration.
- *
- *    - Use ALT versions of stdio routines:
- *
- *           Function                  Description
- *        ===============  =====================================
- *        alt_printf       Only supports %s, %x, and %c ( < 1 Kbyte)
- *        alt_putstr       Smaller overhead than puts with direct drivers
- *                         Note this function doesn't add a newline.
- *        alt_putchar      Smaller overhead than putchar with direct drivers
- *        alt_getchar      Smaller overhead than getchar with direct drivers
- *
- */
+// Camera and Accelerometer Processor
 
 #include "sys/alt_stdio.h"
+#include "system.h"
+#include "io.h"
+#include <stdlib.h>
+#include <stdint.h>
+#include <altera_avalon_pio_regs.h>
+#include "altera_avalon_mutex.h"
+
+// SPI CHIP SELECTS
+#define CS_ACCEL 1
+#define CS_CAM 0
+
+// Gyroscope Configuration
+// Gyroscope Write Registers
+#define BW_RATE 0x2C
+#define POWER_CONTROL 0x2d
+#define DATA_FORMAT 0x31
+#define INT_ENABLE 0x2E
+#define INT_MAP 0x2F
+#define THRESH_ACT 0x24
+#define THRESH_INACT 0x25
+#define TIME_INACT 0x26
+#define ACT_INACT_CTL 0x27
+#define THRESH_FF 0x28
+#define TIME_FF 0x29
+#define TAP_AXES 0x2a
+#define TAP_THRES 0x1d
+#define DUR 0x21
+#define LATENT 0x22
+#define WINDOW 0x23
+// Gyroscope Read Registers
+#define INT_SOURCE 0x30
+#define X_LB 0x32
+#define X_HB 0x33
+#define Y_LB 0x34
+#define Y_HB 0x35
+#define Z_LB 0x36
+#define Z_HB 0x37
+#define CONFIG_LENGTH 16 * 2
+#define MAX_COUNT 500000
+// Gyroscope Read Axis Values
+#define READ_X_AXIS (0xc0 | X_LB)
+#define READ_Y_AXIS (0xc0 | Y_LB)
+#define READ_Z_AXIS (0xc0 | Z_LB)
+
+// Functionality to initialise the accelerometer for double tap detection
+alt_u8 gyro_config[CONFIG_LENGTH] = {
+	DATA_FORMAT, 0x0b,		// 4-wire SPI, full resolution, +/- 16g
+	THRESH_ACT, 0x04,
+	THRESH_INACT, 0x02,
+	TIME_INACT, 0x02,
+	ACT_INACT_CTL, 0xff,
+	THRESH_FF, 0x09,
+	TIME_FF, 0x46,
+	TAP_THRES, 0x20,
+	TAP_AXES, 0x07,
+	LATENT, 0x85,
+	DUR, 0x40,
+	WINDOW, 0xc0,
+	BW_RATE, 0x0a,
+	INT_ENABLE, 0x60,
+	INT_MAP, 0x20,
+	POWER_CONTROL, 0x08
+};
+
+// Interrupt Flags Define
+volatile int tap_flag = 0;	// Double Tap Interrupt Flag
+
+// mutex
+alt_mutex_dev *mutex;
+
+// Shared SDRAM
+int *display_mode_shared = (int*)0x03500000;
+int *config_mode_shared = (int*) 0x3500004;
+int *double_tap_counter = (int*) 0x3500008;
+int *key_flag_shared = (int*) 0x350000C;
+
+// Function Declarations
+void gyro_isr(void * context);
+void gyro_detect_tap(volatile int *tap_flag, int *counter);
+void display_select_configuration(alt_16 yData);
+alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData);
 
 int main() {
-	alt_putstr("Hello from SPI Processor!\n");
+	alt_putstr("Camera/Accelerometer Processor Initialised\n");
+	mutex = altera_avalon_mutex_open("/dev/mutex_0");
+	if (mutex == NULL) {
+	    alt_printf("Failed to open mutex!\n");
+	    return 1;
+	}
+	// Accelerometer Setup
+	alt_u8 gyro_data_in, gyro_data_out, regData;
+	alt_u8 readX = READ_X_AXIS;
+	alt_u8 readY = READ_Y_AXIS;
+	alt_u8 readZ = READ_Z_AXIS;
+	alt_16 xData, yData, zData;
+	alt_u8 isrRes = 0xff;
 
-  return 0;
+	for (int i = 0; i < CONFIG_LENGTH; i += 2) {
+		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 2, gyro_config + i, 0, &gyro_data_out, 0);
+	}
+
+	void* context = (void *) &isrRes;
+	IOWR(GYRO_INT_BASE, 3, 0);
+	IOWR(GYRO_INT_BASE, 2, 0x1);
+	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, gyro_isr, context, 0x0);
+
+	// Initialising Double Tap Counter for updating Display
+	int counter = 0;
+	int quad_config_mode = 0;
+	while(1){
+		// pseudocode
+		// Required functionality: take bit from display proc to inform which display mode is being used (0 for quad, 1 for single)
+		// if Quad:
+		// int status = alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrSmall,9600,&rxArrSmall,0); //SPI for SMALL res
+		// quad_config_mode = display_select_configuration(yData);
+		// send quad_config_mode over sdram
+		// if Single:
+		// int status = alt_avalon_spi_command(SPI_0_BASE, 0, 1, sendBuffPtrFull, 38400, &rxArr, 0); // SPI full res
+
+		gyro_data_in = INT_SOURCE | 0x80;
+		alt_avalon_spi_command(SPI_0_BASE, 1, 1, &gyro_data_in, 1, &regData, 0x0);
+	}
+
+	return 0;
+}
+
+// Interrupt service routine (ISR) for accelerometer interrupt
+void gyro_isr(void * context) {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0); //clear interrupt
+	IOWR(GYRO_INT_BASE, 3, 0);
+	tap_flag = 1; //set the tap flag when an interrupt is triggered
+}
+
+void gyro_detect_tap(volatile int *tap_flag, int *counter) {
+	// Prints result of triggering accelerometer double tap interrupt and adds to counter
+
+	// Print accelerometer double tap result
+	if (*tap_flag == 1) {
+		printf("\n\nDouble tap detected!\n\n");
+		*tap_flag = 0;
+		*counter = *counter + 1;
+	}
+
+	// Reset Counter if over 3
+	if (*counter >= 4) {
+		*counter = 0;
+	}
+
+}
+
+void display_select_configuration(alt_16 yData) {
+	// selects the configureation mode for Quad Display (loaded into other proc)
+	if (yData >= -265 && yData < -127) {
+        int config_mode = 0;
+    }
+    else if (yData >= -127 && yData < 0) {
+        int config_mode = 1;
+    }
+    else if (yData >= 0 && yData < 127) {
+        int config_mode = 2;
+    }
+    else if (yData >= 127 && yData <= 265) {
+        int config_mode = 3;
+    }
+}
+
+
+alt_16 gyro_process_data(alt_u8 readX, alt_u8 readY, alt_u8 readZ, alt_16 xData, alt_16 yData, alt_16 zData) {
+	// Prints rotational data from gyroscope and returns Y-axis rotational data
+
+	// Read accelerometer rotation data
+	alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &readX, 2, &xData, 0x0);
+	alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &readY, 2, &yData, 0x0);
+	alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &readZ, 2, &zData, 0x0);
+
+	printf("X-Axis: %d, Y-Axis: %d, Z-Axis: %d\n", xData, yData, zData);
+
+	return yData;
 }
