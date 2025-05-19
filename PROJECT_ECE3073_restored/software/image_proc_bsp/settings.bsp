@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>19/05/2025 9:24:17 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1747653857964</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>19/05/2025 11:31:17 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1747661477376</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\ishaa\Documents\GitHub\ECE3073_S12025_B04\PROJECT_ECE3073_restored\software\image_proc_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\TripleProcessor.sopcinfo</SopcDesignFile>

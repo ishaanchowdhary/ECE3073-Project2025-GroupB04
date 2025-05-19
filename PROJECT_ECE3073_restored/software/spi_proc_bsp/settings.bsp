@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>19/05/2025 9:30:40 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1747654240228</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>19/05/2025 11:31:43 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1747661503728</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\ishaa\Documents\GitHub\ECE3073_S12025_B04\PROJECT_ECE3073_restored\software\spi_proc_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\TripleProcessor.sopcinfo</SopcDesignFile>
@@ -911,13 +911,13 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>P1_OUTPUT</slaveDescriptor>
+                <slaveDescriptor>GYRO_INT</slaveDescriptor>
                 <addressRange>0x04001020 - 0x0400102F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>P1_INPUT</slaveDescriptor>
+                <slaveDescriptor>P1_OUTPUT</slaveDescriptor>
                 <addressRange>0x04001030 - 0x0400103F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
@@ -953,7 +953,7 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>CAM_READY</slaveDescriptor>
+                <slaveDescriptor>P1_INPUT</slaveDescriptor>
                 <addressRange>0x04001090 - 0x0400109F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
@@ -965,16 +965,22 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>jtag_uart_1</slaveDescriptor>
-                <addressRange>0x040010B0 - 0x040010B7</addressRange>
-                <addressSpan>8</addressSpan>
-                <attributes>printable</attributes>
+                <slaveDescriptor>CAM_READY</slaveDescriptor>
+                <addressRange>0x040010B0 - 0x040010BF</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>mutex_0</slaveDescriptor>
                 <addressRange>0x040010C0 - 0x040010C7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>jtag_uart_1</slaveDescriptor>
+                <addressRange>0x040010C8 - 0x040010CF</addressRange>
+                <addressSpan>8</addressSpan>
+                <attributes>printable</attributes>
         </MemoryMap>
         <LinkerSection>
                 <sectionName>.text</sectionName>

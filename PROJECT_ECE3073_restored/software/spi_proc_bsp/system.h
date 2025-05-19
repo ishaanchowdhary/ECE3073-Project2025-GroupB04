@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_1' in SOPC Builder design 'TripleProcessor'
  * SOPC Builder design path: ../../TripleProcessor.sopcinfo
  *
- * Generated: Mon May 19 21:25:20 EST 2025
+ * Generated: Mon May 19 23:31:44 EST 2025
  */
 
 /*
@@ -61,7 +61,7 @@
  */
 
 #define ALT_MODULE_CLASS_CAM_READY altera_avalon_pio
-#define CAM_READY_BASE 0x4001090
+#define CAM_READY_BASE 0x40010b0
 #define CAM_READY_BIT_CLEARING_EDGE_REGISTER 0
 #define CAM_READY_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define CAM_READY_CAPTURE 0
@@ -177,6 +177,33 @@
 
 
 /*
+ * GYRO_INT configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_GYRO_INT altera_avalon_pio
+#define GYRO_INT_BASE 0x4001020
+#define GYRO_INT_BIT_CLEARING_EDGE_REGISTER 0
+#define GYRO_INT_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define GYRO_INT_CAPTURE 1
+#define GYRO_INT_DATA_WIDTH 1
+#define GYRO_INT_DO_TEST_BENCH_WIRING 0
+#define GYRO_INT_DRIVEN_SIM_VALUE 0
+#define GYRO_INT_EDGE_TYPE "RISING"
+#define GYRO_INT_FREQ 50000000
+#define GYRO_INT_HAS_IN 1
+#define GYRO_INT_HAS_OUT 0
+#define GYRO_INT_HAS_TRI 0
+#define GYRO_INT_IRQ 3
+#define GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define GYRO_INT_IRQ_TYPE "EDGE"
+#define GYRO_INT_NAME "/dev/GYRO_INT"
+#define GYRO_INT_RESET_VALUE 0
+#define GYRO_INT_SPAN 16
+#define GYRO_INT_TYPE "altera_avalon_pio"
+
+
+/*
  * HEX20 configuration
  *
  */
@@ -236,7 +263,7 @@
  */
 
 #define ALT_MODULE_CLASS_P1_INPUT altera_avalon_pio
-#define P1_INPUT_BASE 0x4001030
+#define P1_INPUT_BASE 0x4001090
 #define P1_INPUT_BIT_CLEARING_EDGE_REGISTER 1
 #define P1_INPUT_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define P1_INPUT_CAPTURE 1
@@ -263,7 +290,7 @@
  */
 
 #define ALT_MODULE_CLASS_P1_OUTPUT altera_avalon_pio
-#define P1_OUTPUT_BASE 0x4001020
+#define P1_OUTPUT_BASE 0x4001030
 #define P1_OUTPUT_BIT_CLEARING_EDGE_REGISTER 0
 #define P1_OUTPUT_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define P1_OUTPUT_CAPTURE 0
@@ -381,19 +408,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_1"
-#define ALT_STDERR_BASE 0x40010b0
+#define ALT_STDERR_BASE 0x40010c8
 #define ALT_STDERR_DEV jtag_uart_1
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_1"
-#define ALT_STDIN_BASE 0x40010b0
+#define ALT_STDIN_BASE 0x40010c8
 #define ALT_STDIN_DEV jtag_uart_1
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_1"
-#define ALT_STDOUT_BASE 0x40010b0
+#define ALT_STDOUT_BASE 0x40010c8
 #define ALT_STDOUT_DEV jtag_uart_1
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -445,7 +472,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_1 altera_avalon_jtag_uart
-#define JTAG_UART_1_BASE 0x40010b0
+#define JTAG_UART_1_BASE 0x40010c8
 #define JTAG_UART_1_IRQ 0
 #define JTAG_UART_1_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_1_NAME "/dev/jtag_uart_1"

@@ -183,6 +183,7 @@ TripleProcessor triple_processor_inst (
     .spi_external_MOSI (spi_mosi),
     .spi_external_SCLK (spi_clk),
     .spi_external_SS_n (spi_cs),
+	 .gyro_int_export(GSENSOR_INT[2]),
 
     // Timer
     .time_display_export (count_ext),
