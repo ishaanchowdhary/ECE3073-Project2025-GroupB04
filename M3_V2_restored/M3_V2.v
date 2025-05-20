@@ -38,7 +38,14 @@ module M3_V2 (
 
 	output [16:0] wraddress,	// same as pixel address export
 	output wire [3:0] pixel_out, //output from the buffer to the VGA
-	output [3:0] write_value //value we are writing to the buffer
+	output [3:0] write_value, //value we are writing to the buffer 
+	
+	// gyro  
+	output GSENSOR_SCLK, 
+	inout GSENSOR_SDI, 
+	inout GSENSOR_SDO,
+	output GSENSOR_CS_N, 
+	input [2:1] GSENSOR_INT
 
 );
 
@@ -65,7 +72,10 @@ assign GPIO[6] = 1'bz;
 assign GPIO[4] = 1'bz;
 assign GPIO[3] = 1'bz;
 assign GPIO[1] = 1'bz;
-assign GPIO[0] = 1'bz;
+assign GPIO[0] = 1'bz; 
+
+// SPI assignment for gyro and Camera  
+
 
 wire p0_out,p0_in,p1_out,p1_in;
 
