@@ -50,7 +50,10 @@ module M3_V2 (
 );
 
 // Wires and Assigns
-
+wire spi_clk; 
+wire spi_miso; 
+wire spi_mosi; 
+wire [1:0] spi_cs;  
 
 // Wires for timer, hex and VGA clock
 wire [31:0] count_ext;
@@ -75,7 +78,15 @@ assign GPIO[1] = 1'bz;
 assign GPIO[0] = 1'bz; 
 
 // SPI assignment for gyro and Camera  
+assign GPIO[8] = spi_mosi; 
+assign GPIO[9] = spi_clk; 
+assign GPIO[5] = spi_cs[0];  
 
+assign GSENSOR_SDI = spi_mosi; 
+assign GSENSOR_SCLK = spi_clk; 
+assign GSENSOR_CS_N = spi_cs[1]; 
+
+assign spi_miso = (spi_cs[0] == 1'b0) ? GPIO[7] : (spi_cs[1] == 1'b0) ? GSENSOR_SDO : 1'bz; 
 
 wire p0_out,p0_in,p1_out,p1_in;
 
@@ -162,10 +173,11 @@ MUTIPROCESSOR_V2 u0 (
 		.sdram_we_n    		(DRAM_WE_N),
 		
 		//SPI IO
-	.spi_external_MISO(GPIO[7]),
-	.spi_external_MOSI(GPIO[8]),    // .MOSI
-	.spi_external_SCLK(GPIO[9]),    // .SCLK
-	.spi_external_SS_n(GPIO[5]),    // .SS_n
+	.spi_external_MISO(spi_miso),
+	.spi_external_MOSI(spi_mosi),    // .MOSI
+	.spi_external_SCLK(spi_clk),    // .SCLK
+	.spi_external_SS_n(spi_cs),    // .SS_n 
+	.gyro_int_export(GSENSOR_INT[2]), 
 	
 	//count
 		.time_display_export		(count_ext)			// 32 bit time display
