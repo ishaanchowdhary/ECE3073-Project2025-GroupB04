@@ -166,7 +166,7 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 	DUR, 0x40,
 	WINDOW, 0xc0,
 	BW_RATE, 0x0a,
-	INT_ENABLE, 0x60,
+	INT_ENABLE, 0x40,
 	INT_MAP, 0x20,
 	POWER_CONTROL, 0x08
 };
@@ -174,6 +174,8 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 //volatile uint8_t *rxArr = (uint8_t *)SHARED_BUFF_1_BASE;
 volatile int tap_flag = 0; // Global Variable for double tap interrupt.
 void *context;
+alt_u8 isRes = 0xff;
+void* gyro_context = (void *) &isRes;
 alt_mutex_dev* mutex;
 int received = 0;
 int valueFromP0 = 0;
@@ -328,7 +330,7 @@ int main()
 	// gyro double tap
 	IOWR(GYRO_INT_BASE, 3, 0);
 	IOWR(GYRO_INT_BASE, 2, 0x1);
-	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, GYRO_ISR, context, 0x0 );;
+	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, GYRO_ISR, gyro_context, 0x0 );
 
 	// setting up value for SPI
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
