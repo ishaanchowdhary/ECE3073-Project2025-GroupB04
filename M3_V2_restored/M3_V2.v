@@ -174,7 +174,7 @@ MUTIPROCESSOR_V2 u0 (
 		.spi_external_MOSI(spi_mosi),    // .MOSI
 		.spi_external_SCLK(spi_clk),    	// .SCLK
 		.spi_external_SS_n(spi_cs),    	// .SS_n 
-		.gyro_int_export(GSENSOR_INT[2]), 
+		.gyro_int_export(GSENSOR_INT),	// [2] 
 	
 	//count
 		.time_display_export		(count_ext)		// 32 bit time display
