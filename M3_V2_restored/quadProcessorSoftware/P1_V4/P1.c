@@ -394,9 +394,9 @@ int main()
 		  }
 
 
-		 *needBlur  = IORD(0x040010a0,0)&0x1;
-		 *quadImgMode  = IORD(0x040010a0,0)&0x2; // CONFUSED why is quadImgMode being switched with a double tap shouldn't that be a key interrupt
-		 *needEdgeDetect = IORD(0x040010a0,0)&0x4;
+//		 *needBlur  = IORD(0x040010a0,0)&0x1;
+//		 *quadImgMode  = IORD(0x040010a0,0)&0x2; // CONFUSED why is quadImgMode being switched with a double tap shouldn't that be a key interrupt
+//		 *needEdgeDetect = IORD(0x040010a0,0)&0x4;
 
 
 		 // HANDLE DOUBLE TAP TOGGLE
@@ -433,7 +433,7 @@ int main()
 
 			 }
 
-			 alt_dcache_flus_all();
+			 alt_dcache_flush_all();
 
 		 }
 //		  printf("needEdgeDetect %d \n",*needEdgeDetect);
