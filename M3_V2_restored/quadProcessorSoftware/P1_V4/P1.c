@@ -87,6 +87,7 @@
 #include "io.h"
 #include "sys/alt_irq.h"
 #include "altera_avalon_mutex.h"
+#include "altera_avalon_spi_regs.h"
 #include "altera_avalon_pio_regs.h"
 #include <stdio.h>
 
@@ -110,10 +111,68 @@ int *needEdgeDetect = (int*)0x03200000;
 #define CONV_RESULT_BASE_1 0x03400000
 #define CONV_RESULT_BASE_2 0x03410000
 
+// GYRO ADDRESS
+#define GYRO_INT_BASE 0x4001020
+#define GYRO_INT_IRQ 3
+#define GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID 0
+// SPI CHIP SELECT
+#define CS_ACCEL 1
 
+// GYRO CONFIGURATION
+// Gyroscope Write Registers
+#define BW_RATE 0x2C
+#define POWER_CONTROL 0x2d
+#define DATA_FORMAT 0x31
+#define INT_ENABLE 0x2E
+#define INT_MAP 0x2F
+#define THRESH_ACT 0x24
+#define THRESH_INACT 0x25
+#define TIME_INACT 0x26
+#define ACT_INACT_CTL 0x27
+#define THRESH_FF 0x28
+#define TIME_FF 0x29
+#define TAP_AXES 0x2a
+#define TAP_THRES 0x1d
+#define DUR 0x21
+#define LATENT 0x22
+#define WINDOW 0x23
+// Gyroscope Read Registers
+#define INT_SOURCE 0x30
+#define X_LB 0x32
+#define X_HB 0x33
+#define Y_LB 0x34
+#define Y_HB 0x35
+#define Z_LB 0x36
+#define Z_HB 0x37
+#define CONFIG_LENGTH 16 * 2
+#define MAX_COUNT 500000
+// Gyroscope Read Axis Values
+#define READ_X_AXIS (0xc0 | X_LB)
+#define READ_Y_AXIS (0xc0 | Y_LB)
+#define READ_Z_AXIS (0xc0 | Z_LB)
+
+// Functionality to initialise the accelerometer for double tap detection
+alt_u8 gyro_config[CONFIG_LENGTH] = {
+	DATA_FORMAT, 0x0b,		// 4-wire SPI, full resolution, +/- 16g
+	THRESH_ACT, 0x04,
+	THRESH_INACT, 0x02,
+	TIME_INACT, 0x02,
+	ACT_INACT_CTL, 0xff,
+	THRESH_FF, 0x09,
+	TIME_FF, 0x46,
+	TAP_THRES, 0x20,
+	TAP_AXES, 0x07,
+	LATENT, 0x85,
+	DUR, 0x40,
+	WINDOW, 0xc0,
+	BW_RATE, 0x0a,
+	INT_ENABLE, 0x60,
+	INT_MAP, 0x20,
+	POWER_CONTROL, 0x08
+};
 
 //volatile uint8_t *rxArr = (uint8_t *)SHARED_BUFF_1_BASE;
-
+volatile int tap_flag = 0; // Global Variable for double tap interrupt.
 void *context;
 alt_mutex_dev* mutex;
 int received = 0;
@@ -137,6 +196,12 @@ void KEY_ISR(void *isr_context, alt_u32 id){
 	 IOWR(P1_IN_BASE,3,0x1);
 }
 
+// GYRO INTERRUPT SERVICE
+void GYRO_ISR(void * context) {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0);
+	IOWR(GYRO_INT_BASE, 3, 0);
+	tap_flag = 1;
+}
 void send_msg(int msg){
 
 //	altera_avalon_mutex_lock(mutex,1);
@@ -255,9 +320,15 @@ void Run_Time_2_frame(uint32_t before, uint32_t after){
 int main()
 { 
 	//setting up interrupt
+	// key_isr
 	IOWR(P1_IN_BASE, 3, 0x1);
 	IOWR(P1_IN_BASE, 2, 0x1);
 	alt_irq_register(P1_IN_IRQ, &context, KEY_ISR);
+
+	// gyro double tap
+	IOWR(GYRO_INT_BASE, 3, 0);
+	IOWR(GYRO_INT_BASE, 2, 0x1);
+	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, GYRO_ISR, context, 0x0 );;
 
 	// setting up value for SPI
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
