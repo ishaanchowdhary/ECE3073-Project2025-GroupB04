@@ -2,6 +2,7 @@
 		.cam_ready_export     (<connected-to-cam_ready_export>),     //     cam_ready.export
 		.clk_clk              (<connected-to-clk_clk>),              //           clk.clk
 		.first_hex_export     (<connected-to-first_hex_export>),     //     first_hex.export
+		.gyro_int_export      (<connected-to-gyro_int_export>),      //      gyro_int.export
 		.keys_export          (<connected-to-keys_export>),          //          keys.export
 		.leds_export          (<connected-to-leds_export>),          //          leds.export
 		.p0_in_export         (<connected-to-p0_in_export>),         //         p0_in.export
@@ -25,7 +26,6 @@
 		.spi_external_SCLK    (<connected-to-spi_external_SCLK>),    //              .SCLK
 		.spi_external_SS_n    (<connected-to-spi_external_SS_n>),    //              .SS_n
 		.switches_export      (<connected-to-switches_export>),      //      switches.export
-		.time_display_export  (<connected-to-time_display_export>),  //  time_display.export
-		.gyro_int_export      (<connected-to-gyro_int_export>)       //      gyro_int.export
+		.time_display_export  (<connected-to-time_display_export>)   //  time_display.export
 	);
 

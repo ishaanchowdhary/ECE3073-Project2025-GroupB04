@@ -208,9 +208,9 @@ refer to the applicable agreement for further details.
 	(port
 		(pt 0 808)
 		(output)
-		(text "spi_external_SS_n" (rect 0 0 75 12)(font "Arial" (font_size 8)))
-		(text "spi_external_SS_n" (rect 4 797 106 808)(font "Arial" (font_size 8)))
-		(line (pt 0 808)(pt 144 808)(line_width 1))
+		(text "spi_external_SS_n[1..0]" (rect 0 0 94 12)(font "Arial" (font_size 8)))
+		(text "spi_external_SS_n[1..0]" (rect 4 797 142 808)(font "Arial" (font_size 8)))
+		(line (pt 0 808)(pt 144 808)(line_width 3))
 	)
 	(port
 		(pt 0 632)
