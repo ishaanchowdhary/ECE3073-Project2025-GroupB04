@@ -1,32 +1,32 @@
 module M3_V2 (
-	// ---- Generic IO ---- //
-	input 			CLOCK_50,
-	input wire [1:0] KEY,
-	input wire [9:0] SW,
-	output wire [18:0] VGA_ADDR,
-	output wire [3:0] VGA_R, VGA_G, VGA_B,
-	output wire VGA_HS, VGA_VS,
-	output [9:0] LEDR,
-	input wire reset_reset_n,
-	inout wire [10:0] GPIO,
+	// Generic I/O
+	input 					CLOCK_50,
+	input wire 	[1:0]		KEY,
+	input wire 	[9:0] 	SW,
+	output wire [18:0] 	VGA_ADDR,
+	output wire [3:0] 	VGA_R, VGA_G, VGA_B,
+	output wire 			VGA_HS, VGA_VS,
+	output 		[9:0]		LEDR,
+	input wire 				reset_reset_n,
+	inout wire 	[10:0] 	GPIO,
 	
-	// ---- SDRAM IO ---- //
+	// SDRAM I/O
 	output	[12:0]	DRAM_ADDR,
 	output	[1:0]		DRAM_BA,
-	output			DRAM_CAS_N,
-	output			DRAM_CKE,
-	output			DRAM_CLK,
-	output			DRAM_CS_N,
+	output				DRAM_CAS_N,
+	output				DRAM_CKE,
+	output				DRAM_CLK,
+	output				DRAM_CS_N,
 	inout		[15:0]	DRAM_DQ,
-	output			DRAM_LDQM,
-	output			DRAM_UDQM,
-	output			DRAM_RAS_N,
-	output			DRAM_WE_N,
+	output				DRAM_LDQM,
+	output				DRAM_UDQM,
+	output				DRAM_RAS_N,
+	output				DRAM_WE_N,
 	
-	//camera I/O
+	// Camera I/O
 	input wire CAM_READY,
 	
-	//HEX I/O
+	// HEX I/O
 	output wire [7:0] HEX0,
 	output wire [7:0] HEX1,
 	output wire [7:0] HEX2,
@@ -34,17 +34,16 @@ module M3_V2 (
 	output wire [7:0] HEX4,
 	output wire [7:0] HEX5,
 	
-	//PIXEL BUFFER INTERFACE
-
-	output [16:0] wraddress,	// same as pixel address export
-	output wire [3:0] pixel_out, //output from the buffer to the VGA
-	output [3:0] write_value, //value we are writing to the buffer 
+	// PIXEL BUFFER INTERFACE
+	output 		[16:0] 	wraddress,		// same as pixel address export
+	output wire [3:0] 	pixel_out, 		//output from the buffer to the VGA
+	output 		[3:0] 	write_value, 	//value we are writing to the buffer 
 	
-	// gyro  
-	output GSENSOR_SCLK, 
-	inout GSENSOR_SDI, 
-	inout GSENSOR_SDO,
-	output GSENSOR_CS_N, 
+	// Gyroscope I/O  
+	output 		GSENSOR_SCLK, 
+	inout 		GSENSOR_SDI, 
+	inout 		GSENSOR_SDO,
+	output 		GSENSOR_CS_N, 
 	input [2:1] GSENSOR_INT
 
 );
@@ -88,12 +87,11 @@ assign GSENSOR_CS_N = spi_cs[1];
 
 assign spi_miso = (spi_cs[0] == 1'b0) ? GPIO[7] : (spi_cs[1] == 1'b0) ? GSENSOR_SDO : 1'bz; 
 
+// Assign Processor Communication
 wire p0_out,p0_in,p1_out,p1_in;
 
 assign p1_in = p0_out;
 assign p0_in = p1_out;
-
-
 
 // Instantiate Modules
 
@@ -127,7 +125,6 @@ vga_controller vga_inst(
 	.VGA_B(VGA_B),
 	.VGA_HS(VGA_HS),
 	.VGA_VS(VGA_VS)
-
 );
 
 usec_timer timer(
@@ -141,16 +138,16 @@ usec_timer timer(
 MUTIPROCESSOR_V2 u0 (
 		.clk_clk          (CLOCK_50),
 		//interrupt PIO
-		.p0_out_export      (p0_out),      //      p0_out.export
-		.p0_in_export       (p0_in),       //       p0_in.export
-		.p1_out_export      (p1_out),      //      p1_out.export
-		.p1_in_export       (p1_in),       //       p1_in.export
+		.p0_out_export      (p0_out),      // p0_out.export
+		.p0_in_export       (p0_in),       // p0_in.export
+		.p1_out_export      (p1_out),      // p1_out.export
+		.p1_in_export       (p1_in),       // p1_in.export
 		
 		// Camera
 		.cam_ready_export(GPIO[2]),
 		// HEX Display
 		.first_hex_export(first_hex_data),		// Use this for the first 3 HEXS (Ones, Tenths and Hundreths)
-		.second_hex_export(second_hex_data),		// Use this for the 4th HEX (tens place)
+		.second_hex_export(second_hex_data),	// Use this for the 4th HEX (tens place)
 		// Switches
 		.switches_export(SW),
 		// Keys
@@ -173,36 +170,29 @@ MUTIPROCESSOR_V2 u0 (
 		.sdram_we_n    		(DRAM_WE_N),
 		
 		//SPI IO
-	.spi_external_MISO(spi_miso),
-	.spi_external_MOSI(spi_mosi),    // .MOSI
-	.spi_external_SCLK(spi_clk),    // .SCLK
-	.spi_external_SS_n(spi_cs),    // .SS_n 
-	.gyro_int_export(GSENSOR_INT[2]), 
+		.spi_external_MISO(spi_miso),
+		.spi_external_MOSI(spi_mosi),    // .MOSI
+		.spi_external_SCLK(spi_clk),    	// .SCLK
+		.spi_external_SS_n(spi_cs),    	// .SS_n 
+		.gyro_int_export(GSENSOR_INT[2]), 
 	
 	//count
-		.time_display_export		(count_ext)			// 32 bit time display
-			
-			
-    );
+		.time_display_export		(count_ext)		// 32 bit time display
+);
 	 
 endmodule
-
-
-
-
 
 
 // Microsecond Timer Module
 
 module usec_timer (
-    input clk,          // FPGA system clock (e.g., 50 MHz)
-    input reset,      // Active-low reset
-    output reg [31:0] count_ext // 32-bit microsecond counter output
+    input 					clk,      // FPGA system clock (e.g., 50 MHz)
+    input 					reset,    // Active-low reset
+    output reg [31:0]	count_ext // 32-bit microsecond counter output
 );
- // have a continous counter of micro seconds that have occured since the program has started
+// Runs a counter of micro seconds that have occured since the program has started
 
 reg [31:0] clk_checker;
-
 
 always @(posedge clk or negedge reset) begin
 	
@@ -217,10 +207,9 @@ always @(posedge clk or negedge reset) begin
 			clk_checker <= 32'b0; 				// reset the checker to be ready for the next cycle
 		end
 		else begin
-			clk_checker <= 1 + clk_checker;  // increment the counter until ya hit 50 (basically converts 50MHz to 1us)
+			clk_checker <= 1 + clk_checker;  // increment the counter until hits 50 (i.e. converts 50MHz to 1us)
 		end
 	end
 end
-		
 
 endmodule
