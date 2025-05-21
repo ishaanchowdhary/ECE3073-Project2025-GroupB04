@@ -343,6 +343,9 @@ int main()
 	received = 0;
 	*bufferFlag1 = 1;
 
+	// Accelerometer Set up
+	alt_u8 gyro_data_in, gyro_data_out, regData;
+
 	uint32_t writeBuffer1 = SHARED_BUFF_1_BASE;
 
 	alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrFull,38400,writeBuffer1,0); //SPI for full res
@@ -384,13 +387,55 @@ int main()
 			  uint32_t end = IORD(TIME_DISPLAY_BASE, 0);
 	  		  Run_Time_2_frame(start, end);
 	  		  start = IORD(TIME_DISPLAY_BASE, 0);
+	  		  // read gyro input
+	  		gyro_data_in = INT_SOURCE | 0x80;
+	  		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
 
 		  }
 
 
 		 *needBlur  = IORD(0x040010a0,0)&0x1;
-		 *quadImgMode  = IORD(0x040010a0,0)&0x2;
+		 *quadImgMode  = IORD(0x040010a0,0)&0x2; // CONFUSED why is quadImgMode being switched with a double tap shouldn't that be a key interrupt
 		 *needEdgeDetect = IORD(0x040010a0,0)&0x4;
+
+
+		 // HANDLE DOUBLE TAP TOGGLE
+		 if (tap_flag == 1) {
+			 printf("\n\nDouble Tap Detected !\n\n");
+			 tap_flag = 0;
+			 counter++;
+
+			 if (counter >= 4) counter = 0;
+
+			 // reset all modes
+			 *needBlur = 0;
+			 *quadImgMode = 0;
+			 *needEdgeDetect = 0;
+
+			 switch (counter) {
+			   case 0:
+				   printf("Mode 0: All effects OFF\n");
+				   break;
+			   case 1:
+				   *needBlur = 1;
+				   printf("Mode 1: Blur enabled\n");
+				   break;
+			   case 2:
+				   *quadImgMode = 1; // should this not be flip image or soemthing
+				   printf("Mode 2: Quad Image Mode enabled\n");
+				   break;
+
+
+			   case 3:
+				   *needEdgeDetect = 1;
+				   printf("Mode 3: Edge Detection enabled\n");
+				   break;
+
+			 }
+
+			 alt_dcache_flus_all();
+
+		 }
 //		  printf("needEdgeDetect %d \n",*needEdgeDetect);
 //		  printf("quadImgMode is is %d \n",*quadImgMode);
 		  alt_dcache_flush_all();
