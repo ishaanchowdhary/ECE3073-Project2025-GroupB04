@@ -160,7 +160,7 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 	ACT_INACT_CTL, 0xff,
 	THRESH_FF, 0x09,
 	TIME_FF, 0x46,
-	TAP_THRES, 0x30, //0x20
+	TAP_THRES, 0x20, // Change tap sensitivity with this
 	TAP_AXES, 0x07,
 	LATENT, 0x85,
 	DUR, 0x40,
@@ -319,6 +319,7 @@ void Run_Time_2_frame(uint32_t before, uint32_t after){
 
 int main()
 { 
+	alt_putstr("Hello from Nios II!\n");
 	//setting up interrupt
 	// key_isr
 	IOWR(P1_IN_BASE, 3, 0x1);
