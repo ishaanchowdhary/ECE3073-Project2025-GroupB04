@@ -35,43 +35,43 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   8 .debug_aranges 00000e58  00000000  00000000  00011be8  2**3
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_info   000200b7  00000000  00000000  00012a40  2**0
+  9 .debug_info   00020135  00000000  00000000  00012a40  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_abbrev 00008d3a  00000000  00000000  00032af7  2**0
+ 10 .debug_abbrev 00008d3a  00000000  00000000  00032b75  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_line   0000adc8  00000000  00000000  0003b831  2**0
+ 11 .debug_line   0000adc8  00000000  00000000  0003b8af  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_frame  00001c64  00000000  00000000  000465fc  2**2
+ 12 .debug_frame  00001c64  00000000  00000000  00046678  2**2
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_str    000038a0  00000000  00000000  00048260  2**0
+ 13 .debug_str    000038f4  00000000  00000000  000482dc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_loc    0001ab2f  00000000  00000000  0004bb00  2**0
+ 14 .debug_loc    0001ab2f  00000000  00000000  0004bbd0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_alt_sim_info 00000060  00000000  00000000  00066630  2**2
+ 15 .debug_alt_sim_info 00000060  00000000  00000000  00066700  2**2
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_ranges 00001d08  00000000  00000000  00066690  2**3
+ 16 .debug_ranges 00001d08  00000000  00000000  00066760  2**3
                   CONTENTS, READONLY, DEBUGGING
- 17 .thread_model 00000003  00000000  00000000  0006b332  2**0
+ 17 .thread_model 00000003  00000000  00000000  0006b402  2**0
                   CONTENTS, READONLY
- 18 .cpu          0000000c  00000000  00000000  0006b335  2**0
+ 18 .cpu          0000000c  00000000  00000000  0006b405  2**0
                   CONTENTS, READONLY
- 19 .qsys         00000001  00000000  00000000  0006b341  2**0
+ 19 .qsys         00000001  00000000  00000000  0006b411  2**0
                   CONTENTS, READONLY
- 20 .simulation_enabled 00000001  00000000  00000000  0006b342  2**0
+ 20 .simulation_enabled 00000001  00000000  00000000  0006b412  2**0
                   CONTENTS, READONLY
- 21 .stderr_dev   0000000b  00000000  00000000  0006b343  2**0
+ 21 .stderr_dev   0000000b  00000000  00000000  0006b413  2**0
                   CONTENTS, READONLY
- 22 .stdin_dev    0000000b  00000000  00000000  0006b34e  2**0
+ 22 .stdin_dev    0000000b  00000000  00000000  0006b41e  2**0
                   CONTENTS, READONLY
- 23 .stdout_dev   0000000b  00000000  00000000  0006b359  2**0
+ 23 .stdout_dev   0000000b  00000000  00000000  0006b429  2**0
                   CONTENTS, READONLY
- 24 .sopc_system_name 00000010  00000000  00000000  0006b364  2**0
+ 24 .sopc_system_name 00000010  00000000  00000000  0006b434  2**0
                   CONTENTS, READONLY
- 25 .quartus_project_dir 0000001c  00000000  00000000  0006b374  2**0
+ 25 .quartus_project_dir 00000046  00000000  00000000  0006b444  2**0
                   CONTENTS, READONLY
- 26 .jdi          000150ce  00000000  00000000  0006b390  2**0
+ 26 .jdi          000150ce  00000000  00000000  0006b48a  2**0
                   CONTENTS, READONLY
- 27 .sopcinfo     000fa7ec  00000000  00000000  0008045e  2**0
+ 27 .sopcinfo     001019b1  00000000  00000000  00080558  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 01000000 l    d  .entry	00000000 .entry
@@ -942,7 +942,7 @@ void KEY_ISR(void *isr_context, alt_u32 id){
 
 	 IOWR(P1_IN_BASE,3,0x1);
  1000218:	00810034 	movhi	r2,1024
- 100021c:	10840f04 	addi	r2,r2,4156
+ 100021c:	10842704 	addi	r2,r2,4252
  1000220:	00c00044 	movi	r3,1
  1000224:	10c00035 	stwio	r3,0(r2)
 }
@@ -987,7 +987,7 @@ void send_msg(int msg){
 	//pulsing the output
 	IOWR(P1_OUT_BASE,0,1);
  1000250:	00810034 	movhi	r2,1024
- 1000254:	10840804 	addi	r2,r2,4128
+ 1000254:	10840c04 	addi	r2,r2,4144
  1000258:	00c00044 	movi	r3,1
  100025c:	10c00035 	stwio	r3,0(r2)
 	IOWR(P1_OUT_BASE,0,0);
@@ -1415,11 +1415,11 @@ int main()
 	//setting up interrupt
 	IOWR(P1_IN_BASE, 3, 0x1);
  10004c4:	04000044 	movi	r16,1
- 10004c8:	10840f04 	addi	r2,r2,4156
+ 10004c8:	10842704 	addi	r2,r2,4252
  10004cc:	14000035 	stwio	r16,0(r2)
 	IOWR(P1_IN_BASE, 2, 0x1);
  10004d0:	00810034 	movhi	r2,1024
- 10004d4:	10840e04 	addi	r2,r2,4152
+ 10004d4:	10842604 	addi	r2,r2,4248
  10004d8:	14000035 	stwio	r16,0(r2)
 	alt_irq_register(P1_IN_IRQ, &context, KEY_ISR);
  10004dc:	01804034 	movhi	r6,256

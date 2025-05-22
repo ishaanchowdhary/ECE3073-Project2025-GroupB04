@@ -35,43 +35,43 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   8 .debug_aranges 00000e38  00000000  00000000  000126e8  2**3
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_info   00020970  00000000  00000000  00013520  2**0
+  9 .debug_info   000209ee  00000000  00000000  00013520  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_abbrev 00008f29  00000000  00000000  00033e90  2**0
+ 10 .debug_abbrev 00008f29  00000000  00000000  00033f0e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_line   0000b054  00000000  00000000  0003cdb9  2**0
+ 11 .debug_line   0000b054  00000000  00000000  0003ce37  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_frame  00001d00  00000000  00000000  00047e10  2**2
+ 12 .debug_frame  00001d00  00000000  00000000  00047e8c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_str    00003a2c  00000000  00000000  00049b10  2**0
+ 13 .debug_str    00003a56  00000000  00000000  00049b8c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_loc    0001bfd9  00000000  00000000  0004d53c  2**0
+ 14 .debug_loc    0001bfd9  00000000  00000000  0004d5e2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_alt_sim_info 00000030  00000000  00000000  00069518  2**2
+ 15 .debug_alt_sim_info 00000030  00000000  00000000  000695bc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_ranges 00002090  00000000  00000000  00069548  2**3
+ 16 .debug_ranges 00002090  00000000  00000000  000695f0  2**3
                   CONTENTS, READONLY, DEBUGGING
- 17 .thread_model 00000003  00000000  00000000  0006e5ca  2**0
+ 17 .thread_model 00000003  00000000  00000000  0006e672  2**0
                   CONTENTS, READONLY
- 18 .cpu          0000000c  00000000  00000000  0006e5cd  2**0
+ 18 .cpu          0000000c  00000000  00000000  0006e675  2**0
                   CONTENTS, READONLY
- 19 .qsys         00000001  00000000  00000000  0006e5d9  2**0
+ 19 .qsys         00000001  00000000  00000000  0006e681  2**0
                   CONTENTS, READONLY
- 20 .simulation_enabled 00000001  00000000  00000000  0006e5da  2**0
+ 20 .simulation_enabled 00000001  00000000  00000000  0006e682  2**0
                   CONTENTS, READONLY
- 21 .stderr_dev   0000000b  00000000  00000000  0006e5db  2**0
+ 21 .stderr_dev   0000000b  00000000  00000000  0006e683  2**0
                   CONTENTS, READONLY
- 22 .stdin_dev    0000000b  00000000  00000000  0006e5e6  2**0
+ 22 .stdin_dev    0000000b  00000000  00000000  0006e68e  2**0
                   CONTENTS, READONLY
- 23 .stdout_dev   0000000b  00000000  00000000  0006e5f1  2**0
+ 23 .stdout_dev   0000000b  00000000  00000000  0006e699  2**0
                   CONTENTS, READONLY
- 24 .sopc_system_name 00000010  00000000  00000000  0006e5fc  2**0
+ 24 .sopc_system_name 00000010  00000000  00000000  0006e6a4  2**0
                   CONTENTS, READONLY
- 25 .quartus_project_dir 0000001c  00000000  00000000  0006e60c  2**0
+ 25 .quartus_project_dir 00000046  00000000  00000000  0006e6b4  2**0
                   CONTENTS, READONLY
- 26 .jdi          000150ce  00000000  00000000  0006e628  2**0
+ 26 .jdi          000150ce  00000000  00000000  0006e6fa  2**0
                   CONTENTS, READONLY
- 27 .sopcinfo     000fa7ec  00000000  00000000  000836f6  2**0
+ 27 .sopcinfo     001019b1  00000000  00000000  000837c8  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 00000000 l    d  .entry	00000000 .entry
@@ -899,323 +899,104 @@ alt_after_alt_main:
      1d0:	003fff06 	br	1d0 <__alt_data_end+0xff0001d0>
 
 000001d4 <KEY_ISR>:
-void *context;
-alt_mutex_dev* mutex;
-int received = 0;
-int valueFromP1 = 0;
-
-void KEY_ISR(void *isr_context, alt_u32 id){
      1d4:	deffff04 	addi	sp,sp,-4
      1d8:	dfc00015 	stw	ra,0(sp)
-	//should be triggered when P1 send signal to us
-
-	//reading from shared buffer
-//    altera_avalon_mutex_lock(mutex, 1);
-	alt_dcache_flush_all();  // After writing
      1dc:	000ec380 	call	ec38 <alt_dcache_flush_all>
-    received = *sharedMsgBuff;
      1e0:	d0a00017 	ldw	r2,-32768(gp)
-//    altera_avalon_mutex_unlock(mutex);
-//
-    printf("Received (unsigned): %d\n", received);
      1e4:	01000074 	movhi	r4,1
      1e8:	213e8304 	addi	r4,r4,-1524
-	//should be triggered when P1 send signal to us
-
-	//reading from shared buffer
-//    altera_avalon_mutex_lock(mutex, 1);
-	alt_dcache_flush_all();  // After writing
-    received = *sharedMsgBuff;
      1ec:	11400017 	ldw	r5,0(r2)
      1f0:	d1666815 	stw	r5,-26208(gp)
-//    altera_avalon_mutex_unlock(mutex);
-//
-    printf("Received (unsigned): %d\n", received);
      1f4:	000273c0 	call	273c <printf>
-//    alt_printf("Received: %x\n", received);
-//    alt_printf("Received: %u\n", received);
-
-	 IOWR(P0_IN_BASE,3,0x1);
      1f8:	00810034 	movhi	r2,1024
      1fc:	10840f04 	addi	r2,r2,4156
      200:	00c00044 	movi	r3,1
      204:	10c00035 	stwio	r3,0(r2)
-}
      208:	dfc00017 	ldw	ra,0(sp)
      20c:	dec00104 	addi	sp,sp,4
      210:	f800283a 	ret
 
 00000214 <send_msg>:
-
-void send_msg(int msg){
-
-//	altera_avalon_mutex_lock(mutex,1);
-	*sharedMsgBuff = msg;
      214:	d0a00017 	ldw	r2,-32768(gp)
-//    alt_printf("Received: %u\n", received);
-
-	 IOWR(P0_IN_BASE,3,0x1);
-}
-
-void send_msg(int msg){
      218:	defffe04 	addi	sp,sp,-8
      21c:	dc000015 	stw	r16,0(sp)
      220:	dfc00115 	stw	ra,4(sp)
-
-//	altera_avalon_mutex_lock(mutex,1);
-	*sharedMsgBuff = msg;
      224:	11000015 	stw	r4,0(r2)
-//    alt_printf("Received: %u\n", received);
-
-	 IOWR(P0_IN_BASE,3,0x1);
-}
-
-void send_msg(int msg){
      228:	2021883a 	mov	r16,r4
-
-//	altera_avalon_mutex_lock(mutex,1);
-	*sharedMsgBuff = msg;
-//	alt_dcache_flush_all();  // After writing
-
-	alt_dcache_flush_all();  // After writing
      22c:	000ec380 	call	ec38 <alt_dcache_flush_all>
-//	altera_avalon_mutex_unlock(mutex);
-
-	//pulsing the output
-	IOWR(P0_OUT_BASE,0,1);
      230:	00810034 	movhi	r2,1024
      234:	10840804 	addi	r2,r2,4128
      238:	00c00044 	movi	r3,1
      23c:	10c00035 	stwio	r3,0(r2)
-	IOWR(P0_OUT_BASE,0,0);
      240:	10000035 	stwio	zero,0(r2)
-
-	printf("P0: sending %d to P1 \n",msg);
      244:	01000074 	movhi	r4,1
      248:	800b883a 	mov	r5,r16
      24c:	213e8a04 	addi	r4,r4,-1496
-}
      250:	dfc00117 	ldw	ra,4(sp)
      254:	dc000017 	ldw	r16,0(sp)
      258:	dec00204 	addi	sp,sp,8
-
-	//pulsing the output
-	IOWR(P0_OUT_BASE,0,1);
-	IOWR(P0_OUT_BASE,0,0);
-
-	printf("P0: sending %d to P1 \n",msg);
      25c:	000273c1 	jmpi	273c <printf>
 
 00000260 <display_image_from_array_v2>:
-}
-
-
-
-void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
      260:	defffc04 	addi	sp,sp,-16
      264:	dc800215 	stw	r18,8(sp)
      268:	2025883a 	mov	r18,r4
-//	int imgW = 318;
-
-//	int pixelAddress_2 = 0;
-
-//	Address = Column + (Row * Width)
-	altera_avalon_mutex_lock(mutex,1);
      26c:	d1266917 	ldw	r4,-26204(gp)
-	printf("P0: sending %d to P1 \n",msg);
-}
-
-
-
-void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
      270:	dc000015 	stw	r16,0(sp)
      274:	2821883a 	mov	r16,r5
-//	int imgW = 318;
-
-//	int pixelAddress_2 = 0;
-
-//	Address = Column + (Row * Width)
-	altera_avalon_mutex_lock(mutex,1);
      278:	01400044 	movi	r5,1
-	printf("P0: sending %d to P1 \n",msg);
-}
-
-
-
-void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
      27c:	dc400115 	stw	r17,4(sp)
      280:	dfc00315 	stw	ra,12(sp)
      284:	3023883a 	mov	r17,r6
-//	int imgW = 318;
-
-//	int pixelAddress_2 = 0;
-
-//	Address = Column + (Row * Width)
-	altera_avalon_mutex_lock(mutex,1);
      288:	000f4ec0 	call	f4ec <altera_avalon_mutex_lock>
-			int unpackedValue1 = (pixelValue&mask);
-			mask = mask << 4;
-			int unpackedValue2 = (pixelValue&mask)>>4;
-
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress);
      28c:	01810034 	movhi	r6,1024
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue1);
      290:	02410034 	movhi	r9,1024
      294:	81fffec4 	addi	r7,r16,-5
-
-//	int pixelAddress_2 = 0;
-
-//	Address = Column + (Row * Width)
-	altera_avalon_mutex_lock(mutex,1);
-	for(int h = 0; h<imgH; h=h+1){
      298:	000b883a 	mov	r5,zero
-
-void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
-	//FASTER FUNCTION FOR DISPLAY, DO NOT USE TILL M3
-//	int pixel_count = imgH*imgW;
-//	int readAddressOffset = 0;
-	int pixel_idx = 0;
      29c:	0005883a 	mov	r2,zero
-			int unpackedValue1 = (pixelValue&mask);
-			mask = mask << 4;
-			int unpackedValue2 = (pixelValue&mask)>>4;
-
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress);
      2a0:	31841804 	addi	r6,r6,4192
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue1);
      2a4:	4a441404 	addi	r9,r9,4176
-
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress+1);
-	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue2);
      2a8:	02bffc04 	movi	r10,-16
-
-//	int pixelAddress_2 = 0;
-
-//	Address = Column + (Row * Width)
-	altera_avalon_mutex_lock(mutex,1);
-	for(int h = 0; h<imgH; h=h+1){
      2ac:	2c80160e 	bge	r5,r18,308 <display_image_from_array_v2+0xa8>
-		for(int w = imgW-1; w>=0; w=w-2){
      2b0:	823fffc4 	addi	r8,r16,-1
      2b4:	8887883a 	add	r3,r17,r2
      2b8:	3809883a 	mov	r4,r7
      2bc:	1c45c83a 	sub	r2,r3,r17
      2c0:	40000e16 	blt	r8,zero,2fc <display_image_from_array_v2+0x9c>
-
-			int pixelAddress  = w+(imgW*h)-4;
-			int pixelValue = image_base[pixel_idx];
      2c4:	18800003 	ldbu	r2,0(r3)
-			int unpackedValue1 = (pixelValue&mask);
-			mask = mask << 4;
-			int unpackedValue2 = (pixelValue&mask)>>4;
-
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress);
      2c8:	31000035 	stwio	r4,0(r6)
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue1);
      2cc:	12c003cc 	andi	r11,r2,15
      2d0:	4ac00035 	stwio	r11,0(r9)
-
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress+1);
      2d4:	22c00044 	addi	r11,r4,1
      2d8:	32c00035 	stwio	r11,0(r6)
-	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue2);
      2dc:	1284703a 	and	r2,r2,r10
      2e0:	10803fcc 	andi	r2,r2,255
      2e4:	1005d13a 	srai	r2,r2,4
      2e8:	48800035 	stwio	r2,0(r9)
-//	int pixelAddress_2 = 0;
-
-//	Address = Column + (Row * Width)
-	altera_avalon_mutex_lock(mutex,1);
-	for(int h = 0; h<imgH; h=h+1){
-		for(int w = imgW-1; w>=0; w=w-2){
      2ec:	423fff84 	addi	r8,r8,-2
      2f0:	18c00044 	addi	r3,r3,1
      2f4:	213fff84 	addi	r4,r4,-2
      2f8:	003ff006 	br	2bc <__alt_data_end+0xff0002bc>
-
-//	int pixelAddress_2 = 0;
-
-//	Address = Column + (Row * Width)
-	altera_avalon_mutex_lock(mutex,1);
-	for(int h = 0; h<imgH; h=h+1){
      2fc:	29400044 	addi	r5,r5,1
      300:	3c0f883a 	add	r7,r7,r16
      304:	003fe906 	br	2ac <__alt_data_end+0xff0002ac>
-
-
-
-		}
-	}
-	altera_avalon_mutex_unlock(mutex);
      308:	d1266917 	ldw	r4,-26204(gp)
      30c:	000f5380 	call	f538 <altera_avalon_mutex_unlock>
-	alt_dcache_flush_all();  // After writing
-
-}
      310:	dfc00317 	ldw	ra,12(sp)
      314:	dc800217 	ldw	r18,8(sp)
      318:	dc400117 	ldw	r17,4(sp)
      31c:	dc000017 	ldw	r16,0(sp)
      320:	dec00404 	addi	sp,sp,16
-
-
-		}
-	}
-	altera_avalon_mutex_unlock(mutex);
-	alt_dcache_flush_all();  // After writing
      324:	000ec381 	jmpi	ec38 <alt_dcache_flush_all>
 
 00000328 <combineSobelFilter>:
-    }
-}
-
-void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH){
-
-	int numPixel = imgH*imgW;
      328:	d8800017 	ldw	r2,0(sp)
-	int threshold = 13;
-	int pixelIdx = 0;
-	uint8_t packedPixelVal = 0;
-	for(int i=0; i< numPixel; i = i+1){
      32c:	3013883a 	mov	r9,r6
-		//pixel 1
-		int pixelValue1 = ((sobelX[pixelIdx] & 0xF0)>>4) + ((sobelY[pixelIdx] & 0xF0)>>4);//combining x,y value after conv
-
-		if (pixelValue1 < threshold){
      330:	02c00304 	movi	r11,12
-    }
-}
-
-void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH){
-
-	int numPixel = imgH*imgW;
      334:	11cf383a 	mul	r7,r2,r7
-		if (pixelValue2 < threshold){
-			pixelValue2 = 0;
-		}
-
-		packedPixelVal = (((uint8_t)pixelValue2)|0xF0) & (((uint8_t)pixelValue1<<4) | 0x0F); //packing 2 pixel value into 1 byte
-		resultImg[i] = packedPixelVal;
      338:	033ffc04 	movi	r12,-16
-
-	int numPixel = imgH*imgW;
-	int threshold = 13;
-	int pixelIdx = 0;
-	uint8_t packedPixelVal = 0;
-	for(int i=0; i< numPixel; i = i+1){
      33c:	4985c83a 	sub	r2,r9,r6
      340:	11c0170e 	bge	r2,r7,3a0 <combineSobelFilter+0x78>
-		//pixel 1
-		int pixelValue1 = ((sobelX[pixelIdx] & 0xF0)>>4) + ((sobelY[pixelIdx] & 0xF0)>>4);//combining x,y value after conv
      344:	20800003 	ldbu	r2,0(r4)
      348:	28c00003 	ldbu	r3,0(r5)
      34c:	12003fcc 	andi	r8,r2,255
@@ -1223,26 +1004,13 @@ void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int 
      354:	1a003fcc 	andi	r8,r3,255
      358:	4010d13a 	srli	r8,r8,4
      35c:	5211883a 	add	r8,r10,r8
-
-		if (pixelValue1 < threshold){
      360:	5a000116 	blt	r11,r8,368 <combineSobelFilter+0x40>
-			pixelValue1 = 0; //blacking out pixel value if they are smaller than threshold
      364:	0011883a 	mov	r8,zero
-		}
-		//pixel 2
-		int pixelValue2 = ((sobelX[pixelIdx] & 0x0F))+((sobelY[pixelIdx] & 0x0F));
      368:	108003cc 	andi	r2,r2,15
      36c:	18c003cc 	andi	r3,r3,15
      370:	10c5883a 	add	r2,r2,r3
-
-		if (pixelValue2 < threshold){
      374:	58800116 	blt	r11,r2,37c <combineSobelFilter+0x54>
-			pixelValue2 = 0;
      378:	0005883a 	mov	r2,zero
-		}
-
-		packedPixelVal = (((uint8_t)pixelValue2)|0xF0) & (((uint8_t)pixelValue1<<4) | 0x0F); //packing 2 pixel value into 1 byte
-		resultImg[i] = packedPixelVal;
      37c:	4010913a 	slli	r8,r8,4
      380:	1304b03a 	or	r2,r2,r12
      384:	4a400044 	addi	r9,r9,1
@@ -1252,78 +1020,33 @@ void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int 
      394:	21000044 	addi	r4,r4,1
      398:	29400044 	addi	r5,r5,1
      39c:	003fe706 	br	33c <__alt_data_end+0xff00033c>
-
-		pixelIdx = pixelIdx + 1;
-
-	}
-
-}
      3a0:	f800283a 	ret
 
 000003a4 <getPixelVal>:
-	//function to get pixel value from a packed array
-	int pixelOutput = 0;
-	int packedPixelVal = 0;
-	int decodedAddress;
-
-	if (rawAddress % 2 == 0) { //if the value is even we need to extract the top 4 bits
      3a4:	3080004c 	andi	r2,r6,1
      3a8:	1000071e 	bne	r2,zero,3c8 <getPixelVal+0x24>
-
-	    decodedAddress = rawAddress/2;
-	    packedPixelVal = packedImgArr[decodedAddress];
      3ac:	3004d7fa 	srli	r2,r6,31
      3b0:	118d883a 	add	r6,r2,r6
      3b4:	300dd07a 	srai	r6,r6,1
      3b8:	398f883a 	add	r7,r7,r6
-
-	    pixelOutput = (packedPixelVal & 0xF0)>>4;
      3bc:	38800003 	ldbu	r2,0(r7)
      3c0:	1004d13a 	srli	r2,r2,4
      3c4:	f800283a 	ret
-	} else { //if the value is odd we need to extract the bottom 4 bits
-	    decodedAddress = (rawAddress-1)/2;
-	    packedPixelVal = packedImgArr[decodedAddress];
      3c8:	31bfffc4 	addi	r6,r6,-1
      3cc:	3004d7fa 	srli	r2,r6,31
      3d0:	118d883a 	add	r6,r2,r6
      3d4:	300dd07a 	srai	r6,r6,1
      3d8:	398f883a 	add	r7,r7,r6
-
-	    pixelOutput = (packedPixelVal & 0x0F); //extracting the value for a single pixel from the packed storage
      3dc:	38800003 	ldbu	r2,0(r7)
      3e0:	108003cc 	andi	r2,r2,15
-	}
-	return pixelOutput;
-}
      3e4:	f800283a 	ret
 
 000003e8 <display_4_images>:
-	altera_avalon_mutex_unlock(mutex);
-	alt_dcache_flush_all();  // After writing
-
-}
-
-void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx){
      3e8:	deffee04 	addi	sp,sp,-72
      3ec:	dc800a15 	stw	r18,40(sp)
      3f0:	dc801317 	ldw	r18,76(sp)
-				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
-			}
-
-			pixelValue = getPixelVal(0,0,inputPixelAddress,img1);
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
      3f4:	03010034 	movhi	r12,1024
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
      3f8:	03410034 	movhi	r13,1024
-	altera_avalon_mutex_unlock(mutex);
-	alt_dcache_flush_all();  // After writing
-
-}
-
-void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx){
      3fc:	ddc00f15 	stw	r23,60(sp)
      400:	dd800e15 	stw	r22,56(sp)
      404:	dd400d15 	stw	r21,52(sp)
@@ -1340,50 +1063,19 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
      430:	0412bf84 	movi	r16,19198
      434:	0252e684 	movi	r9,19354
      438:	0225a694 	movui	r8,38554
-	//image 1
-	for(int h=0; h<120; h++){
-		for(int w=0; w<159; w++){
-			int displayAddress  = w+(displayW*h)-1;
-
-			if(flipImgIdx == 1){
      43c:	02c00044 	movi	r11,1
-				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
-			}
-
-			pixelValue = getPixelVal(0,0,inputPixelAddress,img1);
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
      440:	63041804 	addi	r12,r12,4192
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
      444:	6b441404 	addi	r13,r13,4176
-	int intputImgH = 120;
-	int inputPixelAddress = 0;
-
-	int pixelValue = 0;
-	//image 1
-	for(int h=0; h<120; h++){
      448:	03bfff84 	movi	r14,-2
      44c:	873fff64 	muli	fp,r16,-3
      450:	847fd844 	addi	r17,r16,-159
      454:	4c07c83a 	sub	r3,r9,r16
      458:	e239883a 	add	fp,fp,r8
      45c:	8f27883a 	add	r19,r17,fp
-		for(int w=0; w<159; w++){
-			int displayAddress  = w+(displayW*h)-1;
-
-			if(flipImgIdx == 1){
      460:	92c0021e 	bne	r18,r11,46c <display_4_images+0x84>
-				inputPixelAddress = w+(inputImgW* (intputImgH-h-1))-1;
      464:	880d883a 	mov	r6,r17
      468:	00000106 	br	470 <display_4_images+0x88>
-
-			}else{
-				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
      46c:	180d883a 	mov	r6,r3
-			}
-
-			pixelValue = getPixelVal(0,0,inputPixelAddress,img1);
      470:	500f883a 	mov	r7,r10
      474:	000b883a 	mov	r5,zero
      478:	0009883a 	mov	r4,zero
@@ -1396,12 +1088,8 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
      494:	db400015 	stw	r13,0(sp)
      498:	db800115 	stw	r14,4(sp)
      49c:	00003a40 	call	3a4 <getPixelVal>
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
      4a0:	db000217 	ldw	r12,8(sp)
      4a4:	64c00035 	stwio	r19,0(r12)
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
      4a8:	db400017 	ldw	r13,0(sp)
      4ac:	68800035 	stwio	r2,0(r13)
      4b0:	d8c00317 	ldw	r3,12(sp)
@@ -1411,12 +1099,6 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
      4c0:	18ffffc4 	addi	r3,r3,-1
      4c4:	9cc41804 	addi	r19,r19,4192
      4c8:	a5041404 	addi	r20,r20,4176
-	int inputPixelAddress = 0;
-
-	int pixelValue = 0;
-	//image 1
-	for(int h=0; h<120; h++){
-		for(int w=0; w<159; w++){
      4cc:	da000617 	ldw	r8,24(sp)
      4d0:	da400517 	ldw	r9,20(sp)
      4d4:	da800417 	ldw	r10,16(sp)
@@ -1424,50 +1106,21 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
      4dc:	db800117 	ldw	r14,4(sp)
      4e0:	8c3fde1e 	bne	r17,r16,45c <__alt_data_end+0xff00045c>
      4e4:	8c3fd804 	addi	r16,r17,-160
-	int intputImgH = 120;
-	int inputPixelAddress = 0;
-
-	int pixelValue = 0;
-	//image 1
-	for(int h=0; h<120; h++){
      4e8:	83bfd81e 	bne	r16,r14,44c <__alt_data_end+0xff00044c>
      4ec:	0412bf84 	movi	r16,19198
      4f0:	0252bec4 	movi	r9,19195
      4f4:	0225ce94 	movui	r8,38714
-	// image 2
-	for(int h=0; h<120; h++){
-		for(int w=159; w<319; w++){
-			int displayAddress  = w+(displayW*h)-1;
-
-			if(flipImgIdx == 2){
      4f8:	02800084 	movi	r10,2
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
-		}
-	}
-	// image 2
-	for(int h=0; h<120; h++){
      4fc:	02ffff84 	movi	r11,-2
      500:	873fff64 	muli	fp,r16,-3
      504:	847fd804 	addi	r17,r16,-160
      508:	4c07c83a 	sub	r3,r9,r16
      50c:	e239883a 	add	fp,fp,r8
      510:	e459883a 	add	r12,fp,r17
-		for(int w=159; w<319; w++){
-			int displayAddress  = w+(displayW*h)-1;
-
-			if(flipImgIdx == 2){
      514:	9280021e 	bne	r18,r10,520 <display_4_images+0x138>
-				inputPixelAddress = w+(inputImgW* (intputImgH-h-2))-1;
      518:	880d883a 	mov	r6,r17
      51c:	00000106 	br	524 <display_4_images+0x13c>
-
-			}else{
-				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
      520:	180d883a 	mov	r6,r3
-			}
-
-			pixelValue = getPixelVal(0,0,inputPixelAddress,img2);
      524:	b80f883a 	mov	r7,r23
      528:	000b883a 	mov	r5,zero
      52c:	0009883a 	mov	r4,zero
@@ -1478,21 +1131,11 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
      540:	da800415 	stw	r10,16(sp)
      544:	dac00715 	stw	r11,28(sp)
      548:	00003a40 	call	3a4 <getPixelVal>
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
      54c:	db000217 	ldw	r12,8(sp)
      550:	9b000035 	stwio	r12,0(r19)
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
      554:	a0800035 	stwio	r2,0(r20)
      558:	d8c00317 	ldw	r3,12(sp)
      55c:	8c400044 	addi	r17,r17,1
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
-		}
-	}
-	// image 2
-	for(int h=0; h<120; h++){
-		for(int w=159; w<319; w++){
      560:	da000617 	ldw	r8,24(sp)
      564:	18ffffc4 	addi	r3,r3,-1
      568:	da400517 	ldw	r9,20(sp)
@@ -1500,51 +1143,22 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
      570:	dac00717 	ldw	r11,28(sp)
      574:	8c3fe61e 	bne	r17,r16,510 <__alt_data_end+0xff000510>
      578:	8c3fd804 	addi	r16,r17,-160
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
-		}
-	}
-	// image 2
-	for(int h=0; h<120; h++){
      57c:	82ffe01e 	bne	r16,r11,500 <__alt_data_end+0xff000500>
      580:	00c00074 	movhi	r3,1
      584:	04129784 	movi	r16,19038
      588:	0212be84 	movi	r8,19194
      58c:	18cad684 	addi	r3,r3,11098
-	// image 3
-	for(int h=120; h<240; h++){
-		for(int w=0; w<159; w++){
-			int displayAddress  = w+(displayW*h)-1;
-
-			if(flipImgIdx == 3){
      590:	024000c4 	movi	r9,3
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
-		}
-	}
-	// image 3
-	for(int h=120; h<240; h++){
      594:	02bfd784 	movi	r10,-162
      598:	85ffff64 	muli	r23,r16,-3
      59c:	847fd844 	addi	r17,r16,-159
      5a0:	4439c83a 	sub	fp,r8,r16
      5a4:	b8ef883a 	add	r23,r23,r3
      5a8:	bc57883a 	add	r11,r23,r17
-		for(int w=0; w<159; w++){
-			int displayAddress  = w+(displayW*h)-1;
-
-			if(flipImgIdx == 3){
      5ac:	9240021e 	bne	r18,r9,5b8 <display_4_images+0x1d0>
-				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH) -2))-1;
      5b0:	880d883a 	mov	r6,r17
      5b4:	00000106 	br	5bc <display_4_images+0x1d4>
-
-			}else{
-				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
      5b8:	e00d883a 	mov	r6,fp
-			}
-
-			pixelValue = getPixelVal(0,0,inputPixelAddress,img3);
      5bc:	b00f883a 	mov	r7,r22
      5c0:	000b883a 	mov	r5,zero
      5c4:	0009883a 	mov	r4,zero
@@ -1554,51 +1168,23 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
      5d4:	da400515 	stw	r9,20(sp)
      5d8:	da800415 	stw	r10,16(sp)
      5dc:	00003a40 	call	3a4 <getPixelVal>
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
      5e0:	dac00717 	ldw	r11,28(sp)
      5e4:	9ac00035 	stwio	r11,0(r19)
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
      5e8:	a0800035 	stwio	r2,0(r20)
      5ec:	8c400044 	addi	r17,r17,1
      5f0:	e73fffc4 	addi	fp,fp,-1
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
-		}
-	}
-	// image 3
-	for(int h=120; h<240; h++){
-		for(int w=0; w<159; w++){
      5f4:	d8c00317 	ldw	r3,12(sp)
      5f8:	da000617 	ldw	r8,24(sp)
      5fc:	da400517 	ldw	r9,20(sp)
      600:	da800417 	ldw	r10,16(sp)
      604:	847fe81e 	bne	r16,r17,5a8 <__alt_data_end+0xff0005a8>
      608:	843fd804 	addi	r16,r16,-160
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
-		}
-	}
-	// image 3
-	for(int h=120; h<240; h++){
      60c:	82bfe21e 	bne	r16,r10,598 <__alt_data_end+0xff000598>
      610:	00c00074 	movhi	r3,1
      614:	04529784 	movi	r17,19038
      618:	0212bec4 	movi	r8,19195
      61c:	18cb4e84 	addi	r3,r3,11578
-	}
-	//image 4
-	for(int h=121; h<240; h++){
-		for(int w=159; w<319; w++){
-			int displayAddress  = w+(displayW*h)-1;
-			if(flipImgIdx == 4){
      620:	02400104 	movi	r9,4
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
-		}
-	}
-	//image 4
-	for(int h=121; h<240; h++){
      624:	02bfff84 	movi	r10,-2
      628:	8dbfff64 	muli	r22,r17,-3
      62c:	8c3fd804 	addi	r16,r17,-160
@@ -1606,19 +1192,10 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
      634:	b0ed883a 	add	r22,r22,r3
      638:	8039883a 	mov	fp,r16
      63c:	b417883a 	add	r11,r22,r16
-		for(int w=159; w<319; w++){
-			int displayAddress  = w+(displayW*h)-1;
-			if(flipImgIdx == 4){
      640:	9240021e 	bne	r18,r9,64c <display_4_images+0x264>
-				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH)-2))-1;
      644:	800d883a 	mov	r6,r16
      648:	00000106 	br	650 <display_4_images+0x268>
-
-			}else{
-				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
      64c:	b80d883a 	mov	r6,r23
-			}
-			pixelValue = getPixelVal(0,0,inputPixelAddress,img4);
      650:	a80f883a 	mov	r7,r21
      654:	000b883a 	mov	r5,zero
      658:	0009883a 	mov	r4,zero
@@ -1628,40 +1205,18 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
      668:	da400515 	stw	r9,20(sp)
      66c:	da800415 	stw	r10,16(sp)
      670:	00003a40 	call	3a4 <getPixelVal>
-
-	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
      674:	dac00717 	ldw	r11,28(sp)
      678:	9ac00035 	stwio	r11,0(r19)
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
      67c:	a0800035 	stwio	r2,0(r20)
      680:	84000044 	addi	r16,r16,1
      684:	bdffffc4 	addi	r23,r23,-1
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
-		}
-	}
-	//image 4
-	for(int h=121; h<240; h++){
-		for(int w=159; w<319; w++){
      688:	d8c00317 	ldw	r3,12(sp)
      68c:	da000617 	ldw	r8,24(sp)
      690:	da400517 	ldw	r9,20(sp)
      694:	da800417 	ldw	r10,16(sp)
      698:	8c3fe81e 	bne	r17,r16,63c <__alt_data_end+0xff00063c>
      69c:	e023883a 	mov	r17,fp
-	    	//specific the value to be displayed
-	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
-		}
-	}
-	//image 4
-	for(int h=121; h<240; h++){
      6a0:	e2bfe11e 	bne	fp,r10,628 <__alt_data_end+0xff000628>
-
-
-
-
-
-}
      6a4:	dfc01117 	ldw	ra,68(sp)
      6a8:	df001017 	ldw	fp,64(sp)
      6ac:	ddc00f17 	ldw	r23,60(sp)
@@ -1676,8 +1231,6 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
      6d0:	f800283a 	ret
 
 000006d4 <convolve_v2>:
-
-void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],float v_kernel[3], int width, int height){
      6d4:	deffeb04 	addi	sp,sp,-84
      6d8:	df001315 	stw	fp,76(sp)
      6dc:	df001304 	addi	fp,sp,76
@@ -1685,127 +1238,49 @@ void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],floa
      6e4:	e4400317 	ldw	r17,12(fp)
      6e8:	dcc00e15 	stw	r19,56(sp)
      6ec:	e4c00217 	ldw	r19,8(fp)
-    uint16_t x, y, k;
-    float temp_buffer[height][width];
      6f0:	8c45883a 	add	r2,r17,r17
      6f4:	1085883a 	add	r2,r2,r2
      6f8:	14c5383a 	mul	r2,r2,r19
-
-
-
-}
-
-void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],float v_kernel[3], int width, int height){
      6fc:	dc000b15 	stw	r16,44(sp)
-                if (xi >= 0 && xi < width) {
-                	int pixelAddress = y*width + xi;
-                    sum += h_kernel[k] * getPixelVal(0,0,pixelAddress, inputImg);;
-                }
-            }
-            temp_buffer[y][x] = sum;
      700:	9ce1883a 	add	r16,r19,r19
-
-}
-
-void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],float v_kernel[3], int width, int height){
-    uint16_t x, y, k;
-    float temp_buffer[height][width];
      704:	10800184 	addi	r2,r2,6
      708:	1004d0ba 	srli	r2,r2,2
-                if (xi >= 0 && xi < width) {
-                	int pixelAddress = y*width + xi;
-                    sum += h_kernel[k] * getPixelVal(0,0,pixelAddress, inputImg);;
-                }
-            }
-            temp_buffer[y][x] = sum;
      70c:	8421883a 	add	r16,r16,r16
      710:	8020d0ba 	srli	r16,r16,2
-
-}
-
-void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],float v_kernel[3], int width, int height){
-    uint16_t x, y, k;
-    float temp_buffer[height][width];
      714:	1085883a 	add	r2,r2,r2
      718:	1085883a 	add	r2,r2,r2
-
-
-
-}
-
-void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],float v_kernel[3], int width, int height){
      71c:	ddc01215 	stw	r23,72(sp)
      720:	dd801115 	stw	r22,68(sp)
      724:	dfc01415 	stw	ra,80(sp)
      728:	dd401015 	stw	r21,64(sp)
      72c:	dd000f15 	stw	r20,60(sp)
      730:	dc800d15 	stw	r18,52(sp)
-    uint16_t x, y, k;
-    float temp_buffer[height][width];
      734:	d8b7c83a 	sub	sp,sp,r2
-
-
-
-}
-
-void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],float v_kernel[3], int width, int height){
      738:	202d883a 	mov	r22,r4
      73c:	e17fee15 	stw	r5,-72(fp)
      740:	302f883a 	mov	r23,r6
      744:	e1ffef15 	stw	r7,-68(fp)
-    uint16_t x, y, k;
-    float temp_buffer[height][width];
      748:	e6ffed15 	stw	sp,-76(fp)
-
-//    float h_kernel[3] = {1.0f/3, 1.0f/3, 1.0f/3};
-//    float v_kernel[3] = {1.0f/3, 1.0f/3, 1.0f/3};
-
-    // Horizontal pass
-    for (y = 0; y < height; y++) {
      74c:	0015883a 	mov	r10,zero
      750:	523fffcc 	andi	r8,r10,65535
      754:	4440380e 	bge	r8,r17,838 <convolve_v2+0x164>
      758:	44d9383a 	mul	r12,r8,r19
-                if (xi >= 0 && xi < width) {
-                	int pixelAddress = y*width + xi;
-                    sum += h_kernel[k] * getPixelVal(0,0,pixelAddress, inputImg);;
-                }
-            }
-            temp_buffer[y][x] = sum;
      75c:	4407383a 	mul	r3,r8,r16
-        for (x = 0; x <= width - 1; x++) {
-            float sum = 0;
-            for (k = 0; k < KERNEL_SIZE; k++) {
-                int16_t xi = x + k - 1; // offset: -1, 0, 1
-                if (xi >= 0 && xi < width) {
-                	int pixelAddress = y*width + xi;
      760:	002b883a 	mov	r21,zero
-//    float h_kernel[3] = {1.0f/3, 1.0f/3, 1.0f/3};
-//    float v_kernel[3] = {1.0f/3, 1.0f/3, 1.0f/3};
-
-    // Horizontal pass
-    for (y = 0; y < height; y++) {
-        for (x = 0; x <= width - 1; x++) {
      764:	acbfffcc 	andi	r18,r21,65535
      768:	94c0310e 	bge	r18,r19,830 <convolve_v2+0x15c>
      76c:	ab800084 	addi	r14,r21,2
      770:	ab7fffc4 	addi	r13,r21,-1
      774:	b829883a 	mov	r20,r23
      778:	0017883a 	mov	r11,zero
-            float sum = 0;
-            for (k = 0; k < KERNEL_SIZE; k++) {
      77c:	73bfffcc 	andi	r14,r14,65535
      780:	68bfffcc 	andi	r2,r13,65535
      784:	70802226 	beq	r14,r2,810 <convolve_v2+0x13c>
-                int16_t xi = x + k - 1; // offset: -1, 0, 1
-                if (xi >= 0 && xi < width) {
      788:	69bfffcc 	andi	r6,r13,65535
      78c:	31a0001c 	xori	r6,r6,32768
      790:	31a00004 	addi	r6,r6,-32768
      794:	30001b16 	blt	r6,zero,804 <convolve_v2+0x130>
      798:	34c01a0e 	bge	r6,r19,804 <convolve_v2+0x130>
-                	int pixelAddress = y*width + xi;
-                    sum += h_kernel[k] * getPixelVal(0,0,pixelAddress, inputImg);;
      79c:	330d883a 	add	r6,r6,r12
      7a0:	b00f883a 	mov	r7,r22
      7a4:	000b883a 	mov	r5,zero
@@ -1835,76 +1310,41 @@ void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],floa
      804:	6b400044 	addi	r13,r13,1
      808:	a5000104 	addi	r20,r20,4
      80c:	003fdc06 	br	780 <__alt_data_end+0xff000780>
-                }
-            }
-            temp_buffer[y][x] = sum;
      810:	1ca5883a 	add	r18,r3,r18
      814:	e0bfed17 	ldw	r2,-76(fp)
      818:	94a5883a 	add	r18,r18,r18
      81c:	94a5883a 	add	r18,r18,r18
      820:	14a5883a 	add	r18,r2,r18
      824:	92c00015 	stw	r11,0(r18)
-//    float h_kernel[3] = {1.0f/3, 1.0f/3, 1.0f/3};
-//    float v_kernel[3] = {1.0f/3, 1.0f/3, 1.0f/3};
-
-    // Horizontal pass
-    for (y = 0; y < height; y++) {
-        for (x = 0; x <= width - 1; x++) {
      828:	ad400044 	addi	r21,r21,1
      82c:	003fcd06 	br	764 <__alt_data_end+0xff000764>
-
-//    float h_kernel[3] = {1.0f/3, 1.0f/3, 1.0f/3};
-//    float v_kernel[3] = {1.0f/3, 1.0f/3, 1.0f/3};
-
-    // Horizontal pass
-    for (y = 0; y < height; y++) {
      830:	52800044 	addi	r10,r10,1
      834:	003fc606 	br	750 <__alt_data_end+0xff000750>
      838:	002f883a 	mov	r23,zero
      83c:	002d883a 	mov	r22,zero
      840:	0025883a 	mov	r18,zero
      844:	0029883a 	mov	r20,zero
-            temp_buffer[y][x] = sum;
-        }
-    }
-
-    // Vertical pass
-    for (y = 0; y <= height - 1; y++) {
      848:	a0bfffcc 	andi	r2,r20,65535
      84c:	1440480e 	bge	r2,r17,970 <convolve_v2+0x29c>
      850:	a0800084 	addi	r2,r20,2
      854:	a0ffffc4 	addi	r3,r20,-1
-        for (x = 0; x <= width - 1; x++) {
-            float sum = 0;
-            for (k = 0; k < KERNEL_SIZE; k++) {
      858:	10bfffcc 	andi	r2,r2,65535
      85c:	002b883a 	mov	r21,zero
      860:	e0fff00d 	sth	r3,-64(fp)
      864:	e0bff115 	stw	r2,-60(fp)
-        }
-    }
-
-    // Vertical pass
-    for (y = 0; y <= height - 1; y++) {
-        for (x = 0; x <= width - 1; x++) {
      868:	ab7fffcc 	andi	r13,r21,65535
      86c:	6cc03e0e 	bge	r13,r19,968 <convolve_v2+0x294>
      870:	e23ff00b 	ldhu	r8,-64(fp)
      874:	e33fef17 	ldw	r12,-68(fp)
      878:	0017883a 	mov	r11,zero
-            float sum = 0;
-            for (k = 0; k < KERNEL_SIZE; k++) {
      87c:	e0fff117 	ldw	r3,-60(fp)
      880:	40bfffcc 	andi	r2,r8,65535
      884:	10c01d26 	beq	r2,r3,8fc <convolve_v2+0x228>
-                int16_t yi = y + k - 1; // offset: -1, 0, 1
-                if (yi >= 0 && yi < height) {
      888:	40bfffcc 	andi	r2,r8,65535
      88c:	10a0001c 	xori	r2,r2,32768
      890:	10a00004 	addi	r2,r2,-32768
      894:	10001616 	blt	r2,zero,8f0 <convolve_v2+0x21c>
      898:	1440150e 	bge	r2,r17,8f0 <convolve_v2+0x21c>
-                    sum += v_kernel[k] * temp_buffer[yi][x];
      89c:	8085383a 	mul	r2,r16,r2
      8a0:	e0ffed17 	ldw	r3,-76(fp)
      8a4:	61000017 	ldw	r4,0(r12)
@@ -1929,11 +1369,6 @@ void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],floa
      8f0:	42000044 	addi	r8,r8,1
      8f4:	63000104 	addi	r12,r12,4
      8f8:	003fe006 	br	87c <__alt_data_end+0xff00087c>
-                }
-            }
-
-            // Clamp to 4-bit range and store
-            uint8_t result = (uint8_t)(sum + 0.5f); // round to nearest
      8fc:	5809883a 	mov	r4,r11
      900:	014fc034 	movhi	r5,16128
      904:	0000f280 	call	f28 <__addsf3>
@@ -1944,65 +1379,25 @@ void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],floa
      918:	10803fcc 	andi	r2,r2,255
      91c:	1880012e 	bgeu	r3,r2,924 <convolve_v2+0x250>
      920:	010003c4 	movi	r4,15
-            if (result > 15) result = 15; // max 4-bit
-
-
-            pixelCount = pixelCount + 1;
      924:	bdc00044 	addi	r23,r23,1
-
-			if(pixelCount == 2){//once we have 2 pixel, we can store them to the output array
      928:	00800084 	movi	r2,2
      92c:	b880091e 	bne	r23,r2,954 <convolve_v2+0x280>
-				uint8_t finalResult = (((uint8_t)result)|0xF0) & convResiltBuff; //packing the value together
-				outputImg[outputPixelIdx] = finalResult;
      930:	e0ffee17 	ldw	r3,-72(fp)
-
-				outputPixelIdx = outputPixelIdx + 1;
-				pixelCount = 0;
      934:	002f883a 	mov	r23,zero
-
-            pixelCount = pixelCount + 1;
-
-			if(pixelCount == 2){//once we have 2 pixel, we can store them to the output array
-				uint8_t finalResult = (((uint8_t)result)|0xF0) & convResiltBuff; //packing the value together
-				outputImg[outputPixelIdx] = finalResult;
      938:	1d85883a 	add	r2,r3,r22
      93c:	00fffc04 	movi	r3,-16
      940:	20c8b03a 	or	r4,r4,r3
      944:	2488703a 	and	r4,r4,r18
      948:	11000005 	stb	r4,0(r2)
-
-				outputPixelIdx = outputPixelIdx + 1;
      94c:	b5800044 	addi	r22,r22,1
      950:	00000306 	br	960 <convolve_v2+0x28c>
-				pixelCount = 0;
-			}else{
-				convResiltBuff = ((uint8_t)result<<4) | 0x0F; //padding the bottom 4 bits with 0
      954:	24803fcc 	andi	r18,r4,255
      958:	9024913a 	slli	r18,r18,4
      95c:	948003d4 	ori	r18,r18,15
-        }
-    }
-
-    // Vertical pass
-    for (y = 0; y <= height - 1; y++) {
-        for (x = 0; x <= width - 1; x++) {
      960:	ad400044 	addi	r21,r21,1
      964:	003fc006 	br	868 <__alt_data_end+0xff000868>
-            temp_buffer[y][x] = sum;
-        }
-    }
-
-    // Vertical pass
-    for (y = 0; y <= height - 1; y++) {
      968:	a5000044 	addi	r20,r20,1
      96c:	003fb606 	br	848 <__alt_data_end+0xff000848>
-			}else{
-				convResiltBuff = ((uint8_t)result<<4) | 0x0F; //padding the bottom 4 bits with 0
-			}
-        }
-    }
-}
      970:	e6fff804 	addi	sp,fp,-32
      974:	dfc00917 	ldw	ra,36(sp)
      978:	df000817 	ldw	fp,32(sp)
@@ -2018,115 +1413,47 @@ void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],floa
      9a0:	f800283a 	ret
 
 000009a4 <Run_Time_2_frame>:
-	}
-	return pixelOutput;
-}
-
-
-void Run_Time_2_frame(uint32_t before, uint32_t after){
      9a4:	defff704 	addi	sp,sp,-36
-	// prints the run time, calculates FPS to 2 decimal places and prints FPS
-	// separates the 4 digits in FPS to ten, one, tenth, hundredth
-	// hex decoder to write a 7 digit binary value to the hex pio's
-	// make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
-
-	float frameTime = (after - before);  // calculates run time of the frame
      9a8:	2909c83a 	sub	r4,r5,r4
-	}
-	return pixelOutput;
-}
-
-
-void Run_Time_2_frame(uint32_t before, uint32_t after){
      9ac:	dfc00815 	stw	ra,32(sp)
      9b0:	dd000715 	stw	r20,28(sp)
      9b4:	dcc00615 	stw	r19,24(sp)
      9b8:	dc800515 	stw	r18,20(sp)
      9bc:	dc400415 	stw	r17,16(sp)
      9c0:	dc000315 	stw	r16,12(sp)
-	// prints the run time, calculates FPS to 2 decimal places and prints FPS
-	// separates the 4 digits in FPS to ten, one, tenth, hundredth
-	// hex decoder to write a 7 digit binary value to the hex pio's
-	// make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
-
-	float frameTime = (after - before);  // calculates run time of the frame
      9c4:	00023600 	call	2360 <__floatunsisf>
-	printf("The Run Time for the Frame is %.2f\n", frameTime);
      9c8:	1009883a 	mov	r4,r2
-	// prints the run time, calculates FPS to 2 decimal places and prints FPS
-	// separates the 4 digits in FPS to ten, one, tenth, hundredth
-	// hex decoder to write a 7 digit binary value to the hex pio's
-	// make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
-
-	float frameTime = (after - before);  // calculates run time of the frame
      9cc:	1021883a 	mov	r16,r2
-	printf("The Run Time for the Frame is %.2f\n", frameTime);
      9d0:	00024500 	call	2450 <__extendsfdf2>
      9d4:	01000074 	movhi	r4,1
      9d8:	180d883a 	mov	r6,r3
      9dc:	100b883a 	mov	r5,r2
      9e0:	213e9004 	addi	r4,r4,-1472
      9e4:	000273c0 	call	273c <printf>
-
-	float fps = 1000000.0/frameTime;   // converts us to fps
      9e8:	01125d34 	movhi	r4,18804
      9ec:	800b883a 	mov	r5,r16
      9f0:	21090004 	addi	r4,r4,9216
      9f4:	00013f00 	call	13f0 <__divsf3>
-	printf("The fps for the System is %.2f\n", fps);
      9f8:	1009883a 	mov	r4,r2
-	// make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
-
-	float frameTime = (after - before);  // calculates run time of the frame
-	printf("The Run Time for the Frame is %.2f\n", frameTime);
-
-	float fps = 1000000.0/frameTime;   // converts us to fps
      9fc:	1021883a 	mov	r16,r2
-	printf("The fps for the System is %.2f\n", fps);
      a00:	00024500 	call	2450 <__extendsfdf2>
      a04:	01000074 	movhi	r4,1
      a08:	180d883a 	mov	r6,r3
      a0c:	100b883a 	mov	r5,r2
      a10:	213e9904 	addi	r4,r4,-1436
      a14:	000273c0 	call	273c <printf>
-
-	uint16_t fps_x100 = fps*100; // Multiply the fps by 100 to retain the 2 decimal places
      a18:	0150b234 	movhi	r5,17096
      a1c:	8009883a 	mov	r4,r16
      a20:	00018ec0 	call	18ec <__mulsf3>
      a24:	1009883a 	mov	r4,r2
      a28:	0000d140 	call	d14 <__fixunssfsi>
-	uint8_t d2 = (fps_x100 / 100) % 10;
-	uint8_t d3 = (fps_x100 / 1000) % 10;
-
-	// look up Table for Hex Decoder Values
-
-	uint8_t hex_lut[10] = {
      a2c:	04c00284 	movi	r19,10
      a30:	01400074 	movhi	r5,1
      a34:	980d883a 	mov	r6,r19
      a38:	d809883a 	mov	r4,sp
-	printf("The Run Time for the Frame is %.2f\n", frameTime);
-
-	float fps = 1000000.0/frameTime;   // converts us to fps
-	printf("The fps for the System is %.2f\n", fps);
-
-	uint16_t fps_x100 = fps*100; // Multiply the fps by 100 to retain the 2 decimal places
      a3c:	1025883a 	mov	r18,r2
-	uint8_t d2 = (fps_x100 / 100) % 10;
-	uint8_t d3 = (fps_x100 / 1000) % 10;
-
-	// look up Table for Hex Decoder Values
-
-	uint8_t hex_lut[10] = {
      a40:	297ea644 	addi	r5,r5,-1383
      a44:	00025c40 	call	25c4 <memcpy>
-	// Convert digits to 7-segment encoding
-	uint8_t seg0 = hex_lut[d0] | 0b10000000;  // rightmost digit
-	uint8_t seg1 = hex_lut[d1] | 0b10000000;
-	uint8_t seg2 = hex_lut[d2] | 0b10000000;
-	seg2 &= ~0b10000000;  // Set the final bit in seg2 to 0
-	uint8_t seg3 = hex_lut[d3] | 0b10000000;
      a48:	94bfffcc 	andi	r18,r18,65535
      a4c:	9009883a 	mov	r4,r18
      a50:	0140fa04 	movi	r5,1000
@@ -2136,138 +1463,49 @@ void Run_Time_2_frame(uint32_t before, uint32_t after){
      a60:	0000ed00 	call	ed0 <__umodsi3>
      a64:	10bfffcc 	andi	r2,r2,65535
      a68:	d885883a 	add	r2,sp,r2
-	};
-
-	// Convert digits to 7-segment encoding
-	uint8_t seg0 = hex_lut[d0] | 0b10000000;  // rightmost digit
-	uint8_t seg1 = hex_lut[d1] | 0b10000000;
-	uint8_t seg2 = hex_lut[d2] | 0b10000000;
      a6c:	9009883a 	mov	r4,r18
      a70:	01401904 	movi	r5,100
-	seg2 &= ~0b10000000;  // Set the final bit in seg2 to 0
-	uint8_t seg3 = hex_lut[d3] | 0b10000000;
      a74:	15000003 	ldbu	r20,0(r2)
-	};
-
-	// Convert digits to 7-segment encoding
-	uint8_t seg0 = hex_lut[d0] | 0b10000000;  // rightmost digit
-	uint8_t seg1 = hex_lut[d1] | 0b10000000;
-	uint8_t seg2 = hex_lut[d2] | 0b10000000;
      a78:	0000e6c0 	call	e6c <__udivsi3>
      a7c:	980b883a 	mov	r5,r19
      a80:	113fffcc 	andi	r4,r2,65535
      a84:	0000ed00 	call	ed0 <__umodsi3>
      a88:	10bfffcc 	andi	r2,r2,65535
      a8c:	d885883a 	add	r2,sp,r2
-		~0b01101111  // 9
-	};
-
-	// Convert digits to 7-segment encoding
-	uint8_t seg0 = hex_lut[d0] | 0b10000000;  // rightmost digit
-	uint8_t seg1 = hex_lut[d1] | 0b10000000;
      a90:	980b883a 	mov	r5,r19
      a94:	9009883a 	mov	r4,r18
-
-	// HEX3 goes into second_hex_export (just the lowest byte)
-	uint32_t second_hex_value = seg3;
-
-	// Write to PIOs
-	IOWR(HEX20_BASE, 0, first_hex_value);
      a98:	14400003 	ldbu	r17,0(r2)
-		~0b01101111  // 9
-	};
-
-	// Convert digits to 7-segment encoding
-	uint8_t seg0 = hex_lut[d0] | 0b10000000;  // rightmost digit
-	uint8_t seg1 = hex_lut[d1] | 0b10000000;
      a9c:	0000e6c0 	call	e6c <__udivsi3>
      aa0:	980b883a 	mov	r5,r19
      aa4:	113fffcc 	andi	r4,r2,65535
      aa8:	0000ed00 	call	ed0 <__umodsi3>
      aac:	10bfffcc 	andi	r2,r2,65535
      ab0:	d885883a 	add	r2,sp,r2
-
-	// HEX3 goes into second_hex_export (just the lowest byte)
-	uint32_t second_hex_value = seg3;
-
-	// Write to PIOs
-	IOWR(HEX20_BASE, 0, first_hex_value);
      ab4:	10c00003 	ldbu	r3,0(r2)
-	// Convert digits to 7-segment encoding
-	uint8_t seg0 = hex_lut[d0] | 0b10000000;  // rightmost digit
-	uint8_t seg1 = hex_lut[d1] | 0b10000000;
-	uint8_t seg2 = hex_lut[d2] | 0b10000000;
-	seg2 &= ~0b10000000;  // Set the final bit in seg2 to 0
-	uint8_t seg3 = hex_lut[d3] | 0b10000000;
      ab8:	043fe004 	movi	r16,-128
-
-	// HEX3 goes into second_hex_export (just the lowest byte)
-	uint32_t second_hex_value = seg3;
-
-	// Write to PIOs
-	IOWR(HEX20_BASE, 0, first_hex_value);
      abc:	8c401fcc 	andi	r17,r17,127
      ac0:	1c06b03a 	or	r3,r3,r16
      ac4:	18c03fcc 	andi	r3,r3,255
      ac8:	1806923a 	slli	r3,r3,8
      acc:	8822943a 	slli	r17,r17,16
-		~0b01111111, // 8
-		~0b01101111  // 9
-	};
-
-	// Convert digits to 7-segment encoding
-	uint8_t seg0 = hex_lut[d0] | 0b10000000;  // rightmost digit
      ad0:	980b883a 	mov	r5,r19
      ad4:	9009883a 	mov	r4,r18
-
-	// HEX3 goes into second_hex_export (just the lowest byte)
-	uint32_t second_hex_value = seg3;
-
-	// Write to PIOs
-	IOWR(HEX20_BASE, 0, first_hex_value);
      ad8:	88e2b03a 	or	r17,r17,r3
-		~0b01111111, // 8
-		~0b01101111  // 9
-	};
-
-	// Convert digits to 7-segment encoding
-	uint8_t seg0 = hex_lut[d0] | 0b10000000;  // rightmost digit
      adc:	0000ed00 	call	ed0 <__umodsi3>
      ae0:	10bfffcc 	andi	r2,r2,65535
      ae4:	d885883a 	add	r2,sp,r2
-
-	// HEX3 goes into second_hex_export (just the lowest byte)
-	uint32_t second_hex_value = seg3;
-
-	// Write to PIOs
-	IOWR(HEX20_BASE, 0, first_hex_value);
      ae8:	10800003 	ldbu	r2,0(r2)
-	// Convert digits to 7-segment encoding
-	uint8_t seg0 = hex_lut[d0] | 0b10000000;  // rightmost digit
-	uint8_t seg1 = hex_lut[d1] | 0b10000000;
-	uint8_t seg2 = hex_lut[d2] | 0b10000000;
-	seg2 &= ~0b10000000;  // Set the final bit in seg2 to 0
-	uint8_t seg3 = hex_lut[d3] | 0b10000000;
      aec:	a428b03a 	or	r20,r20,r16
-
-	// HEX3 goes into second_hex_export (just the lowest byte)
-	uint32_t second_hex_value = seg3;
-
-	// Write to PIOs
-	IOWR(HEX20_BASE, 0, first_hex_value);
      af0:	1420b03a 	or	r16,r2,r16
      af4:	84003fcc 	andi	r16,r16,255
      af8:	00810034 	movhi	r2,1024
      afc:	8c20b03a 	or	r16,r17,r16
      b00:	10842004 	addi	r2,r2,4224
      b04:	14000035 	stwio	r16,0(r2)
-	IOWR(HEX52_BASE, 0, second_hex_value);
      b08:	00810034 	movhi	r2,1024
      b0c:	a5003fcc 	andi	r20,r20,255
      b10:	10841c04 	addi	r2,r2,4208
      b14:	15000035 	stwio	r20,0(r2)
-
-}
      b18:	dfc00817 	ldw	ra,32(sp)
      b1c:	dd000717 	ldw	r20,28(sp)
      b20:	dcc00617 	ldw	r19,24(sp)
@@ -2278,240 +1516,85 @@ void Run_Time_2_frame(uint32_t before, uint32_t after){
      b34:	f800283a 	ret
 
 00000b38 <main>:
-
-	uint8_t sobelArrX[38400];
-	uint8_t sobelArrY[38400];
-	uint8_t sobelArrCombined[38400];
-
-	alt_putstr("Hello from Nios II!\n");
      b38:	01000074 	movhi	r4,1
-	IOWR(HEX52_BASE, 0, second_hex_value);
-
-}
-
-int main()
-{ 
      b3c:	defff904 	addi	sp,sp,-28
-
-	uint8_t sobelArrX[38400];
-	uint8_t sobelArrY[38400];
-	uint8_t sobelArrCombined[38400];
-
-	alt_putstr("Hello from Nios II!\n");
      b40:	213ea104 	addi	r4,r4,-1404
-	IOWR(HEX52_BASE, 0, second_hex_value);
-
-}
-
-int main()
-{ 
      b44:	dc000215 	stw	r16,8(sp)
      b48:	dfc00615 	stw	ra,24(sp)
      b4c:	dcc00515 	stw	r19,20(sp)
      b50:	dc800415 	stw	r18,16(sp)
      b54:	dc400315 	stw	r17,12(sp)
-
-	uint8_t sobelArrX[38400];
-	uint8_t sobelArrY[38400];
-	uint8_t sobelArrCombined[38400];
-
-	alt_putstr("Hello from Nios II!\n");
      b58:	000ee640 	call	ee64 <alt_putstr>
-	IOWR(P0_IN_BASE,3,0x1);
      b5c:	00810034 	movhi	r2,1024
      b60:	04000044 	movi	r16,1
      b64:	10840f04 	addi	r2,r2,4156
      b68:	14000035 	stwio	r16,0(r2)
-	IOWR(P0_IN_BASE,2,0x1);
      b6c:	00810034 	movhi	r2,1024
      b70:	10840e04 	addi	r2,r2,4152
      b74:	14000035 	stwio	r16,0(r2)
-	alt_irq_register(P0_IN_IRQ, &context, KEY_ISR);
      b78:	01800034 	movhi	r6,0
      b7c:	31807504 	addi	r6,r6,468
      b80:	d1666a04 	addi	r5,gp,-26200
      b84:	01000084 	movi	r4,2
      b88:	000ec700 	call	ec70 <alt_irq_register>
-	int counter  = 0;
-
-
-	received = 0;
-
-	*display1Ready  = 1;
      b8c:	d0a00817 	ldw	r2,-32736(gp)
-	IOWR(P0_IN_BASE,2,0x1);
-	alt_irq_register(P0_IN_IRQ, &context, KEY_ISR);
-	int counter  = 0;
-
-
-	received = 0;
      b90:	d0266815 	stw	zero,-26208(gp)
-
-	*display1Ready  = 1;
      b94:	14000015 	stw	r16,0(r2)
-	uint32_t readBuffer = SHARED_BUFF_1_BASE;
-	uint32_t start = IORD(TIME_DISPLAY_BASE, 0);
      b98:	00810034 	movhi	r2,1024
      b9c:	10841004 	addi	r2,r2,4160
      ba0:	10800037 	ldwio	r2,0(r2)
-
-
-	received = 0;
-
-	*display1Ready  = 1;
-	uint32_t readBuffer = SHARED_BUFF_1_BASE;
      ba4:	0440cc34 	movhi	r17,816
-	  				img4 = CONV_RESULT_BASE_2;
-//	  				printf("img4 assigned as edge detect \n");
-	  			}else{img4 = readBuffer;}
-
-
-	  			display_4_images(readBuffer,readBuffer,img3,img4,PIXEL_ADDRESS_BASE,2);
      ba8:	04c10034 	movhi	r19,1024
-
-
-	int blurFilter = 1;
-
-
-	alt_dcache_flush_all();
      bac:	000ec380 	call	ec38 <alt_dcache_flush_all>
-
-
-	received = 0;
-
-	*display1Ready  = 1;
-	uint32_t readBuffer = SHARED_BUFF_1_BASE;
      bb0:	8c404004 	addi	r17,r17,256
-	  				img4 = CONV_RESULT_BASE_2;
-//	  				printf("img4 assigned as edge detect \n");
-	  			}else{img4 = readBuffer;}
-
-
-	  			display_4_images(readBuffer,readBuffer,img3,img4,PIXEL_ADDRESS_BASE,2);
      bb4:	9cc41804 	addi	r19,r19,4192
-
-	alt_dcache_flush_all();
-
-  while (1){
-//	  	  printf("P0 runing\n");
-	  	  if(*frame1Ready == 1){
      bb8:	d0a00617 	ldw	r2,-32744(gp)
      bbc:	10800017 	ldw	r2,0(r2)
      bc0:	1400521e 	bne	r2,r16,d0c <main+0x1d4>
-	  		  if(*bufferFlag1 == 0){
      bc4:	d0a00717 	ldw	r2,-32740(gp)
      bc8:	10800017 	ldw	r2,0(r2)
      bcc:	10000426 	beq	r2,zero,be0 <main+0xa8>
-	  			  readBuffer = SHARED_BUFF_2_BASE;
-
-	  		  }else if(*bufferFlag1 == 1){
      bd0:	1400051e 	bne	r2,r16,be8 <main+0xb0>
-	  			  readBuffer = SHARED_BUFF_1_BASE;
      bd4:	0440cc34 	movhi	r17,816
      bd8:	8c404004 	addi	r17,r17,256
      bdc:	00000206 	br	be8 <main+0xb0>
-
-  while (1){
-//	  	  printf("P0 runing\n");
-	  	  if(*frame1Ready == 1){
-	  		  if(*bufferFlag1 == 0){
-	  			  readBuffer = SHARED_BUFF_2_BASE;
      be0:	0440cc74 	movhi	r17,817
      be4:	8c65bfc4 	addi	r17,r17,-26881
-
-	  		  }else if(*bufferFlag1 == 1){
-	  			  readBuffer = SHARED_BUFF_1_BASE;
-
-	  		  }
-	  		  *display1Ready  = 0;
      be8:	d0a00817 	ldw	r2,-32736(gp)
      bec:	10000015 	stw	zero,0(r2)
-	  		  alt_dcache_flush_all();
      bf0:	000ec380 	call	ec38 <alt_dcache_flush_all>
-
-
-
-	  		  if(*quadImgMode != 0){
      bf4:	d0a00217 	ldw	r2,-32760(gp)
      bf8:	10c00017 	ldw	r3,0(r2)
      bfc:	d0a00317 	ldw	r2,-32756(gp)
-	  			if(*needBlur == 1){
      c00:	10800017 	ldw	r2,0(r2)
-	  		  *display1Ready  = 0;
-	  		  alt_dcache_flush_all();
-
-
-
-	  		  if(*quadImgMode != 0){
      c04:	18002326 	beq	r3,zero,c94 <main+0x15c>
-	  			if(*needBlur == 1){
      c08:	1400091e 	bne	r2,r16,c30 <main+0xf8>
-	  				*convDone = 0;
      c0c:	d0a00517 	ldw	r2,-32748(gp)
      c10:	10000015 	stw	zero,0(r2)
-	  				while(*convDone == 0){
      c14:	d0a00517 	ldw	r2,-32748(gp)
      c18:	10800017 	ldw	r2,0(r2)
      c1c:	1000021e 	bne	r2,zero,c28 <main+0xf0>
-//	  					printf("convdone is %d \n", convDone);
-	  					alt_dcache_flush_all();
      c20:	000ec380 	call	ec38 <alt_dcache_flush_all>
      c24:	003ffb06 	br	c14 <__alt_data_end+0xff000c14>
-
-	  				}
-	  				img3 = CONV_RESULT_BASE_1;
      c28:	0480d034 	movhi	r18,832
      c2c:	00000106 	br	c34 <main+0xfc>
-
-//	  				convolve_v2(SHARED_BUFF_1_BASE,CONV_RESULT_BASE_1,h_kernel,v_kernel,160,120);
-
-	  			}else{img3 = readBuffer;}
      c30:	8825883a 	mov	r18,r17
-
-	  			if(*needEdgeDetect != 0){
      c34:	d0a00117 	ldw	r2,-32764(gp)
      c38:	10800017 	ldw	r2,0(r2)
      c3c:	10000c26 	beq	r2,zero,c70 <main+0x138>
-//	  				printf("in edge detect \n");
-	  				if(*needBlur == 0){
      c40:	d0a00317 	ldw	r2,-32756(gp)
      c44:	10800017 	ldw	r2,0(r2)
      c48:	10000226 	beq	r2,zero,c54 <main+0x11c>
-	  					while(*convDone == 0){
-	  						alt_dcache_flush_all();
-	  					}
-	  				}
-
-	  				img4 = CONV_RESULT_BASE_2;
      c4c:	01c0d074 	movhi	r7,833
      c50:	00000806 	br	c74 <main+0x13c>
-	  			}else{img3 = readBuffer;}
-
-	  			if(*needEdgeDetect != 0){
-//	  				printf("in edge detect \n");
-	  				if(*needBlur == 0){
-	  					*convDone = 0;
      c54:	d0a00517 	ldw	r2,-32748(gp)
      c58:	10000015 	stw	zero,0(r2)
-
-
-	  					while(*convDone == 0){
      c5c:	d0a00517 	ldw	r2,-32748(gp)
      c60:	10800017 	ldw	r2,0(r2)
      c64:	103ff91e 	bne	r2,zero,c4c <__alt_data_end+0xff000c4c>
-	  						alt_dcache_flush_all();
      c68:	000ec380 	call	ec38 <alt_dcache_flush_all>
      c6c:	003ffb06 	br	c5c <__alt_data_end+0xff000c5c>
-	  					}
-	  				}
-
-	  				img4 = CONV_RESULT_BASE_2;
-//	  				printf("img4 assigned as edge detect \n");
-	  			}else{img4 = readBuffer;}
      c70:	880f883a 	mov	r7,r17
-
-
-	  			display_4_images(readBuffer,readBuffer,img3,img4,PIXEL_ADDRESS_BASE,2);
      c74:	00800084 	movi	r2,2
      c78:	d8800115 	stw	r2,4(sp)
      c7c:	dcc00015 	stw	r19,0(sp)
@@ -2520,88 +1603,37 @@ int main()
      c88:	8809883a 	mov	r4,r17
      c8c:	00003e80 	call	3e8 <display_4_images>
      c90:	00001906 	br	cf8 <main+0x1c0>
-		  		  *display1Ready  = 1;
-		  		  *frame1Ready = 0;
-		  		  alt_dcache_flush_all();
-	  		  }else{
-		  			if(*needBlur == 1){
      c94:	1400091e 	bne	r2,r16,cbc <main+0x184>
-		  				*convDone = 0;
      c98:	d0a00517 	ldw	r2,-32748(gp)
      c9c:	10000015 	stw	zero,0(r2)
-		  				readBuffer = CONV_RESULT_BASE_1;
-		  				while(*convDone == 0){
      ca0:	d0a00517 	ldw	r2,-32748(gp)
      ca4:	10800017 	ldw	r2,0(r2)
      ca8:	1000021e 	bne	r2,zero,cb4 <main+0x17c>
-		  					alt_dcache_flush_all();
      cac:	000ec380 	call	ec38 <alt_dcache_flush_all>
      cb0:	003ffb06 	br	ca0 <__alt_data_end+0xff000ca0>
-		  		  *frame1Ready = 0;
-		  		  alt_dcache_flush_all();
-	  		  }else{
-		  			if(*needBlur == 1){
-		  				*convDone = 0;
-		  				readBuffer = CONV_RESULT_BASE_1;
      cb4:	0440d034 	movhi	r17,832
      cb8:	00000b06 	br	ce8 <main+0x1b0>
-		  				while(*convDone == 0){
-		  					alt_dcache_flush_all();
-		  				}
-
-		  			}
-		  			else if(*needEdgeDetect != 0 ){
      cbc:	d0a00117 	ldw	r2,-32764(gp)
      cc0:	10800017 	ldw	r2,0(r2)
      cc4:	10000826 	beq	r2,zero,ce8 <main+0x1b0>
-		  				*convDone = 0;
      cc8:	d0a00517 	ldw	r2,-32748(gp)
      ccc:	10000015 	stw	zero,0(r2)
-		  				readBuffer = CONV_RESULT_BASE_2;
-
-		  				while(*convDone == 0){
      cd0:	d0a00517 	ldw	r2,-32748(gp)
      cd4:	10800017 	ldw	r2,0(r2)
      cd8:	1000021e 	bne	r2,zero,ce4 <main+0x1ac>
-		  					alt_dcache_flush_all();
      cdc:	000ec380 	call	ec38 <alt_dcache_flush_all>
      ce0:	003ffb06 	br	cd0 <__alt_data_end+0xff000cd0>
-		  				}
-
-		  			}
-		  			else if(*needEdgeDetect != 0 ){
-		  				*convDone = 0;
-		  				readBuffer = CONV_RESULT_BASE_2;
      ce4:	0440d074 	movhi	r17,833
-
-		  				while(*convDone == 0){
-		  					alt_dcache_flush_all();
-		  				}
-		  			}
-	  			display_image_from_array_v2(240,320,readBuffer);
      ce8:	880d883a 	mov	r6,r17
      cec:	01405004 	movi	r5,320
      cf0:	01003c04 	movi	r4,240
      cf4:	00002600 	call	260 <display_image_from_array_v2>
-		  		  *display1Ready  = 1;
      cf8:	d0a00817 	ldw	r2,-32736(gp)
      cfc:	14000015 	stw	r16,0(r2)
-		  		  *frame1Ready = 0;
      d00:	d0a00617 	ldw	r2,-32744(gp)
      d04:	10000015 	stw	zero,0(r2)
-		  		  alt_dcache_flush_all();
      d08:	000ec380 	call	ec38 <alt_dcache_flush_all>
-	  		  }
-
-
-	  	  }
-
-	  	  alt_dcache_flush_all();
      d0c:	000ec380 	call	ec38 <alt_dcache_flush_all>
-
-
-
-	    }
      d10:	003fa906 	br	bb8 <__alt_data_end+0xff000bb8>
 
 00000d14 <__fixunssfsi>:

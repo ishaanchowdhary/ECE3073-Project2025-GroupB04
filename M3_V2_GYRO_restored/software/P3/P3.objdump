@@ -35,43 +35,43 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   8 .debug_aranges 00000cd0  00000000  00000000  00010470  2**3
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_info   0001e4c4  00000000  00000000  00011140  2**0
+  9 .debug_info   0001e542  00000000  00000000  00011140  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_abbrev 00007ff5  00000000  00000000  0002f604  2**0
+ 10 .debug_abbrev 00007ff5  00000000  00000000  0002f682  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_line   0000a07d  00000000  00000000  000375f9  2**0
+ 11 .debug_line   0000a07d  00000000  00000000  00037677  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_frame  00001940  00000000  00000000  00041678  2**2
+ 12 .debug_frame  00001940  00000000  00000000  000416f4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_str    000033ac  00000000  00000000  00042fb8  2**0
+ 13 .debug_str    000033d6  00000000  00000000  00043034  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_loc    000182e6  00000000  00000000  00046364  2**0
+ 14 .debug_loc    000182e6  00000000  00000000  0004640a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_alt_sim_info 00000030  00000000  00000000  0005e64c  2**2
+ 15 .debug_alt_sim_info 00000030  00000000  00000000  0005e6f0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_ranges 00001968  00000000  00000000  0005e680  2**3
+ 16 .debug_ranges 00001968  00000000  00000000  0005e720  2**3
                   CONTENTS, READONLY, DEBUGGING
- 17 .thread_model 00000003  00000000  00000000  00062c1a  2**0
+ 17 .thread_model 00000003  00000000  00000000  00062cba  2**0
                   CONTENTS, READONLY
- 18 .cpu          0000000c  00000000  00000000  00062c1d  2**0
+ 18 .cpu          0000000c  00000000  00000000  00062cbd  2**0
                   CONTENTS, READONLY
- 19 .qsys         00000001  00000000  00000000  00062c29  2**0
+ 19 .qsys         00000001  00000000  00000000  00062cc9  2**0
                   CONTENTS, READONLY
- 20 .simulation_enabled 00000001  00000000  00000000  00062c2a  2**0
+ 20 .simulation_enabled 00000001  00000000  00000000  00062cca  2**0
                   CONTENTS, READONLY
- 21 .stderr_dev   0000000b  00000000  00000000  00062c2b  2**0
+ 21 .stderr_dev   0000000b  00000000  00000000  00062ccb  2**0
                   CONTENTS, READONLY
- 22 .stdin_dev    0000000b  00000000  00000000  00062c36  2**0
+ 22 .stdin_dev    0000000b  00000000  00000000  00062cd6  2**0
                   CONTENTS, READONLY
- 23 .stdout_dev   0000000b  00000000  00000000  00062c41  2**0
+ 23 .stdout_dev   0000000b  00000000  00000000  00062ce1  2**0
                   CONTENTS, READONLY
- 24 .sopc_system_name 00000010  00000000  00000000  00062c4c  2**0
+ 24 .sopc_system_name 00000010  00000000  00000000  00062cec  2**0
                   CONTENTS, READONLY
- 25 .quartus_project_dir 0000001c  00000000  00000000  00062c5c  2**0
+ 25 .quartus_project_dir 00000046  00000000  00000000  00062cfc  2**0
                   CONTENTS, READONLY
- 26 .jdi          000150ce  00000000  00000000  00062c78  2**0
+ 26 .jdi          000150ce  00000000  00000000  00062d42  2**0
                   CONTENTS, READONLY
- 27 .sopcinfo     000fa7ec  00000000  00000000  00077d46  2**0
+ 27 .sopcinfo     001019b1  00000000  00000000  00077e10  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 01c00000 l    d  .entry	00000000 .entry
@@ -864,35 +864,11 @@ alt_after_alt_main:
  1c001d0:	003fff06 	br	1c001d0 <__alt_data_end+0xfef12ed0>
 
 01c001d4 <main>:
-int *needEdgeDetect = (int*)0x03200000;
-
-
-int main()
-{ 
-  alt_putstr("Hello from Nios II!\n");
  1c001d4:	01007074 	movhi	r4,449
-int *quadImgMode = (int*)0x0320080;
-int *needEdgeDetect = (int*)0x03200000;
-
-
-int main()
-{ 
  1c001d8:	deffff04 	addi	sp,sp,-4
-  alt_putstr("Hello from Nios II!\n");
  1c001dc:	2135f704 	addi	r4,r4,-10276
-int *quadImgMode = (int*)0x0320080;
-int *needEdgeDetect = (int*)0x03200000;
-
-
-int main()
-{ 
  1c001e0:	dfc00015 	stw	ra,0(sp)
-  alt_putstr("Hello from Nios II!\n");
  1c001e4:	1c0cc1c0 	call	1c0cc1c <alt_putstr>
-
-  /* Event loop never exits. */
-  while (1){
-	  printf("need blur = %d , quadImgMode = %d, *needEdgeDetect = %d \n",*needBlur,*quadImgMode,*needEdgeDetect);
  1c001e8:	d0a00017 	ldw	r2,-32768(gp)
  1c001ec:	01007074 	movhi	r4,449
  1c001f0:	2135fd04 	addi	r4,r4,-10252
