@@ -30,7 +30,7 @@ module PROJECT_SYS_V2 (
 	input	[1:0]	keys_export;
 	output	[9:0]	leds_export;
 	output	[16:0]	pixel_address_export;
-	output	[3:0]	pixel_data_export;
+	output	[11:0]	pixel_data_export;
 	output	[12:0]	sdram_addr;
 	output	[1:0]	sdram_ba;
 	output		sdram_cas_n;

@@ -44,8 +44,8 @@ module PROJECT_M1_FINAL(
 	// PIXIEL BUFFER Interface
 
 	output [16:0] wraddress,	// same as pixel address export
-	output wire [3:0] pixel_out, //output from the buffer to the VGA
-	output [3:0] write_value //value we are writing to the buffer
+	output wire [11:0] pixel_out, //output from the buffer to the VGA
+	output [11:0] write_value //value we are writing to the buffer
 	
 
 	
