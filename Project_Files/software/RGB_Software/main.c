@@ -448,12 +448,28 @@ void display_single_image(int imgH, int imgW, const uint8_t *src, int flipImg) {
 
     for (int h = 0; h < imgH; h++) {
         for (int w = 0; w < imgW; w += 2) {
-           
-			uint16_t pixel1_val = *(uint16_t*)(src + byte_idx);
-			uint16_t pixel2_val = *(uint16_t*)(src + byte_idx + 1) >> 4;
 
-			byte_idx += 3;
-			
+            // Read 3 bytes per 2 pixels
+            uint8_t byte0 = src[byte_idx];
+            uint8_t byte1 = src[byte_idx + 1];
+            uint8_t byte2 = src[byte_idx + 2];
+
+            // Pixel 1: bits from byte0 and byte1
+            uint8_t r1 = (byte0 >> 4) & 0x0F;
+            uint8_t g1 = byte0 & 0x0F;
+            uint8_t b1 = (byte1 >> 4) & 0x0F;
+
+            // Pixel 2: bits from byte1 and byte2
+            uint8_t r2 = byte1 & 0x0F;
+            uint8_t g2 = (byte2 >> 4) & 0x0F;
+            uint8_t b2 = byte2 & 0x0F;
+
+            // Format as GBR: GGGG BBBB RRRR
+            uint16_t pixel1_val = (g1 << 8) | (b1 << 4) | r1;
+            uint16_t pixel2_val = (g2 << 8) | (b2 << 4) | r2;
+
+            byte_idx += 3;
+
             int pixelAddress1 = w + (imgW * h);
             int pixelAddress2 = pixelAddress1 + 1;
 
