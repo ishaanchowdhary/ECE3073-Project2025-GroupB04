@@ -87,6 +87,7 @@
 #include "io.h"
 #include "sys/alt_irq.h"
 #include "altera_avalon_mutex.h"
+#include "altera_avalon_spi_regs.h"
 #include "altera_avalon_pio_regs.h"
 #include <stdio.h>
 
@@ -110,11 +111,68 @@ int *needEdgeDetect = (int*)0x03200000;
 #define CONV_RESULT_BASE_1 0x03400000
 #define CONV_RESULT_BASE_2 0x03410000
 
+// SPI CHIP SELECT for Gyroscope
+#define CS_ACCEL 1
 
+// GYRO CONFIGURATION
+// Gyroscope Write Registers
+#define BW_RATE 0x2C
+#define POWER_CONTROL 0x2d
+#define DATA_FORMAT 0x31
+#define INT_ENABLE 0x2E
+#define INT_MAP 0x2F
+#define THRESH_ACT 0x24
+#define THRESH_INACT 0x25
+#define TIME_INACT 0x26
+#define ACT_INACT_CTL 0x27
+#define THRESH_FF 0x28
+#define TIME_FF 0x29
+#define TAP_AXES 0x2a
+#define TAP_THRES 0x1d
+#define DUR 0x21
+#define LATENT 0x22
+#define WINDOW 0x23
+// Gyroscope Read Registers
+#define INT_SOURCE 0x30
+#define X_LB 0x32
+#define X_HB 0x33
+#define Y_LB 0x34
+#define Y_HB 0x35
+#define Z_LB 0x36
+#define Z_HB 0x37
+#define CONFIG_LENGTH 16 * 2
+#define MAX_COUNT 500000
+// Gyroscope Read Axis Values
+#define READ_X_AXIS (0xc0 | X_LB)
+#define READ_Y_AXIS (0xc0 | Y_LB)
+#define READ_Z_AXIS (0xc0 | Z_LB)
+
+// Functionality to initialise the accelerometer for double tap detection
+alt_u8 gyro_config[CONFIG_LENGTH] = {
+	DATA_FORMAT, 0x0b,		// 4-wire SPI, full resolution, +/- 16g
+	THRESH_ACT, 0x04,
+	THRESH_INACT, 0x02,
+	TIME_INACT, 0x02,
+	ACT_INACT_CTL, 0xff,
+	THRESH_FF, 0x09,
+	TIME_FF, 0x46,
+	TAP_THRES, 0x20,
+	TAP_AXES, 0x07,
+	LATENT, 0x85,
+	DUR, 0x40,
+	WINDOW, 0xc0,
+	BW_RATE, 0x0a,
+	INT_ENABLE, 0x60,
+	INT_MAP, 0x20,
+	POWER_CONTROL, 0x08
+};
 
 //volatile uint8_t *rxArr = (uint8_t *)SHARED_BUFF_1_BASE;
+volatile int tap_flag = 0; // Global Variable for double tap interrupt
 
 void *context;
+alt_u8 isRes = 0xff;
+void* gyro_context = (void *) &isRes;
 alt_mutex_dev* mutex;
 int received = 0;
 int valueFromP0 = 0;
@@ -135,6 +193,13 @@ void KEY_ISR(void *isr_context, alt_u32 id){
     alt_printf("Received: %u\n", received);
 
 	 IOWR(P1_IN_BASE,3,0x1);
+}
+
+// GYRO INTERRUPT SERVICE
+void GYRO_ISR(void * context) {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(GYRO_INT_BASE, 0);
+	IOWR(GYRO_INT_BASE, 3, 0);
+	tap_flag = 1;
 }
 
 void send_msg(int msg){
@@ -259,6 +324,18 @@ int main()
 	IOWR(P1_IN_BASE, 2, 0x1);
 	alt_irq_register(P1_IN_IRQ, &context, KEY_ISR);
 
+	// Gyroscope double tap interrupt
+	IOWR(GYRO_INT_BASE, 3, 0);
+	IOWR(GYRO_INT_BASE, 2, 0x1);
+	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, GYRO_ISR, gyro_context, 0x0);
+
+	// Accelerometer Set up
+	alt_u8 gyro_data_in, gyro_data_out, regData;
+
+	for (int i = 0; i < CONFIG_LENGTH; i += 2) {
+		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 2, gyro_config + i, 0, &gyro_data_out, 0);
+	}
+
 	// setting up value for SPI
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
 
@@ -267,7 +344,7 @@ int main()
 	alt_u8 sendBuffSmall = 0x16;
 	alt_u8 *sendBuffPtrSmall = &sendBuffSmall;
 
-  /* Event loop never exits. */
+  	/* Event loop never exits. */
 	int counter  = 0;
 	received = 0;
 	*bufferFlag1 = 1;
@@ -316,13 +393,38 @@ int main()
 
 		  }
 
+		*quadImgMode  = IORD(0x040010a0,0)&0x2;
 
-		 *needBlur  = IORD(0x040010a0,0)&0x1;
-		 *quadImgMode  = IORD(0x040010a0,0)&0x2;
-		 *needEdgeDetect = IORD(0x040010a0,0)&0x4;
-//		  printf("needEdgeDetect %d \n",*needEdgeDetect);
-//		  printf("quadImgMode is is %d \n",*quadImgMode);
-		  alt_dcache_flush_all();
+		// read gyro input
+		gyro_data_in = INT_SOURCE | 0x80;
+		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
+
+		// HANDLE DOUBLE TAP TOGGLE SINGLE MODE
+		if (tap_flag==1 && *quadImgMode == 0) {
+			printf("\n\nDouble Tap Detected !\n\n");
+			tap_flag = 0;
+			counter++;
+			if (counter >= 3) counter = 0;
+			// reset modes
+			*needBlur = 0;
+			*needEdgeDetect = 0;
+			switch (counter) {
+			   case 0:
+				   //printf("Mode 0: All effects OFF\n");
+				   break;
+				   // TODO: create case for flipped image
+			   case 1:
+				   *needBlur = 1;
+				   //printf("Mode 1: Blur enabled\n");
+				   break;
+			   case 2:
+				   *needEdgeDetect = 1;
+				   //printf("Mode 3: Edge Detection enabled\n");
+				   break;
+			}
+		}
+		
+		alt_dcache_flush_all();
 
 
 
