@@ -166,7 +166,7 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 	DUR, 0x40,
 	WINDOW, 0xc0,
 	BW_RATE, 0x0a,
-	INT_ENABLE, 0x40,
+	INT_ENABLE, 0x60,
 	INT_MAP, 0x20,
 	POWER_CONTROL, 0x08
 };
@@ -332,6 +332,18 @@ int main()
 	IOWR(GYRO_INT_BASE, 2, 0x1);
 	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, GYRO_ISR, gyro_context, 0x0 );
 
+
+	// Accelerometer Set up
+	alt_u8 gyro_data_in, gyro_data_out, regData;
+
+	for (int i = 0; i < CONFIG_LENGTH; i += 2) {
+		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 2, gyro_config + i, 0, &gyro_data_out, 0);
+	}
+	  // read gyro input
+	gyro_data_in = INT_SOURCE | 0x80;
+	alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
+
+
 	// setting up value for SPI
 	alt_u8 sendBuffFull = 0x14; //send buffer for packed data, full res
 
@@ -345,8 +357,8 @@ int main()
 	received = 0;
 	*bufferFlag1 = 1;
 
-	// Accelerometer Set up
-	alt_u8 gyro_data_in, gyro_data_out, regData;
+
+
 
 	uint32_t writeBuffer1 = SHARED_BUFF_1_BASE;
 
@@ -389,15 +401,13 @@ int main()
 			  uint32_t end = IORD(TIME_DISPLAY_BASE, 0);
 	  		  Run_Time_2_frame(start, end);
 	  		  start = IORD(TIME_DISPLAY_BASE, 0);
-	  		  // read gyro input
-	  		gyro_data_in = INT_SOURCE | 0x80;
-	  		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
+
 
 		  }
 
 
 //		 *needBlur  = IORD(0x040010a0,0)&0x1;
-//		 *quadImgMode  = IORD(0x040010a0,0)&0x2; // CONFUSED why is quadImgMode being switched with a double tap shouldn't that be a key interrupt
+		 *quadImgMode  = IORD(0x040010a0,0)&0x2; // CONFUSED why is quadImgMode being switched with a double tap shouldn't that be a key interrupt
 //		 *needEdgeDetect = IORD(0x040010a0,0)&0x4;
 
 
@@ -407,11 +417,10 @@ int main()
 			 tap_flag = 0;
 			 counter++;
 
-			 if (counter >= 4) counter = 0;
+			 if (counter >= 3) counter = 0;
 
 			 // reset all modes
 			 *needBlur = 0;
-			 *quadImgMode = 0;
 			 *needEdgeDetect = 0;
 
 			 switch (counter) {
@@ -423,15 +432,12 @@ int main()
 				   printf("Mode 1: Blur enabled\n");
 				   break;
 			   case 2:
-				   *quadImgMode = 1; // should this not be flip image or soemthing
-				   printf("Mode 2: Quad Image Mode enabled\n");
-				   break;
-
-
-			   case 3:
 				   *needEdgeDetect = 1;
 				   printf("Mode 3: Edge Detection enabled\n");
 				   break;
+
+
+
 
 			 }
 
