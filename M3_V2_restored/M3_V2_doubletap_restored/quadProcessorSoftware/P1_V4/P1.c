@@ -92,6 +92,10 @@
 #include <stdio.h>
 
 
+#define KEY10_BASE 0x4001020
+#define KEY10_IRQ 4
+#define KEY10_IRQ_INTERRUPT_CONTROLLER_ID 0
+
 int *display1Ready = (int*)0x03600010;
 
 int *bufferFlag1 = (int*)0x03200020; //use as buffer idx
@@ -112,7 +116,7 @@ int *needEdgeDetect = (int*)0x03200000;
 #define CONV_RESULT_BASE_2 0x03410000
 
 // GYRO ADDRESS
-#define GYRO_INT_BASE 0x4001020
+#define GYRO_INT_BASE 0x4001030
 #define GYRO_INT_IRQ 3
 #define GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID 0
 // SPI CHIP SELECT
@@ -173,13 +177,22 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 
 //volatile uint8_t *rxArr = (uint8_t *)SHARED_BUFF_1_BASE;
 volatile int tap_flag = 0; // Global Variable for double tap interrupt.
+volatile int key_flag = 0;
 void *context;
 alt_u8 isRes = 0xff;
 void* gyro_context = (void *) &isRes;
+void* key_context = (void *) &isRes;
 alt_mutex_dev* mutex;
 int received = 0;
 int valueFromP0 = 0;
 //uint8_t rxArr[38400];
+
+void quad_key1_isr(void* context, alt_u32 id) {
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
+	IOWR(KEY10_BASE, 3, 0);
+	key_flag = 1;
+}
+
 
 void KEY_ISR(void *isr_context, alt_u32 id){
 
@@ -196,6 +209,7 @@ void KEY_ISR(void *isr_context, alt_u32 id){
     alt_printf("Received: %u\n", received);
 
 	 IOWR(P1_IN_BASE,3,0x1);
+//	 key_flag = 1;
 }
 
 // GYRO INTERRUPT SERVICE
@@ -332,6 +346,10 @@ int main()
 	IOWR(GYRO_INT_BASE, 2, 0x1);
 	int gyroISR = alt_ic_isr_register(GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID, GYRO_INT_IRQ, GYRO_ISR, gyro_context, 0x0 );
 
+	// Initialise the interrupt before entering into the loop
+    IOWR(KEY10_BASE, 3, 0);
+    IOWR(KEY10_BASE, 2, 0x2);
+    int keyISR = alt_ic_isr_register(KEY10_IRQ_INTERRUPT_CONTROLLER_ID, KEY10_IRQ,quad_key1_isr, key_context,0x0);
 
 	// Accelerometer Set up
 	alt_u8 gyro_data_in, gyro_data_out, regData;
@@ -378,6 +396,7 @@ int main()
 //		  printf("P1 running display ready is %d\n", *display1Ready);
 
 
+
 		  if(*display1Ready == 1){
 			  if(*bufferFlag1 == 0){
 				  writeBuffer1 = SHARED_BUFF_1_BASE;
@@ -393,6 +412,9 @@ int main()
 				  alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrSmall,9600,writeBuffer1,0); //SPI for full res
 			  }else{
 				  alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrFull,38400,writeBuffer1,0); //SPI for full res
+				  // read gyro input only when single mode is activated.
+			  		gyro_data_in = INT_SOURCE | 0x80;
+			  		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
 				  usleep(29000);
 			  }
 			  *bufferFlag1 = !*bufferFlag1;
@@ -400,15 +422,22 @@ int main()
 	  		  Run_Time_2_frame(start, end);
 	  		  start = IORD(TIME_DISPLAY_BASE, 0);
 
-	  		  // read gyro input
-	  		gyro_data_in = INT_SOURCE | 0x80;
-	  		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
+
+
+
+
 		  }
 
 
-//		 *needBlur  = IORD(0x040010a0,0)&0x1;
-		 *quadImgMode  = IORD(0x040010a0,0)&0x2; // CONFUSED why is quadImgMode being switched with a double tap shouldn't that be a key interrupt
-//		 *needEdgeDetect = IORD(0x040010a0,0)&0x4;
+
+//		 *quadImgMode  = IORD(0x040010a0,0)&0x2;
+		  if (key_flag == 1) {
+			  *quadImgMode = (*quadImgMode == 0) ? 2 : 0;
+			  printf("Quad Image Mode %s\n", *quadImgMode ? "ON":"OFF");
+			  key_flag = 0;
+
+			  alt_dcache_flush_all();
+		  }
 
 
 		 // HANDLE DOUBLE TAP TOGGLE
@@ -437,11 +466,11 @@ int main()
 				   break;
 
 
-
+				   alt_dcache_flush_all();
 
 			 }
 
-			 alt_dcache_flush_all();
+
 
 		 }
 //		  printf("needEdgeDetect %d \n",*needEdgeDetect);

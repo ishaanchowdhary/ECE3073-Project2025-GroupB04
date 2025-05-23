@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>22/05/2025 9:52:36 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1747914756610</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>23/05/2025 1:04:38 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1747969478176</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\prana\OneDrive\Documents\ECE3073\M3fixing\ECE3073-Project2025-GroupB04\M3_V2_restored\M3_V2_doubletap_restored\quadProcessorSoftware\P2_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\MUTIPROCESSOR_V2.sopcinfo</SopcDesignFile>
@@ -942,7 +942,7 @@
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>mutex_0</slaveDescriptor>
-                <addressRange>0x040010C0 - 0x040010C7</addressRange>
+                <addressRange>0x040010B0 - 0x040010B7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>

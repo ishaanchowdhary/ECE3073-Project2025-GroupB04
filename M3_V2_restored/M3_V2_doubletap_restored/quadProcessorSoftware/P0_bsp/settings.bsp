@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>22/05/2025 9:52:07 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1747914727991</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>23/05/2025 1:03:19 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1747969399025</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\prana\OneDrive\Documents\ECE3073\M3fixing\ECE3073-Project2025-GroupB04\M3_V2_restored\M3_V2_doubletap_restored\quadProcessorSoftware\P0_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\MUTIPROCESSOR_V2.sopcinfo</SopcDesignFile>
@@ -953,32 +953,26 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>KEY10</slaveDescriptor>
+                <slaveDescriptor>SW</slaveDescriptor>
                 <addressRange>0x04001090 - 0x0400109F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>SW</slaveDescriptor>
+                <slaveDescriptor>LEDR90</slaveDescriptor>
                 <addressRange>0x040010A0 - 0x040010AF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>LEDR90</slaveDescriptor>
-                <addressRange>0x040010B0 - 0x040010BF</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>mutex_0</slaveDescriptor>
-                <addressRange>0x040010C0 - 0x040010C7</addressRange>
+                <addressRange>0x040010B0 - 0x040010B7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart_0</slaveDescriptor>
-                <addressRange>0x040010C8 - 0x040010CF</addressRange>
+                <addressRange>0x040010B8 - 0x040010BF</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
