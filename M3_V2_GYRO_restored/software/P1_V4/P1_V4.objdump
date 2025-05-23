@@ -1661,7 +1661,7 @@ int main()
 		  if(*display1Ready == 1){
  1000668:	d0a00917 	ldw	r2,-32732(gp)
  100066c:	10c00017 	ldw	r3,0(r2)
- 1000670:	1d00391e 	bne	r3,r20,1000758 <main+0x274>
+ 1000670:	1d002d1e 	bne	r3,r20,1000728 <main+0x244>
 			  if(*bufferFlag1 == 0){
  1000674:	d0e00817 	ldw	r3,-32736(gp)
  1000678:	18c00017 	ldw	r3,0(r3)
@@ -1715,77 +1715,77 @@ int main()
  10006d0:	000b883a 	mov	r5,zero
  10006d4:	21040004 	addi	r4,r4,4096
  10006d8:	100eccc0 	call	100eccc <alt_avalon_spi_command>
- 10006dc:	00001606 	br	1000738 <main+0x254>
+ 10006dc:	00000a06 	br	1000708 <main+0x224>
 			  }else{
 				  alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrFull,38400,writeBuffer1,0); //SPI for full res
  10006e0:	00a58014 	movui	r2,38400
  10006e4:	01010034 	movhi	r4,1024
- 10006e8:	d9c00344 	addi	r7,sp,13
- 10006ec:	01800044 	movi	r6,1
- 10006f0:	000b883a 	mov	r5,zero
- 10006f4:	21040004 	addi	r4,r4,4096
- 10006f8:	d8800015 	stw	r2,0(sp)
+ 10006e8:	21040004 	addi	r4,r4,4096
+ 10006ec:	d8800015 	stw	r2,0(sp)
+ 10006f0:	d9c00344 	addi	r7,sp,13
+ 10006f4:	01800044 	movi	r6,1
+ 10006f8:	000b883a 	mov	r5,zero
  10006fc:	100eccc0 	call	100eccc <alt_avalon_spi_command>
-				  // read gyro input only when single mode is activated.
-				  gyro_data_in = INT_SOURCE | 0x80;
- 1000700:	00bfec04 	movi	r2,-80
- 1000704:	d8800405 	stb	r2,16(sp)
-				  alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
- 1000708:	01800044 	movi	r6,1
- 100070c:	d8800384 	addi	r2,sp,14
- 1000710:	01010034 	movhi	r4,1024
- 1000714:	21040004 	addi	r4,r4,4096
- 1000718:	d8000215 	stw	zero,8(sp)
- 100071c:	d8800115 	stw	r2,4(sp)
- 1000720:	dd000015 	stw	r20,0(sp)
- 1000724:	d9c00404 	addi	r7,sp,16
- 1000728:	300b883a 	mov	r5,r6
- 100072c:	100eccc0 	call	100eccc <alt_avalon_spi_command>
+
 				  usleep(29000);
- 1000730:	011c5204 	movi	r4,29000
- 1000734:	100e6740 	call	100e674 <usleep>
+ 1000700:	011c5204 	movi	r4,29000
+ 1000704:	100e6740 	call	100e674 <usleep>
 			  }
 			  *bufferFlag1 = !*bufferFlag1;
- 1000738:	d0e00817 	ldw	r3,-32736(gp)
- 100073c:	18800017 	ldw	r2,0(r3)
- 1000740:	1005003a 	cmpeq	r2,r2,zero
- 1000744:	18800015 	stw	r2,0(r3)
+ 1000708:	d0e00817 	ldw	r3,-32736(gp)
+ 100070c:	18800017 	ldw	r2,0(r3)
+ 1000710:	1005003a 	cmpeq	r2,r2,zero
+ 1000714:	18800015 	stw	r2,0(r3)
 			  uint32_t end = IORD(TIME_DISPLAY_BASE, 0);
 	  		  Run_Time_2_frame(start, end);
- 1000748:	99400037 	ldwio	r5,0(r19)
- 100074c:	a809883a 	mov	r4,r21
- 1000750:	10003900 	call	1000390 <Run_Time_2_frame>
+ 1000718:	99400037 	ldwio	r5,0(r19)
+ 100071c:	a809883a 	mov	r4,r21
+ 1000720:	10003900 	call	1000390 <Run_Time_2_frame>
 	  		  start = IORD(TIME_DISPLAY_BASE, 0);
- 1000754:	9d400037 	ldwio	r21,0(r19)
+ 1000724:	9d400037 	ldwio	r21,0(r19)
 
 		  }
 
 		//*quadImgMode  = IORD(0x040010a0,0)&0x2;
 		if (key1_flag == 1) {
- 1000758:	d0a67317 	ldw	r2,-26164(gp)
- 100075c:	1400101e 	bne	r2,r16,10007a0 <main+0x2bc>
+ 1000728:	d0a67317 	ldw	r2,-26164(gp)
+ 100072c:	1400101e 	bne	r2,r16,1000770 <main+0x28c>
 			*quadImgMode = (*quadImgMode == 0) ? 2 : 0;
- 1000760:	d0e00417 	ldw	r3,-32752(gp)
- 1000764:	18800017 	ldw	r2,0(r3)
- 1000768:	1005003a 	cmpeq	r2,r2,zero
- 100076c:	1004907a 	slli	r2,r2,1
- 1000770:	18800015 	stw	r2,0(r3)
+ 1000730:	d0e00417 	ldw	r3,-32752(gp)
+ 1000734:	18800017 	ldw	r2,0(r3)
+ 1000738:	1005003a 	cmpeq	r2,r2,zero
+ 100073c:	1004907a 	slli	r2,r2,1
+ 1000740:	18800015 	stw	r2,0(r3)
 			printf("Quad Image Mode %s\n", *quadImgMode ? "ON":"OFF"); // Debugging
- 1000774:	1000031e 	bne	r2,zero,1000784 <main+0x2a0>
- 1000778:	01404074 	movhi	r5,257
- 100077c:	297c8404 	addi	r5,r5,-3568
- 1000780:	00000206 	br	100078c <main+0x2a8>
- 1000784:	01404074 	movhi	r5,257
- 1000788:	297c8304 	addi	r5,r5,-3572
- 100078c:	01004074 	movhi	r4,257
- 1000790:	213c8504 	addi	r4,r4,-3564
- 1000794:	1001b2c0 	call	1001b2c <printf>
+ 1000744:	1000031e 	bne	r2,zero,1000754 <main+0x270>
+ 1000748:	01404074 	movhi	r5,257
+ 100074c:	297c8404 	addi	r5,r5,-3568
+ 1000750:	00000206 	br	100075c <main+0x278>
+ 1000754:	01404074 	movhi	r5,257
+ 1000758:	297c8304 	addi	r5,r5,-3572
+ 100075c:	01004074 	movhi	r4,257
+ 1000760:	213c8504 	addi	r4,r4,-3564
+ 1000764:	1001b2c0 	call	1001b2c <printf>
 			key1_flag = 0;
- 1000798:	d0267315 	stw	zero,-26164(gp)
+ 1000768:	d0267315 	stw	zero,-26164(gp)
 			alt_dcache_flush_all();
- 100079c:	100e0fc0 	call	100e0fc <alt_dcache_flush_all>
+ 100076c:	100e0fc0 	call	100e0fc <alt_dcache_flush_all>
 		}
-
+		// read gyro input
+		gyro_data_in = INT_SOURCE | 0x80;
+ 1000770:	00bfec04 	movi	r2,-80
+ 1000774:	d8800405 	stb	r2,16(sp)
+		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
+ 1000778:	01800044 	movi	r6,1
+ 100077c:	d8800384 	addi	r2,sp,14
+ 1000780:	01010034 	movhi	r4,1024
+ 1000784:	d8000215 	stw	zero,8(sp)
+ 1000788:	d8800115 	stw	r2,4(sp)
+ 100078c:	dd000015 	stw	r20,0(sp)
+ 1000790:	d9c00404 	addi	r7,sp,16
+ 1000794:	300b883a 	mov	r5,r6
+ 1000798:	21040004 	addi	r4,r4,4096
+ 100079c:	100eccc0 	call	100eccc <alt_avalon_spi_command>
 		// HANDLE DOUBLE TAP TOGGLE SINGLE MODE
 		if (tap_flag==1 && *quadImgMode == 0) {
  10007a0:	d0a67417 	ldw	r2,-26160(gp)
@@ -1800,8 +1800,8 @@ int main()
 			tap_flag = 0;
 			counter++;
  10007c0:	8c400044 	addi	r17,r17,1
-		}
-
+		gyro_data_in = INT_SOURCE | 0x80;
+		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
 		// HANDLE DOUBLE TAP TOGGLE SINGLE MODE
 		if (tap_flag==1 && *quadImgMode == 0) {
 			printf("\n\nDouble Tap Detected !\n\n");
