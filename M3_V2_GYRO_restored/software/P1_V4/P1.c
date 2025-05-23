@@ -397,9 +397,7 @@ int main()
 				  alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrSmall,9600,writeBuffer1,0); //SPI for full res
 			  }else{
 				  alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrFull,38400,writeBuffer1,0); //SPI for full res
-				  // read gyro input only when single mode is activated.
-				  gyro_data_in = INT_SOURCE | 0x80;
-				  alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
+
 				  usleep(29000);
 			  }
 			  *bufferFlag1 = !*bufferFlag1;
@@ -416,7 +414,9 @@ int main()
 			key1_flag = 0;
 			alt_dcache_flush_all();
 		}
-
+		// read gyro input
+		gyro_data_in = INT_SOURCE | 0x80;
+		alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
 		// HANDLE DOUBLE TAP TOGGLE SINGLE MODE
 		if (tap_flag==1 && *quadImgMode == 0) {
 			printf("\n\nDouble Tap Detected !\n\n");
