@@ -43,35 +43,35 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  12 .debug_frame  00000600  00000000  00000000  0000b19c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_str    000014e4  00000000  00000000  0000b79c  2**0
+ 13 .debug_str    0000150e  00000000  00000000  0000b79c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_loc    00002201  00000000  00000000  0000cc80  2**0
+ 14 .debug_loc    00002201  00000000  00000000  0000ccaa  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_alt_sim_info 00000030  00000000  00000000  0000ee84  2**2
+ 15 .debug_alt_sim_info 00000030  00000000  00000000  0000eeac  2**2
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_ranges 000003e8  00000000  00000000  0000eeb8  2**3
+ 16 .debug_ranges 000003e8  00000000  00000000  0000eee0  2**3
                   CONTENTS, READONLY, DEBUGGING
- 17 .thread_model 00000003  00000000  00000000  000109aa  2**0
+ 17 .thread_model 00000003  00000000  00000000  000109d2  2**0
                   CONTENTS, READONLY
- 18 .cpu          0000000c  00000000  00000000  000109ad  2**0
+ 18 .cpu          0000000c  00000000  00000000  000109d5  2**0
                   CONTENTS, READONLY
- 19 .qsys         00000001  00000000  00000000  000109b9  2**0
+ 19 .qsys         00000001  00000000  00000000  000109e1  2**0
                   CONTENTS, READONLY
- 20 .simulation_enabled 00000001  00000000  00000000  000109ba  2**0
+ 20 .simulation_enabled 00000001  00000000  00000000  000109e2  2**0
                   CONTENTS, READONLY
- 21 .stderr_dev   0000000b  00000000  00000000  000109bb  2**0
+ 21 .stderr_dev   0000000b  00000000  00000000  000109e3  2**0
                   CONTENTS, READONLY
- 22 .stdin_dev    0000000b  00000000  00000000  000109c6  2**0
+ 22 .stdin_dev    0000000b  00000000  00000000  000109ee  2**0
                   CONTENTS, READONLY
- 23 .stdout_dev   0000000b  00000000  00000000  000109d1  2**0
+ 23 .stdout_dev   0000000b  00000000  00000000  000109f9  2**0
                   CONTENTS, READONLY
- 24 .sopc_system_name 00000010  00000000  00000000  000109dc  2**0
+ 24 .sopc_system_name 00000010  00000000  00000000  00010a04  2**0
                   CONTENTS, READONLY
- 25 .quartus_project_dir 00000046  00000000  00000000  000109ec  2**0
+ 25 .quartus_project_dir 00000046  00000000  00000000  00010a14  2**0
                   CONTENTS, READONLY
- 26 .jdi          000150ce  00000000  00000000  00010a32  2**0
+ 26 .jdi          000150ce  00000000  00000000  00010a5a  2**0
                   CONTENTS, READONLY
- 27 .sopcinfo     001019b1  00000000  00000000  00025b00  2**0
+ 27 .sopcinfo     00102ae7  00000000  00000000  00025b28  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 01400000 l    d  .entry	00000000 .entry
@@ -660,6 +660,12 @@ alt_after_alt_main:
  14001d0:	003fff06 	br	14001d0 <__alt_data_end+0xff8001d0>
 
 014001d4 <blurImg>:
+void *context;
+alt_mutex_dev* mutex;
+int received = 0;
+int valueFromP1 = 0;
+
+int blurImg(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int startHeight, int endHeight,int outputPixelIdx){
  14001d4:	defff804 	addi	sp,sp,-32
  14001d8:	da400817 	ldw	r9,32(sp)
  14001dc:	dc000015 	stw	r16,0(sp)
@@ -676,41 +682,189 @@ alt_after_alt_main:
  1400208:	dd800615 	stw	r22,24(sp)
  140020c:	dd400515 	stw	r21,20(sp)
  1400210:	dd000415 	stw	r20,16(sp)
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	int convResiltBuff = 0;
+
+	for(int h=startHeight; h<=endHeight-1;h = h+1){
  1400214:	0019883a 	mov	r12,zero
+int valueFromP1 = 0;
+
+int blurImg(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int startHeight, int endHeight,int outputPixelIdx){
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	int convResiltBuff = 0;
  1400218:	003f883a 	mov	ra,zero
+int received = 0;
+int valueFromP1 = 0;
+
+int blurImg(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int startHeight, int endHeight,int outputPixelIdx){
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
  140021c:	0027883a 	mov	r19,zero
+            uint32_t packed2 = ((uint32_t)p4 << 16) | ((uint32_t)p5 << 8) | p6;
+
+            convResult  = __builtin_custom_inii(0, packed1, packed2);
+			pixelCount = pixelCount + 1;
+
+			if(pixelCount == 2){//once we have 2 pixel, we can store them to the output array
  1400220:	04400084 	movi	r17,2
+				uint8_t pixel1 = ((uint8_t)convResiltBuff ) << 4 |0x0F;
+
+				uint8_t pixel2 = (uint8_t)convResult;
+				uint8_t finalResult = (pixel2 | 0xF0) & pixel1;
+
+				outputImg[outputPixelIdx] = finalResult;
  1400224:	04bffc04 	movi	r18,-16
+int blurImg(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int startHeight, int endHeight,int outputPixelIdx){
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	int convResiltBuff = 0;
+
+	for(int h=startHeight; h<=endHeight-1;h = h+1){
  1400228:	d8c00917 	ldw	r3,36(sp)
  140022c:	48c0370e 	bge	r9,r3,140030c <blurImg+0x138>
  1400230:	63db883a 	add	r13,r12,r15
  1400234:	6417883a 	add	r11,r12,r16
  1400238:	6395883a 	add	r10,r12,r14
  140023c:	6811883a 	mov	r8,r13
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            uint8_t p1 = inputImg[pixelAddress1-1];
+            uint8_t p2 = inputImg[pixelAddress1];
+
+            uint8_t p3 = inputImg[pixelAddress2-1];
  1400240:	5b57c83a 	sub	r11,r11,r13
+            uint8_t p4 = inputImg[pixelAddress2];
+
+            uint8_t p5 = inputImg[pixelAddress3-1];
  1400244:	5355c83a 	sub	r10,r10,r13
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	int convResiltBuff = 0;
+
+	for(int h=startHeight; h<=endHeight-1;h = h+1){
+		for(int w=0; w<=width-1;w = w + 1){
  1400248:	4347c83a 	sub	r3,r8,r13
  140024c:	19802c0e 	bge	r3,r6,1400300 <blurImg+0x12c>
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            uint8_t p1 = inputImg[pixelAddress1-1];
+            uint8_t p2 = inputImg[pixelAddress1];
+
+            uint8_t p3 = inputImg[pixelAddress2-1];
  1400250:	5a07883a 	add	r3,r11,r8
+
+			int pixelAddress1 = ((h-1)*width + (w)) / 2 ;
+			int pixelAddress2 = ((h)*width + (w)) / 2;
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            uint8_t p1 = inputImg[pixelAddress1-1];
  1400254:	402cd7fa 	srli	r22,r8,31
+            uint8_t p2 = inputImg[pixelAddress1];
+
+            uint8_t p3 = inputImg[pixelAddress2-1];
  1400258:	182ad7fa 	srli	r21,r3,31
+
+			int pixelAddress1 = ((h-1)*width + (w)) / 2 ;
+			int pixelAddress2 = ((h)*width + (w)) / 2;
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            uint8_t p1 = inputImg[pixelAddress1-1];
  140025c:	b22d883a 	add	r22,r22,r8
+            uint8_t p2 = inputImg[pixelAddress1];
+
+            uint8_t p3 = inputImg[pixelAddress2-1];
  1400260:	a8eb883a 	add	r21,r21,r3
+
+			int pixelAddress1 = ((h-1)*width + (w)) / 2 ;
+			int pixelAddress2 = ((h)*width + (w)) / 2;
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            uint8_t p1 = inputImg[pixelAddress1-1];
  1400264:	b02dd07a 	srai	r22,r22,1
+            uint8_t p2 = inputImg[pixelAddress1];
+
+            uint8_t p3 = inputImg[pixelAddress2-1];
+            uint8_t p4 = inputImg[pixelAddress2];
+
+            uint8_t p5 = inputImg[pixelAddress3-1];
  1400268:	5207883a 	add	r3,r10,r8
  140026c:	1828d7fa 	srli	r20,r3,31
+
+			int pixelAddress1 = ((h-1)*width + (w)) / 2 ;
+			int pixelAddress2 = ((h)*width + (w)) / 2;
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            uint8_t p1 = inputImg[pixelAddress1-1];
  1400270:	25ad883a 	add	r22,r4,r22
+            uint8_t p6 = inputImg[pixelAddress3];
+
+            uint32_t packed1 = ((uint32_t)p1 << 16) | ((uint32_t)p2 << 8) | p3;
+            uint32_t packed2 = ((uint32_t)p4 << 16) | ((uint32_t)p5 << 8) | p6;
+
+            convResult  = __builtin_custom_inii(0, packed1, packed2);
  1400274:	b1ffffc3 	ldbu	r7,-1(r22)
+            uint8_t p2 = inputImg[pixelAddress1];
+
+            uint8_t p3 = inputImg[pixelAddress2-1];
+            uint8_t p4 = inputImg[pixelAddress2];
+
+            uint8_t p5 = inputImg[pixelAddress3-1];
  1400278:	a0e9883a 	add	r20,r20,r3
+            uint8_t p6 = inputImg[pixelAddress3];
+
+            uint32_t packed1 = ((uint32_t)p1 << 16) | ((uint32_t)p2 << 8) | p3;
+            uint32_t packed2 = ((uint32_t)p4 << 16) | ((uint32_t)p5 << 8) | p6;
+
+            convResult  = __builtin_custom_inii(0, packed1, packed2);
  140027c:	b0c00003 	ldbu	r3,0(r22)
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            uint8_t p1 = inputImg[pixelAddress1-1];
+            uint8_t p2 = inputImg[pixelAddress1];
+
+            uint8_t p3 = inputImg[pixelAddress2-1];
  1400280:	a82bd07a 	srai	r21,r21,1
+            uint8_t p6 = inputImg[pixelAddress3];
+
+            uint32_t packed1 = ((uint32_t)p1 << 16) | ((uint32_t)p2 << 8) | p3;
+            uint32_t packed2 = ((uint32_t)p4 << 16) | ((uint32_t)p5 << 8) | p6;
+
+            convResult  = __builtin_custom_inii(0, packed1, packed2);
  1400284:	380e943a 	slli	r7,r7,16
  1400288:	1806923a 	slli	r3,r3,8
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            uint8_t p1 = inputImg[pixelAddress1-1];
+            uint8_t p2 = inputImg[pixelAddress1];
+
+            uint8_t p3 = inputImg[pixelAddress2-1];
  140028c:	256b883a 	add	r21,r4,r21
+            uint8_t p4 = inputImg[pixelAddress2];
+
+            uint8_t p5 = inputImg[pixelAddress3-1];
  1400290:	a029d07a 	srai	r20,r20,1
+            uint8_t p6 = inputImg[pixelAddress3];
+
+            uint32_t packed1 = ((uint32_t)p1 << 16) | ((uint32_t)p2 << 8) | p3;
+            uint32_t packed2 = ((uint32_t)p4 << 16) | ((uint32_t)p5 << 8) | p6;
+
+            convResult  = __builtin_custom_inii(0, packed1, packed2);
  1400294:	38c6b03a 	or	r3,r7,r3
  1400298:	a9ffffc3 	ldbu	r7,-1(r21)
+
+            uint8_t p3 = inputImg[pixelAddress2-1];
+            uint8_t p4 = inputImg[pixelAddress2];
+
+            uint8_t p5 = inputImg[pixelAddress3-1];
+            uint8_t p6 = inputImg[pixelAddress3];
  140029c:	2529883a 	add	r20,r4,r20
+
+            uint32_t packed1 = ((uint32_t)p1 << 16) | ((uint32_t)p2 << 8) | p3;
+            uint32_t packed2 = ((uint32_t)p4 << 16) | ((uint32_t)p5 << 8) | p6;
+
+            convResult  = __builtin_custom_inii(0, packed1, packed2);
  14002a0:	19ceb03a 	or	r7,r3,r7
  14002a4:	a8c00003 	ldbu	r3,0(r21)
  14002a8:	a5400003 	ldbu	r21,0(r20)
@@ -720,8 +874,17 @@ alt_after_alt_main:
  14002b8:	1806923a 	slli	r3,r3,8
  14002bc:	a8c6b03a 	or	r3,r21,r3
  14002c0:	38c7c032 	custom	0,r3,r7,r3
+			pixelCount = pixelCount + 1;
  14002c4:	9cc00044 	addi	r19,r19,1
+
+			if(pixelCount == 2){//once we have 2 pixel, we can store them to the output array
  14002c8:	9c400a1e 	bne	r19,r17,14002f4 <blurImg+0x120>
+				uint8_t pixel1 = ((uint8_t)convResiltBuff ) << 4 |0x0F;
+
+				uint8_t pixel2 = (uint8_t)convResult;
+				uint8_t finalResult = (pixel2 | 0xF0) & pixel1;
+
+				outputImg[outputPixelIdx] = finalResult;
  14002cc:	f9c03fcc 	andi	r7,ra,255
  14002d0:	380e913a 	slli	r7,r7,4
  14002d4:	1c86b03a 	or	r3,r3,r18
@@ -729,15 +892,30 @@ alt_after_alt_main:
  14002dc:	39c003d4 	ori	r7,r7,15
  14002e0:	38c6703a 	and	r3,r7,r3
  14002e4:	98c00005 	stb	r3,0(r19)
+
+				outputPixelIdx = outputPixelIdx + 1;
  14002e8:	10800044 	addi	r2,r2,1
  14002ec:	f807883a 	mov	r3,ra
+				pixelCount = 0;
  14002f0:	0027883a 	mov	r19,zero
  14002f4:	42000044 	addi	r8,r8,1
+int blurImg(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int startHeight, int endHeight,int outputPixelIdx){
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	int convResiltBuff = 0;
+
+	for(int h=startHeight; h<=endHeight-1;h = h+1){
  14002f8:	183f883a 	mov	ra,r3
  14002fc:	003fd206 	br	1400248 <__alt_data_end+0xff800248>
  1400300:	4a400044 	addi	r9,r9,1
  1400304:	6199883a 	add	r12,r12,r6
  1400308:	003fc706 	br	1400228 <__alt_data_end+0xff800228>
+			}
+		}
+	}
+
+return outputPixelIdx;
+}
  140030c:	dfc00717 	ldw	ra,28(sp)
  1400310:	dd800617 	ldw	r22,24(sp)
  1400314:	dd400517 	ldw	r21,20(sp)
@@ -750,6 +928,8 @@ alt_after_alt_main:
  1400330:	f800283a 	ret
 
 01400334 <edgeDectect>:
+
+int edgeDectect(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int startHeight, int endHeight,int outputPixelIdx){
  1400334:	defff304 	addi	sp,sp,-52
  1400338:	db000d17 	ldw	r12,52(sp)
  140033c:	dc400415 	stw	r17,16(sp)
@@ -769,66 +949,288 @@ alt_after_alt_main:
  1400374:	dd000715 	stw	r20,28(sp)
  1400378:	dc000315 	stw	r16,12(sp)
  140037c:	d8c00015 	stw	r3,0(sp)
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	int convResiltBuff = 0;
+	int threshold = 11;
+
+	for(int h=startHeight; h<=endHeight-1;h = h+1){
  1400380:	001b883a 	mov	r13,zero
+}
+
+int edgeDectect(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int startHeight, int endHeight,int outputPixelIdx){
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	int convResiltBuff = 0;
  1400384:	0025883a 	mov	r18,zero
+return outputPixelIdx;
+}
+
+int edgeDectect(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int startHeight, int endHeight,int outputPixelIdx){
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
  1400388:	001f883a 	mov	r15,zero
+
+
+
+            int sobel1 = -1*val1+ 0*val2 + val3 + -2*val4 + 0*val5 + 2*val6 - val7+ 0*val8 + val9;
+			int sobel2 = -1*val1 + -2*val2 + -1*val3 + 0*val4 + 0*val5 + 0*val6 + 1*val7 + 2*val8 + 1*val9;
+            convResult = sobel1+sobel2;
  140038c:	04fffc04 	movi	r19,-16
+
+            if(convResult < threshold){
  1400390:	05c00284 	movi	r23,10
+            }
+
+
+			pixelCount = pixelCount + 1;
+
+			if(pixelCount == 2){//once we have 2 pixel, we can store them to the output array
  1400394:	07000084 	movi	fp,2
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	int convResiltBuff = 0;
+	int threshold = 11;
+
+	for(int h=startHeight; h<=endHeight-1;h = h+1){
  1400398:	d8c00e17 	ldw	r3,56(sp)
  140039c:	60c0510e 	bge	r12,r3,14004e4 <edgeDectect+0x1b0>
  14003a0:	da000017 	ldw	r8,0(sp)
  14003a4:	6c5d883a 	add	r14,r13,r17
  14003a8:	6d8f883a 	add	r7,r13,r22
  14003ac:	6a07883a 	add	r3,r13,r8
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            int p1 = inputImg[pixelAddress1-1];
+            int p2 = inputImg[pixelAddress1];
+
+            int p3 = inputImg[pixelAddress2-1];
  14003b0:	3b8fc83a 	sub	r7,r7,r14
+            int p4 = inputImg[pixelAddress2];
+
+            int p5 = inputImg[pixelAddress3-1];
  14003b4:	1b87c83a 	sub	r3,r3,r14
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	int convResiltBuff = 0;
+	int threshold = 11;
+
+	for(int h=startHeight; h<=endHeight-1;h = h+1){
  14003b8:	7017883a 	mov	r11,r14
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            int p1 = inputImg[pixelAddress1-1];
+            int p2 = inputImg[pixelAddress1];
+
+            int p3 = inputImg[pixelAddress2-1];
  14003bc:	d9c00115 	stw	r7,4(sp)
+            int p4 = inputImg[pixelAddress2];
+
+            int p5 = inputImg[pixelAddress3-1];
  14003c0:	d8c00215 	stw	r3,8(sp)
+	int pixelCount = 0;
+	int convResiltBuff = 0;
+	int threshold = 11;
+
+	for(int h=startHeight; h<=endHeight-1;h = h+1){
+		for(int w=0; w<=width-1;w = w + 1){
  14003c4:	5b87c83a 	sub	r3,r11,r14
  14003c8:	1980430e 	bge	r3,r6,14004d8 <edgeDectect+0x1a4>
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            int p1 = inputImg[pixelAddress1-1];
+            int p2 = inputImg[pixelAddress1];
+
+            int p3 = inputImg[pixelAddress2-1];
  14003cc:	da000117 	ldw	r8,4(sp)
+
+			int pixelAddress1 = ((h-1)*width + (w)) / 2 ;
+			int pixelAddress2 = ((h)*width + (w)) / 2;
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            int p1 = inputImg[pixelAddress1-1];
  14003d0:	5814d7fa 	srli	r10,r11,31
+            int p2 = inputImg[pixelAddress1];
+
+            int p3 = inputImg[pixelAddress2-1];
  14003d4:	42cf883a 	add	r7,r8,r11
  14003d8:	3812d7fa 	srli	r9,r7,31
+            int p4 = inputImg[pixelAddress2];
+
+            int p5 = inputImg[pixelAddress3-1];
  14003dc:	da000217 	ldw	r8,8(sp)
+
+			int pixelAddress1 = ((h-1)*width + (w)) / 2 ;
+			int pixelAddress2 = ((h)*width + (w)) / 2;
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            int p1 = inputImg[pixelAddress1-1];
  14003e0:	52d5883a 	add	r10,r10,r11
+            int p2 = inputImg[pixelAddress1];
+
+            int p3 = inputImg[pixelAddress2-1];
  14003e4:	49d3883a 	add	r9,r9,r7
+
+			int pixelAddress1 = ((h-1)*width + (w)) / 2 ;
+			int pixelAddress2 = ((h)*width + (w)) / 2;
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            int p1 = inputImg[pixelAddress1-1];
  14003e8:	5015d07a 	srai	r10,r10,1
+            int p2 = inputImg[pixelAddress1];
+
+            int p3 = inputImg[pixelAddress2-1];
+            int p4 = inputImg[pixelAddress2];
+
+            int p5 = inputImg[pixelAddress3-1];
  14003ec:	42cf883a 	add	r7,r8,r11
  14003f0:	3810d7fa 	srli	r8,r7,31
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            int p1 = inputImg[pixelAddress1-1];
+            int p2 = inputImg[pixelAddress1];
+
+            int p3 = inputImg[pixelAddress2-1];
  14003f4:	4813d07a 	srai	r9,r9,1
+			int pixelAddress1 = ((h-1)*width + (w)) / 2 ;
+			int pixelAddress2 = ((h)*width + (w)) / 2;
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            int p1 = inputImg[pixelAddress1-1];
+            int p2 = inputImg[pixelAddress1];
  14003f8:	2295883a 	add	r10,r4,r10
  14003fc:	50c00003 	ldbu	r3,0(r10)
+
+            int p3 = inputImg[pixelAddress2-1];
+            int p4 = inputImg[pixelAddress2];
+
+            int p5 = inputImg[pixelAddress3-1];
  1400400:	41cf883a 	add	r7,r8,r7
+			int pixelAddress3 = ((h+1)*width + (w)) / 2;
+
+            int p1 = inputImg[pixelAddress1-1];
+            int p2 = inputImg[pixelAddress1];
+
+            int p3 = inputImg[pixelAddress2-1];
  1400404:	2253883a 	add	r9,r4,r9
+            int p4 = inputImg[pixelAddress2];
+
+            int p5 = inputImg[pixelAddress3-1];
+            int p6 = inputImg[pixelAddress3];
+
+            int val1 = (p1&0x0F);
  1400408:	543fffc3 	ldbu	r16,-1(r10)
+            int p2 = inputImg[pixelAddress1];
+
+            int p3 = inputImg[pixelAddress2-1];
+            int p4 = inputImg[pixelAddress2];
+
+            int p5 = inputImg[pixelAddress3-1];
  140040c:	380fd07a 	srai	r7,r7,1
+
+
+
+            int sobel1 = -1*val1+ 0*val2 + val3 + -2*val4 + 0*val5 + 2*val6 - val7+ 0*val8 + val9;
+			int sobel2 = -1*val1 + -2*val2 + -1*val3 + 0*val4 + 0*val5 + 0*val6 + 1*val7 + 2*val8 + 1*val9;
+            convResult = sobel1+sobel2;
  1400410:	4abfffc3 	ldbu	r10,-1(r9)
+            int p5 = inputImg[pixelAddress3-1];
+            int p6 = inputImg[pixelAddress3];
+
+            int val1 = (p1&0x0F);
+            int val2 =((p2&0xF0)>>4);
+            int val3 = (p2&0x0F);
  1400414:	1d4003cc 	andi	r21,r3,15
+
+
+
+            int sobel1 = -1*val1+ 0*val2 + val3 + -2*val4 + 0*val5 + 2*val6 - val7+ 0*val8 + val9;
+			int sobel2 = -1*val1 + -2*val2 + -1*val3 + 0*val4 + 0*val5 + 0*val6 + 1*val7 + 2*val8 + 1*val9;
+            convResult = sobel1+sobel2;
  1400418:	1cc6703a 	and	r3,r3,r19
+
+            int p3 = inputImg[pixelAddress2-1];
+            int p4 = inputImg[pixelAddress2];
+
+            int p5 = inputImg[pixelAddress3-1];
+            int p6 = inputImg[pixelAddress3];
  140041c:	21cf883a 	add	r7,r4,r7
+
+
+
+            int sobel1 = -1*val1+ 0*val2 + val3 + -2*val4 + 0*val5 + 2*val6 - val7+ 0*val8 + val9;
+			int sobel2 = -1*val1 + -2*val2 + -1*val3 + 0*val4 + 0*val5 + 0*val6 + 1*val7 + 2*val8 + 1*val9;
+            convResult = sobel1+sobel2;
  1400420:	528003cc 	andi	r10,r10,15
  1400424:	18c03fcc 	andi	r3,r3,255
+
+            int p3 = inputImg[pixelAddress2-1];
+            int p4 = inputImg[pixelAddress2];
+
+            int p5 = inputImg[pixelAddress3-1];
+            int p6 = inputImg[pixelAddress3];
  1400428:	3a000003 	ldbu	r8,0(r7)
+
+            int val1 = (p1&0x0F);
  140042c:	840003cc 	andi	r16,r16,15
+
+
+
+            int sobel1 = -1*val1+ 0*val2 + val3 + -2*val4 + 0*val5 + 2*val6 - val7+ 0*val8 + val9;
+			int sobel2 = -1*val1 + -2*val2 + -1*val3 + 0*val4 + 0*val5 + 0*val6 + 1*val7 + 2*val8 + 1*val9;
+            convResult = sobel1+sobel2;
  1400430:	0295c83a 	sub	r10,zero,r10
  1400434:	1807d13a 	srai	r3,r3,4
  1400438:	ac29c83a 	sub	r20,r21,r16
  140043c:	5295883a 	add	r10,r10,r10
  1400440:	5515883a 	add	r10,r10,r20
  1400444:	4d000003 	ldbu	r20,0(r9)
+
+            int val4 = (p3&0x0F);
+            int val5 =((p4&0xF0)>>4);
+            int val6 = (p4&0x0F);
+
+            int val7 = (p5&0x0F);
  1400448:	3fffffc3 	ldbu	ra,-1(r7)
+
+
+
+            int sobel1 = -1*val1+ 0*val2 + val3 + -2*val4 + 0*val5 + 2*val6 - val7+ 0*val8 + val9;
+			int sobel2 = -1*val1 + -2*val2 + -1*val3 + 0*val4 + 0*val5 + 0*val6 + 1*val7 + 2*val8 + 1*val9;
+            convResult = sobel1+sobel2;
  140044c:	00c7c83a 	sub	r3,zero,r3
+            int val5 =((p4&0xF0)>>4);
+            int val6 = (p4&0x0F);
+
+            int val7 = (p5&0x0F);
+            int val8 =((p6&0xF0)>>4);
+            int val9 = (p6&0x0F);
  1400450:	41c003cc 	andi	r7,r8,15
+
+
+
+            int sobel1 = -1*val1+ 0*val2 + val3 + -2*val4 + 0*val5 + 2*val6 - val7+ 0*val8 + val9;
+			int sobel2 = -1*val1 + -2*val2 + -1*val3 + 0*val4 + 0*val5 + 0*val6 + 1*val7 + 2*val8 + 1*val9;
+            convResult = sobel1+sobel2;
  1400454:	44d0703a 	and	r8,r8,r19
  1400458:	18c7883a 	add	r3,r3,r3
  140045c:	42003fcc 	andi	r8,r8,255
  1400460:	a50003cc 	andi	r20,r20,15
  1400464:	1c07c83a 	sub	r3,r3,r16
  1400468:	4010d0fa 	srli	r8,r8,3
+
+            int val4 = (p3&0x0F);
+            int val5 =((p4&0xF0)>>4);
+            int val6 = (p4&0x0F);
+
+            int val7 = (p5&0x0F);
  140046c:	ffc003cc 	andi	ra,ra,15
+
+
+
+            int sobel1 = -1*val1+ 0*val2 + val3 + -2*val4 + 0*val5 + 2*val6 - val7+ 0*val8 + val9;
+			int sobel2 = -1*val1 + -2*val2 + -1*val3 + 0*val4 + 0*val5 + 0*val6 + 1*val7 + 2*val8 + 1*val9;
+            convResult = sobel1+sobel2;
  1400470:	a529883a 	add	r20,r20,r20
  1400474:	1d47c83a 	sub	r3,r3,r21
  1400478:	5529883a 	add	r20,r10,r20
@@ -838,10 +1240,25 @@ alt_after_alt_main:
  1400488:	a1e9883a 	add	r20,r20,r7
  140048c:	f9cf883a 	add	r7,ra,r7
  1400490:	a1e9883a 	add	r20,r20,r7
+
+            if(convResult < threshold){
  1400494:	bd000116 	blt	r23,r20,140049c <edgeDectect+0x168>
+            	convResult = 0;
  1400498:	0029883a 	mov	r20,zero
+            }
+
+
+			pixelCount = pixelCount + 1;
  140049c:	7bc00044 	addi	r15,r15,1
+
+			if(pixelCount == 2){//once we have 2 pixel, we can store them to the output array
  14004a0:	7f000a1e 	bne	r15,fp,14004cc <edgeDectect+0x198>
+				uint8_t pixel2 = (uint8_t)convResult;
+
+
+
+				uint8_t finalResult = (pixel2 | 0xF0) & pixel1;
+				outputImg[outputPixelIdx] = finalResult;
  14004a4:	91c03fcc 	andi	r7,r18,255
  14004a8:	380e913a 	slli	r7,r7,4
  14004ac:	a4e8b03a 	or	r20,r20,r19
@@ -849,15 +1266,30 @@ alt_after_alt_main:
  14004b4:	39c003d4 	ori	r7,r7,15
  14004b8:	3d28703a 	and	r20,r7,r20
  14004bc:	1d000005 	stb	r20,0(r3)
+
+				outputPixelIdx = outputPixelIdx + 1;
  14004c0:	10800044 	addi	r2,r2,1
  14004c4:	9029883a 	mov	r20,r18
+				pixelCount = 0;
  14004c8:	001f883a 	mov	r15,zero
  14004cc:	5ac00044 	addi	r11,r11,1
+//	int outputPixelIdx = 0;
+	int pixelCount = 0;
+	int convResiltBuff = 0;
+	int threshold = 11;
+
+	for(int h=startHeight; h<=endHeight-1;h = h+1){
  14004d0:	a025883a 	mov	r18,r20
  14004d4:	003fbb06 	br	14003c4 <__alt_data_end+0xff8003c4>
  14004d8:	63000044 	addi	r12,r12,1
  14004dc:	699b883a 	add	r13,r13,r6
  14004e0:	003fad06 	br	1400398 <__alt_data_end+0xff800398>
+			}
+		}
+	}
+
+return outputPixelIdx;
+}
  14004e4:	dfc00c17 	ldw	ra,48(sp)
  14004e8:	df000b17 	ldw	fp,44(sp)
  14004ec:	ddc00a17 	ldw	r23,40(sp)
@@ -872,30 +1304,69 @@ alt_after_alt_main:
  1400510:	f800283a 	ret
 
 01400514 <getPixelVal>:
+	//function to get pixel value from a packed array
+	int pixelOutput = 0;
+	int packedPixelVal = 0;
+	int decodedAddress;
+
+	if (rawAddress % 2 == 0) { //if the value is even we need to extract the top 4 bits
  1400514:	3080004c 	andi	r2,r6,1
  1400518:	1000071e 	bne	r2,zero,1400538 <getPixelVal+0x24>
+
+	    decodedAddress = rawAddress/2;
+	    packedPixelVal = packedImgArr[decodedAddress];
  140051c:	3004d7fa 	srli	r2,r6,31
  1400520:	118d883a 	add	r6,r2,r6
  1400524:	300dd07a 	srai	r6,r6,1
  1400528:	398f883a 	add	r7,r7,r6
+
+	    pixelOutput = (packedPixelVal & 0xF0)>>4;
  140052c:	38800003 	ldbu	r2,0(r7)
  1400530:	1004d13a 	srli	r2,r2,4
  1400534:	f800283a 	ret
+	} else { //if the value is odd we need to extract the bottom 4 bits
+	    decodedAddress = (rawAddress-1)/2;
+	    packedPixelVal = packedImgArr[decodedAddress];
  1400538:	31bfffc4 	addi	r6,r6,-1
  140053c:	3004d7fa 	srli	r2,r6,31
  1400540:	118d883a 	add	r6,r2,r6
  1400544:	300dd07a 	srai	r6,r6,1
  1400548:	398f883a 	add	r7,r7,r6
+
+	    pixelOutput = (packedPixelVal & 0x0F); //extracting the value for a single pixel from the packed storage
  140054c:	38800003 	ldbu	r2,0(r7)
  1400550:	108003cc 	andi	r2,r2,15
+	}
+	return pixelOutput;
+}
  1400554:	f800283a 	ret
 
 01400558 <display_4_images>:
+
+return outputPixelIdx;
+}
+
+
+void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx){
  1400558:	deffee04 	addi	sp,sp,-72
  140055c:	dc800a15 	stw	r18,40(sp)
  1400560:	dc801317 	ldw	r18,76(sp)
+				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
+			}
+
+			pixelValue = getPixelVal(0,0,inputPixelAddress,img1);
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
  1400564:	03010034 	movhi	r12,1024
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
  1400568:	03410034 	movhi	r13,1024
+
+return outputPixelIdx;
+}
+
+
+void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx){
  140056c:	ddc00f15 	stw	r23,60(sp)
  1400570:	dd800e15 	stw	r22,56(sp)
  1400574:	dd400d15 	stw	r21,52(sp)
@@ -912,19 +1383,50 @@ alt_after_alt_main:
  14005a0:	0412bf84 	movi	r16,19198
  14005a4:	0252e684 	movi	r9,19354
  14005a8:	0225a694 	movui	r8,38554
+	//image 1
+	for(int h=0; h<120; h++){
+		for(int w=0; w<159; w++){
+			int displayAddress  = w+(displayW*h)-1;
+
+			if(flipImgIdx == 1){
  14005ac:	02c00044 	movi	r11,1
+				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
+			}
+
+			pixelValue = getPixelVal(0,0,inputPixelAddress,img1);
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
  14005b0:	63041804 	addi	r12,r12,4192
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
  14005b4:	6b441404 	addi	r13,r13,4176
+	int intputImgH = 120;
+	int inputPixelAddress = 0;
+
+	int pixelValue = 0;
+	//image 1
+	for(int h=0; h<120; h++){
  14005b8:	03bfff84 	movi	r14,-2
  14005bc:	873fff64 	muli	fp,r16,-3
  14005c0:	847fd844 	addi	r17,r16,-159
  14005c4:	4c07c83a 	sub	r3,r9,r16
  14005c8:	e239883a 	add	fp,fp,r8
  14005cc:	8f27883a 	add	r19,r17,fp
+		for(int w=0; w<159; w++){
+			int displayAddress  = w+(displayW*h)-1;
+
+			if(flipImgIdx == 1){
  14005d0:	92c0021e 	bne	r18,r11,14005dc <display_4_images+0x84>
+				inputPixelAddress = w+(inputImgW* (intputImgH-h-1))-1;
  14005d4:	880d883a 	mov	r6,r17
  14005d8:	00000106 	br	14005e0 <display_4_images+0x88>
+
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
  14005dc:	180d883a 	mov	r6,r3
+			}
+
+			pixelValue = getPixelVal(0,0,inputPixelAddress,img1);
  14005e0:	500f883a 	mov	r7,r10
  14005e4:	000b883a 	mov	r5,zero
  14005e8:	0009883a 	mov	r4,zero
@@ -937,8 +1439,12 @@ alt_after_alt_main:
  1400604:	db400015 	stw	r13,0(sp)
  1400608:	db800115 	stw	r14,4(sp)
  140060c:	14005140 	call	1400514 <getPixelVal>
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
  1400610:	db000217 	ldw	r12,8(sp)
  1400614:	64c00035 	stwio	r19,0(r12)
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
  1400618:	db400017 	ldw	r13,0(sp)
  140061c:	68800035 	stwio	r2,0(r13)
  1400620:	d8c00317 	ldw	r3,12(sp)
@@ -948,6 +1454,12 @@ alt_after_alt_main:
  1400630:	18ffffc4 	addi	r3,r3,-1
  1400634:	9cc41804 	addi	r19,r19,4192
  1400638:	a5041404 	addi	r20,r20,4176
+	int inputPixelAddress = 0;
+
+	int pixelValue = 0;
+	//image 1
+	for(int h=0; h<120; h++){
+		for(int w=0; w<159; w++){
  140063c:	da000617 	ldw	r8,24(sp)
  1400640:	da400517 	ldw	r9,20(sp)
  1400644:	da800417 	ldw	r10,16(sp)
@@ -955,21 +1467,50 @@ alt_after_alt_main:
  140064c:	db800117 	ldw	r14,4(sp)
  1400650:	8c3fde1e 	bne	r17,r16,14005cc <__alt_data_end+0xff8005cc>
  1400654:	8c3fd804 	addi	r16,r17,-160
+	int intputImgH = 120;
+	int inputPixelAddress = 0;
+
+	int pixelValue = 0;
+	//image 1
+	for(int h=0; h<120; h++){
  1400658:	83bfd81e 	bne	r16,r14,14005bc <__alt_data_end+0xff8005bc>
  140065c:	0412bf84 	movi	r16,19198
  1400660:	0252bec4 	movi	r9,19195
  1400664:	0225ce94 	movui	r8,38714
+	// image 2
+	for(int h=0; h<120; h++){
+		for(int w=159; w<319; w++){
+			int displayAddress  = w+(displayW*h)-1;
+
+			if(flipImgIdx == 2){
  1400668:	02800084 	movi	r10,2
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
+		}
+	}
+	// image 2
+	for(int h=0; h<120; h++){
  140066c:	02ffff84 	movi	r11,-2
  1400670:	873fff64 	muli	fp,r16,-3
  1400674:	847fd804 	addi	r17,r16,-160
  1400678:	4c07c83a 	sub	r3,r9,r16
  140067c:	e239883a 	add	fp,fp,r8
  1400680:	e459883a 	add	r12,fp,r17
+		for(int w=159; w<319; w++){
+			int displayAddress  = w+(displayW*h)-1;
+
+			if(flipImgIdx == 2){
  1400684:	9280021e 	bne	r18,r10,1400690 <display_4_images+0x138>
+				inputPixelAddress = w+(inputImgW* (intputImgH-h-2))-1;
  1400688:	880d883a 	mov	r6,r17
  140068c:	00000106 	br	1400694 <display_4_images+0x13c>
+
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
  1400690:	180d883a 	mov	r6,r3
+			}
+
+			pixelValue = getPixelVal(0,0,inputPixelAddress,img2);
  1400694:	b80f883a 	mov	r7,r23
  1400698:	000b883a 	mov	r5,zero
  140069c:	0009883a 	mov	r4,zero
@@ -980,11 +1521,21 @@ alt_after_alt_main:
  14006b0:	da800415 	stw	r10,16(sp)
  14006b4:	dac00715 	stw	r11,28(sp)
  14006b8:	14005140 	call	1400514 <getPixelVal>
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
  14006bc:	db000217 	ldw	r12,8(sp)
  14006c0:	9b000035 	stwio	r12,0(r19)
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
  14006c4:	a0800035 	stwio	r2,0(r20)
  14006c8:	d8c00317 	ldw	r3,12(sp)
  14006cc:	8c400044 	addi	r17,r17,1
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
+		}
+	}
+	// image 2
+	for(int h=0; h<120; h++){
+		for(int w=159; w<319; w++){
  14006d0:	da000617 	ldw	r8,24(sp)
  14006d4:	18ffffc4 	addi	r3,r3,-1
  14006d8:	da400517 	ldw	r9,20(sp)
@@ -992,22 +1543,51 @@ alt_after_alt_main:
  14006e0:	dac00717 	ldw	r11,28(sp)
  14006e4:	8c3fe61e 	bne	r17,r16,1400680 <__alt_data_end+0xff800680>
  14006e8:	8c3fd804 	addi	r16,r17,-160
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
+		}
+	}
+	// image 2
+	for(int h=0; h<120; h++){
  14006ec:	82ffe01e 	bne	r16,r11,1400670 <__alt_data_end+0xff800670>
  14006f0:	00c00074 	movhi	r3,1
  14006f4:	04129784 	movi	r16,19038
  14006f8:	0212be84 	movi	r8,19194
  14006fc:	18cad684 	addi	r3,r3,11098
+	// image 3
+	for(int h=120; h<240; h++){
+		for(int w=0; w<159; w++){
+			int displayAddress  = w+(displayW*h)-1;
+
+			if(flipImgIdx == 3){
  1400700:	024000c4 	movi	r9,3
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
+		}
+	}
+	// image 3
+	for(int h=120; h<240; h++){
  1400704:	02bfd784 	movi	r10,-162
  1400708:	85ffff64 	muli	r23,r16,-3
  140070c:	847fd844 	addi	r17,r16,-159
  1400710:	4439c83a 	sub	fp,r8,r16
  1400714:	b8ef883a 	add	r23,r23,r3
  1400718:	bc57883a 	add	r11,r23,r17
+		for(int w=0; w<159; w++){
+			int displayAddress  = w+(displayW*h)-1;
+
+			if(flipImgIdx == 3){
  140071c:	9240021e 	bne	r18,r9,1400728 <display_4_images+0x1d0>
+				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH) -2))-1;
  1400720:	880d883a 	mov	r6,r17
  1400724:	00000106 	br	140072c <display_4_images+0x1d4>
+
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
  1400728:	e00d883a 	mov	r6,fp
+			}
+
+			pixelValue = getPixelVal(0,0,inputPixelAddress,img3);
  140072c:	b00f883a 	mov	r7,r22
  1400730:	000b883a 	mov	r5,zero
  1400734:	0009883a 	mov	r4,zero
@@ -1017,23 +1597,51 @@ alt_after_alt_main:
  1400744:	da400515 	stw	r9,20(sp)
  1400748:	da800415 	stw	r10,16(sp)
  140074c:	14005140 	call	1400514 <getPixelVal>
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
  1400750:	dac00717 	ldw	r11,28(sp)
  1400754:	9ac00035 	stwio	r11,0(r19)
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
  1400758:	a0800035 	stwio	r2,0(r20)
  140075c:	8c400044 	addi	r17,r17,1
  1400760:	e73fffc4 	addi	fp,fp,-1
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
+		}
+	}
+	// image 3
+	for(int h=120; h<240; h++){
+		for(int w=0; w<159; w++){
  1400764:	d8c00317 	ldw	r3,12(sp)
  1400768:	da000617 	ldw	r8,24(sp)
  140076c:	da400517 	ldw	r9,20(sp)
  1400770:	da800417 	ldw	r10,16(sp)
  1400774:	847fe81e 	bne	r16,r17,1400718 <__alt_data_end+0xff800718>
  1400778:	843fd804 	addi	r16,r16,-160
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
+		}
+	}
+	// image 3
+	for(int h=120; h<240; h++){
  140077c:	82bfe21e 	bne	r16,r10,1400708 <__alt_data_end+0xff800708>
  1400780:	00c00074 	movhi	r3,1
  1400784:	0452bf84 	movi	r17,19198
  1400788:	0212bec4 	movi	r8,19195
  140078c:	18cb4e84 	addi	r3,r3,11578
+	}
+	//image 4
+	for(int h=120; h<240; h++){
+		for(int w=159; w<319; w++){
+			int displayAddress  = w+(displayW*h)-1;
+			if(flipImgIdx == 4){
  1400790:	02400104 	movi	r9,4
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
+		}
+	}
+	//image 4
+	for(int h=120; h<240; h++){
  1400794:	02bfff84 	movi	r10,-2
  1400798:	8dbfff64 	muli	r22,r17,-3
  140079c:	8c3fd804 	addi	r16,r17,-160
@@ -1041,10 +1649,19 @@ alt_after_alt_main:
  14007a4:	b0ed883a 	add	r22,r22,r3
  14007a8:	8039883a 	mov	fp,r16
  14007ac:	b417883a 	add	r11,r22,r16
+		for(int w=159; w<319; w++){
+			int displayAddress  = w+(displayW*h)-1;
+			if(flipImgIdx == 4){
  14007b0:	9240021e 	bne	r18,r9,14007bc <display_4_images+0x264>
+				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH)-2))-1;
  14007b4:	800d883a 	mov	r6,r16
  14007b8:	00000106 	br	14007c0 <display_4_images+0x268>
+
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
  14007bc:	b80d883a 	mov	r6,r23
+			}
+			pixelValue = getPixelVal(0,0,inputPixelAddress,img4);
  14007c0:	a80f883a 	mov	r7,r21
  14007c4:	000b883a 	mov	r5,zero
  14007c8:	0009883a 	mov	r4,zero
@@ -1054,18 +1671,40 @@ alt_after_alt_main:
  14007d8:	da400515 	stw	r9,20(sp)
  14007dc:	da800415 	stw	r10,16(sp)
  14007e0:	14005140 	call	1400514 <getPixelVal>
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
  14007e4:	dac00717 	ldw	r11,28(sp)
  14007e8:	9ac00035 	stwio	r11,0(r19)
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
  14007ec:	a0800035 	stwio	r2,0(r20)
  14007f0:	84000044 	addi	r16,r16,1
  14007f4:	bdffffc4 	addi	r23,r23,-1
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
+		}
+	}
+	//image 4
+	for(int h=120; h<240; h++){
+		for(int w=159; w<319; w++){
  14007f8:	d8c00317 	ldw	r3,12(sp)
  14007fc:	da000617 	ldw	r8,24(sp)
  1400800:	da400517 	ldw	r9,20(sp)
  1400804:	da800417 	ldw	r10,16(sp)
  1400808:	8c3fe81e 	bne	r17,r16,14007ac <__alt_data_end+0xff8007ac>
  140080c:	e023883a 	mov	r17,fp
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
+		}
+	}
+	//image 4
+	for(int h=120; h<240; h++){
  1400810:	e2bfe11e 	bne	fp,r10,1400798 <__alt_data_end+0xff800798>
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , displayAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, pixelValue);
+		}
+	}
+}
  1400814:	dfc01117 	ldw	ra,68(sp)
  1400818:	df001017 	ldw	fp,64(sp)
  140081c:	ddc00f17 	ldw	r23,60(sp)
@@ -1080,89 +1719,290 @@ alt_after_alt_main:
  1400840:	f800283a 	ret
 
 01400844 <display_image_from_array_v2>:
+	}
+	return pixelOutput;
+}
+
+
+void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
  1400844:	defffc04 	addi	sp,sp,-16
  1400848:	dc800215 	stw	r18,8(sp)
  140084c:	2025883a 	mov	r18,r4
+//	int imgW = 318;
+
+//	int pixelAddress_2 = 0;
+
+//	Address = Column + (Row * Width)
+	altera_avalon_mutex_lock(mutex,1);
  1400850:	d1243217 	ldw	r4,-28472(gp)
+	}
+	return pixelOutput;
+}
+
+
+void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
  1400854:	dc000015 	stw	r16,0(sp)
  1400858:	2821883a 	mov	r16,r5
+//	int imgW = 318;
+
+//	int pixelAddress_2 = 0;
+
+//	Address = Column + (Row * Width)
+	altera_avalon_mutex_lock(mutex,1);
  140085c:	01400044 	movi	r5,1
+	}
+	return pixelOutput;
+}
+
+
+void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
  1400860:	dc400115 	stw	r17,4(sp)
  1400864:	dfc00315 	stw	ra,12(sp)
  1400868:	3023883a 	mov	r17,r6
+//	int imgW = 318;
+
+//	int pixelAddress_2 = 0;
+
+//	Address = Column + (Row * Width)
+	altera_avalon_mutex_lock(mutex,1);
  140086c:	14010480 	call	1401048 <altera_avalon_mutex_lock>
+			int unpackedValue1 = (pixelValue&mask);
+			mask = mask << 4;
+			int unpackedValue2 = (pixelValue&mask)>>4;
+
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress);
  1400870:	01810034 	movhi	r6,1024
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue1);
  1400874:	02410034 	movhi	r9,1024
  1400878:	81fffec4 	addi	r7,r16,-5
+
+//	int pixelAddress_2 = 0;
+
+//	Address = Column + (Row * Width)
+	altera_avalon_mutex_lock(mutex,1);
+	for(int h = 0; h<imgH; h=h+1){
  140087c:	000b883a 	mov	r5,zero
+
+void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
+	//FASTER FUNCTION FOR DISPLAY, DO NOT USE TILL M3
+//	int pixel_count = imgH*imgW;
+//	int readAddressOffset = 0;
+	int pixel_idx = 0;
  1400880:	0005883a 	mov	r2,zero
+			int unpackedValue1 = (pixelValue&mask);
+			mask = mask << 4;
+			int unpackedValue2 = (pixelValue&mask)>>4;
+
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress);
  1400884:	31841804 	addi	r6,r6,4192
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue1);
  1400888:	4a441404 	addi	r9,r9,4176
+
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress+1);
+	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue2);
  140088c:	02bffc04 	movi	r10,-16
+
+//	int pixelAddress_2 = 0;
+
+//	Address = Column + (Row * Width)
+	altera_avalon_mutex_lock(mutex,1);
+	for(int h = 0; h<imgH; h=h+1){
  1400890:	2c80160e 	bge	r5,r18,14008ec <display_image_from_array_v2+0xa8>
+		for(int w = imgW-1; w>=0; w=w-2){
  1400894:	823fffc4 	addi	r8,r16,-1
  1400898:	8887883a 	add	r3,r17,r2
  140089c:	3809883a 	mov	r4,r7
  14008a0:	1c45c83a 	sub	r2,r3,r17
  14008a4:	40000e16 	blt	r8,zero,14008e0 <display_image_from_array_v2+0x9c>
+
+			int pixelAddress  = w+(imgW*h)-4;
+			int pixelValue = image_base[pixel_idx];
  14008a8:	18800003 	ldbu	r2,0(r3)
+			int unpackedValue1 = (pixelValue&mask);
+			mask = mask << 4;
+			int unpackedValue2 = (pixelValue&mask)>>4;
+
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress);
  14008ac:	31000035 	stwio	r4,0(r6)
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue1);
  14008b0:	12c003cc 	andi	r11,r2,15
  14008b4:	4ac00035 	stwio	r11,0(r9)
+
+
+	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress+1);
  14008b8:	22c00044 	addi	r11,r4,1
  14008bc:	32c00035 	stwio	r11,0(r6)
+	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue2);
  14008c0:	1284703a 	and	r2,r2,r10
  14008c4:	10803fcc 	andi	r2,r2,255
  14008c8:	1005d13a 	srai	r2,r2,4
  14008cc:	48800035 	stwio	r2,0(r9)
+//	int pixelAddress_2 = 0;
+
+//	Address = Column + (Row * Width)
+	altera_avalon_mutex_lock(mutex,1);
+	for(int h = 0; h<imgH; h=h+1){
+		for(int w = imgW-1; w>=0; w=w-2){
  14008d0:	423fff84 	addi	r8,r8,-2
  14008d4:	18c00044 	addi	r3,r3,1
  14008d8:	213fff84 	addi	r4,r4,-2
  14008dc:	003ff006 	br	14008a0 <__alt_data_end+0xff8008a0>
+
+//	int pixelAddress_2 = 0;
+
+//	Address = Column + (Row * Width)
+	altera_avalon_mutex_lock(mutex,1);
+	for(int h = 0; h<imgH; h=h+1){
  14008e0:	29400044 	addi	r5,r5,1
  14008e4:	3c0f883a 	add	r7,r7,r16
  14008e8:	003fe906 	br	1400890 <__alt_data_end+0xff800890>
+
+
+
+		}
+	}
+	altera_avalon_mutex_unlock(mutex);
  14008ec:	d1243217 	ldw	r4,-28472(gp)
  14008f0:	14010940 	call	1401094 <altera_avalon_mutex_unlock>
+	alt_dcache_flush_all();  // After writing
+
+}
  14008f4:	dfc00317 	ldw	ra,12(sp)
  14008f8:	dc800217 	ldw	r18,8(sp)
  14008fc:	dc400117 	ldw	r17,4(sp)
  1400900:	dc000017 	ldw	r16,0(sp)
  1400904:	dec00404 	addi	sp,sp,16
+
+
+		}
+	}
+	altera_avalon_mutex_unlock(mutex);
+	alt_dcache_flush_all();  // After writing
  1400908:	1400adc1 	jmpi	1400adc <alt_dcache_flush_all>
 
 0140090c <main>:
+
+int main()
+{
+
+
+	alt_putstr("Hello from Nios II!\n");
  140090c:	01005034 	movhi	r4,320
+
+}
+
+
+int main()
+{
  1400910:	defff704 	addi	sp,sp,-36
+
+
+	alt_putstr("Hello from Nios II!\n");
  1400914:	2105d204 	addi	r4,r4,5960
+
+}
+
+
+int main()
+{
  1400918:	dfc00815 	stw	ra,32(sp)
  140091c:	dd000715 	stw	r20,28(sp)
  1400920:	dc400415 	stw	r17,16(sp)
  1400924:	dc000315 	stw	r16,12(sp)
  1400928:	dcc00615 	stw	r19,24(sp)
  140092c:	dc800515 	stw	r18,20(sp)
+	uint8_t sobelArrX[38400];
+	uint8_t sobelArrY[38400];
+	uint8_t sobelArrCombined[38400];
+
+	alt_dcache_flush_all();
+	uint32_t readBuffer = SHARED_BUFF_1_BASE;
  1400930:	0400cc34 	movhi	r16,816
+
+int main()
+{
+
+
+	alt_putstr("Hello from Nios II!\n");
  1400934:	1400c000 	call	1400c00 <alt_putstr>
+
+	uint8_t sobelArrX[38400];
+	uint8_t sobelArrY[38400];
+	uint8_t sobelArrCombined[38400];
+
+	alt_dcache_flush_all();
  1400938:	1400adc0 	call	1400adc <alt_dcache_flush_all>
+	uint32_t readBuffer = SHARED_BUFF_1_BASE;
  140093c:	84004004 	addi	r16,r16,256
  1400940:	04400044 	movi	r17,1
+ 			  readBuffer = SHARED_BUFF_1_BASE;
+ 		  }
+
+		 //img processing
+
+		 if(*quadImgMode == 2){
  1400944:	05000084 	movi	r20,2
+
+	alt_dcache_flush_all();
+	uint32_t readBuffer = SHARED_BUFF_1_BASE;
+
+	 while (1){
+		 alt_dcache_flush_all();
  1400948:	1400adc0 	call	1400adc <alt_dcache_flush_all>
+		 //finding the correct buffer
+
+ 		  if(*bufferFlag1 == 0){
  140094c:	d0a00717 	ldw	r2,-32740(gp)
  1400950:	10800017 	ldw	r2,0(r2)
  1400954:	10000426 	beq	r2,zero,1400968 <main+0x5c>
+ 			  readBuffer = SHARED_BUFF_2_BASE;
+
+ 		  }else if(*bufferFlag1 == 1){
  1400958:	1440051e 	bne	r2,r17,1400970 <main+0x64>
+ 			  readBuffer = SHARED_BUFF_1_BASE;
  140095c:	0400cc34 	movhi	r16,816
  1400960:	84004004 	addi	r16,r16,256
  1400964:	00000206 	br	1400970 <main+0x64>
+	 while (1){
+		 alt_dcache_flush_all();
+		 //finding the correct buffer
+
+ 		  if(*bufferFlag1 == 0){
+ 			  readBuffer = SHARED_BUFF_2_BASE;
  1400968:	0400cc74 	movhi	r16,817
  140096c:	8425bfc4 	addi	r16,r16,-26881
+ 			  readBuffer = SHARED_BUFF_1_BASE;
+ 		  }
+
+		 //img processing
+
+		 if(*quadImgMode == 2){
  1400970:	d0a00117 	ldw	r2,-32764(gp)
  1400974:	10c00017 	ldw	r3,0(r2)
  1400978:	d0a00217 	ldw	r2,-32760(gp)
+
+			 if(*needBlur == 1){
  140097c:	10800017 	ldw	r2,0(r2)
+ 			  readBuffer = SHARED_BUFF_1_BASE;
+ 		  }
+
+		 //img processing
+
+		 if(*quadImgMode == 2){
  1400980:	1d00281e 	bne	r3,r20,1400a24 <main+0x118>
+
+			 if(*needBlur == 1){
  1400984:	1440131e 	bne	r2,r17,14009d4 <main+0xc8>
+//				 printf("starting blur\n");
+//				 convolve_v2(readBuffer,CONV_RESULT_BASE_1,h_kernel,v_kernel,160,120);
+				 int topHalfIdx = blurImg(readBuffer,CONV_RESULT_BASE_1,160,120,0,60,0);
  1400988:	04801e04 	movi	r18,120
  140098c:	04c00f04 	movi	r19,60
  1400990:	900f883a 	mov	r7,r18
@@ -1173,6 +2013,8 @@ alt_after_alt_main:
  14009a4:	dcc00115 	stw	r19,4(sp)
  14009a8:	d8000015 	stw	zero,0(sp)
  14009ac:	14001d40 	call	14001d4 <blurImg>
+//				 printf("topHalf idx is %d \n", topHalfIdx);
+				 blurImg(readBuffer,CONV_RESULT_BASE_1,160,120,60,120,4800);
  14009b0:	0084b004 	movi	r2,4800
  14009b4:	d8800215 	stw	r2,8(sp)
  14009b8:	dc800115 	stw	r18,4(sp)
@@ -1182,9 +2024,15 @@ alt_after_alt_main:
  14009c8:	0140d034 	movhi	r5,832
  14009cc:	8009883a 	mov	r4,r16
  14009d0:	14001d40 	call	14001d4 <blurImg>
+
+//				 printf("blur finished\n");
+			 }
+			 if(*needEdgeDetect!=0){
  14009d4:	d0a00017 	ldw	r2,-32768(gp)
  14009d8:	10800017 	ldw	r2,0(r2)
  14009dc:	10003c26 	beq	r2,zero,1400ad0 <main+0x1c4>
+//				 printf("staring edge detection \n");
+				 edgeDectect(readBuffer,CONV_RESULT_BASE_2,160,120,0,60,0);
  14009e0:	04801e04 	movi	r18,120
  14009e4:	04c00f04 	movi	r19,60
  14009e8:	900f883a 	mov	r7,r18
@@ -1195,6 +2043,7 @@ alt_after_alt_main:
  14009fc:	0140d074 	movhi	r5,833
  1400a00:	8009883a 	mov	r4,r16
  1400a04:	14003340 	call	1400334 <edgeDectect>
+				 edgeDectect(readBuffer,CONV_RESULT_BASE_2,160,120,60,120,4800);
  1400a08:	0084b004 	movi	r2,4800
  1400a0c:	d8800215 	stw	r2,8(sp)
  1400a10:	dc800115 	stw	r18,4(sp)
@@ -1202,7 +2051,15 @@ alt_after_alt_main:
  1400a18:	900f883a 	mov	r7,r18
  1400a1c:	01802804 	movi	r6,160
  1400a20:	00002806 	br	1400ac4 <main+0x1b8>
+			 }
+
+			 *convDone = 1;
+
+		 }else{//single img display
+			 if(*needBlur == 1){
  1400a24:	1440141e 	bne	r2,r17,1400a78 <main+0x16c>
+//				 convolve_v2(readBuffer,readBuffer,h_kernel,v_kernel,320,240);
+				 int fullTopHalf  = blurImg(readBuffer,CONV_RESULT_BASE_1,320,240,0,120,0);
  1400a28:	04803c04 	movi	r18,240
  1400a2c:	04c01e04 	movi	r19,120
  1400a30:	900f883a 	mov	r7,r18
@@ -1213,6 +2070,8 @@ alt_after_alt_main:
  1400a44:	01805004 	movi	r6,320
  1400a48:	0140d034 	movhi	r5,832
  1400a4c:	14001d40 	call	14001d4 <blurImg>
+//				 printf("topHalf idx is %d \n", fullTopHalf);
+				 blurImg(readBuffer,CONV_RESULT_BASE_1,320,240,120,240,19200);
  1400a50:	0092c004 	movi	r2,19200
  1400a54:	d8800215 	stw	r2,8(sp)
  1400a58:	dc800115 	stw	r18,4(sp)
@@ -1223,9 +2082,16 @@ alt_after_alt_main:
  1400a6c:	8009883a 	mov	r4,r16
  1400a70:	14001d40 	call	14001d4 <blurImg>
  1400a74:	00001606 	br	1400ad0 <main+0x1c4>
+				 *convDone = 1;
+			 }else if(*needEdgeDetect != 0){
  1400a78:	d0a00017 	ldw	r2,-32768(gp)
  1400a7c:	10800017 	ldw	r2,0(r2)
  1400a80:	103fb126 	beq	r2,zero,1400948 <__alt_data_end+0xff800948>
+//					convolve_v2(SHARED_BUFF_1_BASE,sobelArrX,sobelA_h,sobelA_v,320,240);
+//					convolve_v2(SHARED_BUFF_1_BASE,sobelArrY,sobelB_h,sobelB_v,320,240);
+//					combineSobelFilter(sobelArrX,sobelArrY,readBuffer,320,240);
+
+					edgeDectect(readBuffer,CONV_RESULT_BASE_2,320,240,0,120,0);
  1400a84:	04803c04 	movi	r18,240
  1400a88:	04c01e04 	movi	r19,120
  1400a8c:	900f883a 	mov	r7,r18
@@ -1236,6 +2102,7 @@ alt_after_alt_main:
  1400aa0:	0140d074 	movhi	r5,833
  1400aa4:	8009883a 	mov	r4,r16
  1400aa8:	14003340 	call	1400334 <edgeDectect>
+					edgeDectect(readBuffer,CONV_RESULT_BASE_2,320,240,120,240,19200);
  1400aac:	0092c004 	movi	r2,19200
  1400ab0:	d8800215 	stw	r2,8(sp)
  1400ab4:	dc800115 	stw	r18,4(sp)
@@ -1245,6 +2112,10 @@ alt_after_alt_main:
  1400ac4:	0140d074 	movhi	r5,833
  1400ac8:	8009883a 	mov	r4,r16
  1400acc:	14003340 	call	1400334 <edgeDectect>
+
+//					readBuffer = sobelArrCombined;
+
+					*convDone = 1;
  1400ad0:	d0a00517 	ldw	r2,-32748(gp)
  1400ad4:	14400015 	stw	r17,0(r2)
  1400ad8:	003f9b06 	br	1400948 <__alt_data_end+0xff800948>

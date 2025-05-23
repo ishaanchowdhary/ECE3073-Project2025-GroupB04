@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'MUTIPROCESSOR_V2'
  * SOPC Builder design path: ../../MUTIPROCESSOR_V2.sopcinfo
  *
- * Generated: Sat May 17 16:47:47 EST 2025
+ * Generated: Fri May 23 22:34:41 EST 2025
  */
 
 /*
@@ -204,39 +204,12 @@
 
 
 /*
- * KEY10 configuration
- *
- */
-
-#define ALT_MODULE_CLASS_KEY10 altera_avalon_pio
-#define KEY10_BASE 0x4001090
-#define KEY10_BIT_CLEARING_EDGE_REGISTER 0
-#define KEY10_BIT_MODIFYING_OUTPUT_REGISTER 0
-#define KEY10_CAPTURE 0
-#define KEY10_DATA_WIDTH 2
-#define KEY10_DO_TEST_BENCH_WIRING 0
-#define KEY10_DRIVEN_SIM_VALUE 0
-#define KEY10_EDGE_TYPE "NONE"
-#define KEY10_FREQ 50000000
-#define KEY10_HAS_IN 1
-#define KEY10_HAS_OUT 0
-#define KEY10_HAS_TRI 0
-#define KEY10_IRQ -1
-#define KEY10_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define KEY10_IRQ_TYPE "NONE"
-#define KEY10_NAME "/dev/KEY10"
-#define KEY10_RESET_VALUE 0
-#define KEY10_SPAN 16
-#define KEY10_TYPE "altera_avalon_pio"
-
-
-/*
  * LEDR90 configuration
  *
  */
 
 #define ALT_MODULE_CLASS_LEDR90 altera_avalon_pio
-#define LEDR90_BASE 0x40010b0
+#define LEDR90_BASE 0x40010a0
 #define LEDR90_BIT_CLEARING_EDGE_REGISTER 0
 #define LEDR90_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define LEDR90_CAPTURE 0
@@ -371,7 +344,7 @@
  */
 
 #define ALT_MODULE_CLASS_SW altera_avalon_pio
-#define SW_BASE 0x40010a0
+#define SW_BASE 0x4001090
 #define SW_BIT_CLEARING_EDGE_REGISTER 0
 #define SW_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define SW_CAPTURE 0
@@ -408,19 +381,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_0"
-#define ALT_STDERR_BASE 0x40010c8
+#define ALT_STDERR_BASE 0x40010b8
 #define ALT_STDERR_DEV jtag_uart_0
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_0"
-#define ALT_STDIN_BASE 0x40010c8
+#define ALT_STDIN_BASE 0x40010b8
 #define ALT_STDIN_DEV jtag_uart_0
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_0"
-#define ALT_STDOUT_BASE 0x40010c8
+#define ALT_STDOUT_BASE 0x40010b8
 #define ALT_STDOUT_DEV jtag_uart_0
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -472,7 +445,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_0 altera_avalon_jtag_uart
-#define JTAG_UART_0_BASE 0x40010c8
+#define JTAG_UART_0_BASE 0x40010b8
 #define JTAG_UART_0_IRQ 0
 #define JTAG_UART_0_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_0_NAME "/dev/jtag_uart_0"
@@ -490,7 +463,7 @@
  */
 
 #define ALT_MODULE_CLASS_mutex_0 altera_avalon_mutex
-#define MUTEX_0_BASE 0x40010c0
+#define MUTEX_0_BASE 0x40010b0
 #define MUTEX_0_IRQ -1
 #define MUTEX_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define MUTEX_0_NAME "/dev/mutex_0"

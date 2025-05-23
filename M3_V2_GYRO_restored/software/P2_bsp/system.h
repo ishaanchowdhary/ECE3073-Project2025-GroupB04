@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_2' in SOPC Builder design 'MUTIPROCESSOR_V2'
  * SOPC Builder design path: ../../MUTIPROCESSOR_V2.sopcinfo
  *
- * Generated: Sun May 18 00:09:55 EST 2025
+ * Generated: Fri May 23 22:35:28 EST 2025
  */
 
 /*
@@ -364,7 +364,7 @@
  */
 
 #define ALT_MODULE_CLASS_mutex_0 altera_avalon_mutex
-#define MUTEX_0_BASE 0x40010c0
+#define MUTEX_0_BASE 0x40010b0
 #define MUTEX_0_IRQ -1
 #define MUTEX_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define MUTEX_0_NAME "/dev/mutex_0"
