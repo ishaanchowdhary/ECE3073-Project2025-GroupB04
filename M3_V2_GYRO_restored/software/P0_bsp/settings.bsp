@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>23/05/2025 11:39:36 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1748007576031</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>23/05/2025 11:51:58 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1748008318153</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\ishaa\Documents\GitHub\ECE3073_S12025_B04\M3_V2_GYRO_restored\software\P0_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\MUTIPROCESSOR_V2.sopcinfo</SopcDesignFile>
