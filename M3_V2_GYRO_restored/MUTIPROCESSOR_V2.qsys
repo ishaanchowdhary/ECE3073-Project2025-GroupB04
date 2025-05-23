@@ -2377,6 +2377,7 @@
    version="18.1"
    start="clk_0.clk_reset"
    end="GYRO_INT.reset" />
+ <connection kind="reset" version="18.1" start="clk_0.clk_reset" end="KEY10.reset" />
  <connection
    kind="reset"
    version="18.1"
@@ -2537,11 +2538,6 @@
    version="18.1"
    start="nios2_gen2_1.debug_reset_request"
    end="GYRO_INT.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="nios2_gen2_0.debug_reset_request"
-   end="KEY10.reset" />
  <connection
    kind="reset"
    version="18.1"
