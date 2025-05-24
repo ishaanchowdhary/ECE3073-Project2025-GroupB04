@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_system' in SOPC Builder design 'PROJECT_SYS_V2'
  * SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
  *
- * Generated: Wed May 21 23:05:37 EST 2025
+ * Generated: Sat May 24 15:22:33 EST 2025
  */
 
 /*
@@ -481,8 +481,8 @@
 #define ONCHIP_MEMORY2_0_READ_DURING_WRITE_MODE "DONT_CARE"
 #define ONCHIP_MEMORY2_0_SINGLE_CLOCK_OP 0
 #define ONCHIP_MEMORY2_0_SIZE_MULTIPLE 1
-#define ONCHIP_MEMORY2_0_SIZE_VALUE 16384
-#define ONCHIP_MEMORY2_0_SPAN 16384
+#define ONCHIP_MEMORY2_0_SIZE_VALUE 49152
+#define ONCHIP_MEMORY2_0_SPAN 49152
 #define ONCHIP_MEMORY2_0_TYPE "altera_avalon_onchip_memory2"
 #define ONCHIP_MEMORY2_0_WRITABLE 1
 

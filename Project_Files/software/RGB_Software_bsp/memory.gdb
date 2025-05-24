@@ -3,7 +3,7 @@
 # Machine generated for CPU 'nios_system' in SOPC Builder design 'PROJECT_SYS_V2'
 # SOPC Builder design path: ../../PROJECT_SYS_V2.sopcinfo
 #
-# Generated: Wed May 21 23:05:37 EST 2025
+# Generated: Sat May 24 15:22:33 EST 2025
 
 # DO NOT MODIFY THIS FILE
 #
@@ -50,4 +50,4 @@
 memory 0x0 0x4000000 cache
 
 # onchip_memory2_0
-memory 0x4020000 0x4024000 cache
+memory 0x4020000 0x402c000 cache

@@ -27,257 +27,269 @@
 // Global variables for key interrupt
 volatile int Key1Flag = 0; // Flag for key1 interrupt
 
+uint16_t getPixelVal(int rawAddress, uint8_t* packedImgArr);
+void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx1 ,int flipImgIdx2 ,int flipImgIdx3 ,int flipImgIdx4);
+void Run_Time(uint32_t before, uint32_t after);
+int main(void);
+void key1_isr(void* context, alt_u32 id);
+void initialise_key1_interrupt();
+void display_single_image(int imgH, int imgW, const uint8_t *src, int flipImg);
+
+
+
+
 int main(void){
 	alt_u8 sendBuffFull = 0x15;  //send buffer for RGB packed data, full res
-	// alt_u8 sendBuffSmall = 0x17; //send buffer for RGB packed data, small res
+	alt_u8 sendBuffSmall = 0x17; //send buffer for RGB packed data, small res
 
 	alt_u8 *sendBuffPtrFull = &sendBuffFull;
-	// alt_u8 *sendBuffPtrSmall = &sendBuffSmall;
+	alt_u8 *sendBuffPtrSmall = &sendBuffSmall;
 	uint8_t rxArr[115200];
-	// uint8_t rxArrSmall[28800];
+	uint8_t rxArrSmall[28800];
 
-	// uint8_t smallImgBuff1[28800];
+	uint8_t smallImgBuff1[28800];
 
-	// float  kernel[9] = {
-	// 	    1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f,
-	// 	    1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f,
-	// 	    1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f
-	// 	};
+	float  kernel[9] = {
+		    1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f,
+		    1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f,
+		    1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f
+		};
 
-	// float  sobelX[9] = {
-	// 	    1.0f, 0.0f, -1.0f,
-	// 		2.0f, 0.0f, -2.0f,
-	// 		1.0f, 0.0f, -1.0f
-	// 	};
+	float  sobelX[9] = {
+		    1.0f, 0.0f, -1.0f,
+			2.0f, 0.0f, -2.0f,
+			1.0f, 0.0f, -1.0f
+		};
 
-	// float  sobelY[9] = {
-	// 	    1.0f, 2.0f, 1.0f,
-	// 		0.0f, 0.0f, 0.0f,
-	// 		-1.0f, -2.0f, -1.0f
-	// 	};
+	float  sobelY[9] = {
+		    1.0f, 2.0f, 1.0f,
+			0.0f, 0.0f, 0.0f,
+			-1.0f, -2.0f, -1.0f
+		};
 
-	// //Sobel Filter Varibles
-	// uint8_t sobelArrX[38400];
-	// uint8_t sobelArrY[38400];
-	// uint8_t sobelArrCombined[38400];
+	//Sobel Filter Varibles
+	uint8_t sobelArrX[38400];
+	uint8_t sobelArrY[38400];
+	uint8_t sobelArrCombined[38400];
 
 
 
-	// // Image Variables
-	// uint8_t *img1;
-	// uint8_t *img2;
-	// uint8_t *img3;
-	// uint8_t *img4;
+	// Image Variables
+	uint8_t *img1;
+	uint8_t *img2;
+	uint8_t *img3;
+	uint8_t *img4;
 
-	// // Global Displays To Be Copied From
-	// uint8_t *GlobalBlur;
-	// uint8_t *GlobalEdge;
+	// Global Displays To Be Copied From
+	uint8_t *GlobalBlur;
+	uint8_t *GlobalEdge;
 
 	// // Global variables for key interrupt
-	// volatile int mode = 0;     // 0 = single mode, 1 = quad mode
+	volatile int mode = 0;     // 0 = single mode, 1 = quad mode
 
 	// // Initialise the interrupt before entering into the loop
-	// initialise_key1_interrupt();
+	initialise_key1_interrupt();
 
 	while(1){
 
 
-		// if (Key1Flag == 1) {
-        //     mode = !mode;  // Toggle mode
-        //     Key1Flag = 0;  // Reset the flag
-        // }
+		if (Key1Flag == 1) {
+            mode = !mode;  // Toggle mode
+            Key1Flag = 0;  // Reset the flag
+        }
 
 
 		// // Variable For Switches
-		// int sw = IORD(SW_BASE, 0);
+		int sw = IORD(SW_BASE, 0);
 
 		uint32_t start = IORD(TIME_DISPLAY_BASE, 0);	// Take Reading at the Start
 
 
 
-		// if (mode) {
+		if (mode) {
 
-			// int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,28800,&rxArrSmall,0); //SPI for SMALL res
+			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0 ,1,sendBuffPtrSmall,28800 + 1,&rxArrSmall,0); //SPI for SMALL res
 
-			// // Flags For Copying Displays
-			// int flag1 = 0;
-			// int flag2 = 0;
+			// Flags For Copying Displays
+			int flag1 = 0;
+			int flag2 = 0;
 
-			// // Quad Display Mode Switches
-			// int disp1_mode = (sw >> 0) & 0x3; // SW[1:0]
-			// int disp2_mode = (sw >> 2) & 0x3; // SW[3:2]
-			// int disp3_mode = (sw >> 4) & 0x3; // SW[5:4]
-			// int disp4_mode = (sw >> 6) & 0x3; // SW[7:6]
+			// Quad Display Mode Switches
+			int disp1_mode = (sw >> 0) & 0x3; // SW[1:0]
+			int disp2_mode = (sw >> 2) & 0x3; // SW[3:2]
+			int disp3_mode = (sw >> 4) & 0x3; // SW[5:4]
+			int disp4_mode = (sw >> 6) & 0x3; // SW[7:6]
 
-			// // Flip Index
-			// int flipImgIdx1 = 0;
-			// int flipImgIdx2 = 0;
-			// int flipImgIdx3 = 0;
-			// int flipImgIdx4 = 0;
+			// Flip Index
+			int flipImgIdx1 = 0;
+			int flipImgIdx2 = 0;
+			int flipImgIdx3 = 0;
+			int flipImgIdx4 = 0;
 
-			// // Handle Disp1
-			// if (disp1_mode == 0) {
-			// 	img1 = &rxArrSmall;
-			// } else if (disp1_mode == 1) {
-			// 	img1 = &rxArrSmall;
-			// 	flipImgIdx1 = 1;
-			// } else if (disp1_mode == 2) {
-			// 	if (flag1 == 0) {
-			// 		int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
-			// 		GlobalBlur = &smallImgBuff1;
-			// 		flag1 = 1;
-			// 	}
-			// 	img1 = GlobalBlur;
-			// } else if (disp1_mode == 3) {
-			// 	if (flag2 == 0) {
-			// 		convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
-			// 		convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
-			// 		combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
-			// 		GlobalEdge = &sobelArrCombined;
-			// 		flag2 = 1;
-			// 	}
-			// 	img1 = GlobalEdge;
-			// }
+			// Handle Disp1
+			if (disp1_mode == 0) {
+				img1 = &rxArrSmall;
+			} else if (disp1_mode == 1) {
+				img1 = &rxArrSmall;
+				flipImgIdx1 = 1;
+			} else if (disp1_mode == 2) {
+				if (flag1 == 0) {
+					// int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img1 = GlobalBlur;
+			} else if (disp1_mode == 3) {
+				if (flag2 == 0) {
+					// convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					// convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					// combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img1 = GlobalEdge;
+			}
 
 
-			// // Handle Disp2
-			// if (disp2_mode == 0) {
-			// 	img2 = rxArrSmall;
-			// } else if (disp2_mode == 1) {
-			// 	img2 = rxArrSmall;
-			// 	flipImgIdx2 = 1;
-			// } else if (disp2_mode == 2) {
-			// 	if (flag1 == 0) {
-			// 		int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
-			// 		GlobalBlur = &smallImgBuff1;
-			// 		flag1 = 1;
-			// 	}
-			// 	img2 = GlobalBlur;
-			// } else if (disp2_mode == 3) {
-			// 	if (flag2 == 0) {
-			// 		convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
-			// 		convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
-			// 		combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
-			// 		GlobalEdge = &sobelArrCombined;
-			// 		flag2 = 1;
-			// 	}
-			// 	img2 = GlobalEdge;
-			// }
+			// Handle Disp2
+			if (disp2_mode == 0) {
+				img2 = rxArrSmall;
+			} else if (disp2_mode == 1) {
+				img2 = rxArrSmall;
+				flipImgIdx2 = 1;
+			} else if (disp2_mode == 2) {
+				if (flag1 == 0) {
+					// int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img2 = GlobalBlur;
+			} else if (disp2_mode == 3) {
+				if (flag2 == 0) {
+					// convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					// convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					// combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img2 = GlobalEdge;
+			}
 
-			// // Handle Disp3
-			// if (disp3_mode == 0) {
-			// 	img3 = rxArrSmall;
-			// } else if (disp3_mode == 1) {
-			// 	img3 = rxArrSmall;
-			// 	flipImgIdx3 = 1;
-			// } else if (disp3_mode == 2) {
-			// 	if (flag1 == 0) {
-			// 		int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
-			// 		GlobalBlur = &smallImgBuff1;
-			// 		flag1 = 1;
-			// 	}
-			// 	img3 = GlobalBlur;
-			// } else if (disp3_mode == 3) {
-			// 	if (flag2 == 0) {
-			// 		convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
-			// 		convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
-			// 		combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
-			// 		GlobalEdge = &sobelArrCombined;
-			// 		flag2 = 1;
-			// 	}
-			// 	img3 = GlobalEdge;
-			// }
+			// Handle Disp3
+			if (disp3_mode == 0) {
+				img3 = rxArrSmall;
+			} else if (disp3_mode == 1) {
+				img3 = rxArrSmall;
+				flipImgIdx3 = 1;
+			} else if (disp3_mode == 2) {
+				if (flag1 == 0) {
+					// int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img3 = GlobalBlur;
+			} else if (disp3_mode == 3) {
+				if (flag2 == 0) {
+					// convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					// convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					// combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img3 = GlobalEdge;
+			}
 
-			// // Handle Disp4
-			// if (disp4_mode == 0) {
-			// 	img4 = rxArrSmall;
-			// } else if (disp4_mode == 1) {
-			// 	img4 = rxArrSmall;
-			// 	flipImgIdx4 = 1;
-			// } else if (disp4_mode == 2) {
-			// 	if (flag1 == 0) {
-			// 		int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
-			// 		GlobalBlur = &smallImgBuff1;
-			// 		flag1 = 1;
-			// 	}
-			// 	img4 = GlobalBlur;
-			// } else if (disp4_mode == 3) {
-			// 	if (flag2 == 0) {
-			// 		convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
-			// 		convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
-			// 		combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
-			// 		GlobalEdge = &sobelArrCombined;
-			// 		flag2 = 1;
-			// 	}
-			// 	img4 = GlobalEdge;
-			// }
+			// Handle Disp4
+			if (disp4_mode == 0) {
+				img4 = rxArrSmall;
+			} else if (disp4_mode == 1) {
+				img4 = rxArrSmall;
+				flipImgIdx4 = 1;
+			} else if (disp4_mode == 2) {
+				if (flag1 == 0) {
+					// int numOutPixel = convolve(&rxArrSmall,&smallImgBuff1,kernel,160,120);
+					GlobalBlur = &smallImgBuff1;
+					flag1 = 1;
+				}
+				img4 = GlobalBlur;
+			} else if (disp4_mode == 3) {
+				if (flag2 == 0) {
+					// convolve(&rxArrSmall,&sobelArrX,sobelX,160,120);
+					// convolve(&rxArrSmall,&sobelArrY,sobelY,160,120);
+					// combineSobelFilter(sobelArrX,sobelArrY,sobelArrCombined,160,120);
+					GlobalEdge = &sobelArrCombined;
+					flag2 = 1;
+				}
+				img4 = GlobalEdge;
+			}
 
-			// display_4_images(img1, img2, img3, img4, PIXEL_ADDRESS_BASE_val, flipImgIdx1, flipImgIdx2, flipImgIdx3, flipImgIdx4);
+			display_4_images(img1, img2, img3, img4, PIXEL_ADDRESS_BASE_val, flipImgIdx1, flipImgIdx2, flipImgIdx3, flipImgIdx4);
 
-		// } else {
+		} 
+		else {
 
 			// Single Display Mode
 
-			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 115200, rxArr, 0); // SPI full res
+			int status = alt_avalon_spi_command(SPI_CONTROLLER_BASE, 0, 1, sendBuffPtrFull, 115200 + 1, rxArr, 0); // SPI full res
 
-			// int single_mode = sw & 0x3; // SW[1:0]
+			int single_mode = sw & 0x3; // SW[1:0]
 			int SingleFlipImgIdx = 0;
 
-			// if (single_mode == 0) {
-			// 	// this will just display normally into the quadrant
-			// } else if (single_mode == 1) {
-			// 	// this will set a variable to be called in the function "display_4_images" as the last input "int flipImgIdx"
-			// 	SingleFlipImgIdx = 1;
-			// } else if (single_mode == 2) {
-			// 	int numOutPixel = convolve(&rxArr,&rxArr,kernel,320,240);
-			// } else if (single_mode == 3) {
-			// 	convolve(&rxArr,&sobelArrX,sobelX,320,240);
-		    // 	convolve(&rxArr,&sobelArrY,sobelY,320,240);
-		    // 	combineSobelFilter(sobelArrX,sobelArrY,rxArr,320,240);
-			// }
+			if (single_mode == 0) {
+				// Normal
+			} else if (single_mode == 1) {
+				// flip
+				SingleFlipImgIdx = 1;
+			} else if (single_mode == 2) {
+				// int numOutPixel = convolve(&rxArr,&rxArr,kernel,320,240);
+			} else if (single_mode == 3) {
+				// convolve(&rxArr,&sobelArrX,sobelX,320,240);
+		    	// convolve(&rxArr,&sobelArrY,sobelY,320,240);
+		    	// combineSobelFilter(sobelArrX,sobelArrY,rxArr,320,240);
+			}
 
 			display_single_image(240, 320, rxArr, SingleFlipImgIdx);
-		// }
+		}
 
 	    uint32_t end = IORD(TIME_DISPLAY_BASE, 0);	    // Take Reading at the End
 	    Run_Time(start, end); // Call Function to Display Benchmarking
 }
 }
 
-// void key1_isr(void* context, alt_u32 id) {
-// 	volatile int* edgeCapturePtr = (volatile int*) context;
+void key1_isr(void* context, alt_u32 id) {
+	volatile int* edgeCapturePtr = (volatile int*) context;
 
-// 	// Read the edge capture register
-// 	*edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
+	// Read the edge capture register
+	*edgeCapturePtr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE);
 
-// 	// Check if interrupt occured
-// 	if(*edgeCapturePtr & 0x2){
-// 		printf("Interrupt\n");
-// 		Key1Flag = 1;
-// }
+	// Check if interrupt occured
+	if(*edgeCapturePtr & 0x2){
+		printf("Interrupt\n");
+		Key1Flag = 1;
+}
 
-// 	// Clear the edge capture register to enable future interrupts
-// 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
-// }
+	// Clear the edge capture register to enable future interrupts
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
+}
 
-// void initialise_key1_interrupt() {
+void initialise_key1_interrupt() {
 
-// 	// Clear any pending interrupts
-// 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
+	// Clear any pending interrupts
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
 
-// 	// Enable interrupts for KEY1 (bit 1)
-// 	IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x2);
+	// Enable interrupts for KEY1 (bit 1)
+	IOWR_ALTERA_AVALON_PIO_IRQ_MASK(KEY10_BASE, 0x2);
 
-// 	// Register ISR
-// 	alt_ic_isr_register(
-// 		KEY10_IRQ_INTERRUPT_CONTROLLER_ID, 
-// 		KEY10_IRQ, 
-// 		key1_isr, 
-// 		(void*) KEY10_BASE, 
-// 		0
-// 	);
+	// Register ISR
+	alt_ic_isr_register(
+		KEY10_IRQ_INTERRUPT_CONTROLLER_ID, 
+		KEY10_IRQ, 
+		key1_isr, 
+		(void*) KEY10_BASE, 
+		0
+	);
 
-// }
+}
 
 // void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH){
 
@@ -347,137 +359,177 @@ int main(void){
 // return outputPixelIdx;
 // }
 
-// void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx1 ,int flipImgIdx2 ,int flipImgIdx3 ,int flipImgIdx4){
-// 	//function to display 4 smaller image
-// 	//input
-// 	//	img1: pointer to image top left
-// 	//	img2: pointer to image top right
-// 	//	img3: pointer to image bottom left
-// 	//	img4: pointer to image bottom right
-// 	//	display_base: base address for display
-// 	//	flipImgIdx: The image of which that need to be flipped (i.e if index is 1, top left image is flipped)
-// 	int displayW = 320;
-// 	int inputImgW = 160;
-// 	int intputImgH = 120;
-// 	int inputPixelAddress = 0;
+void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx1 ,int flipImgIdx2 ,int flipImgIdx3 ,int flipImgIdx4){
+	//function to display 4 smaller image
+	//input
+	//	img1: pointer to image top left
+	//	img2: pointer to image top right
+	//	img3: pointer to image bottom left
+	//	img4: pointer to image bottom right
+	//	display_base: base address for display
+	//	flipImgIdx: The image of which that need to be flipped (i.e if index is 1, top left image is flipped)
+	int displayW = 320;
+	int inputImgW = 160;
+	int intputImgH = 120;
+	int inputPixelAddress = 0;
 
-// 	int pixelValue = 0;
-// 	//image 1
-// 	for(int h=0; h<120; h++){
-// 		for(int w=0; w<159; w++){
-// 			int displayAddress  = w+(displayW*h)-1;
+	uint16_t pixelValue = 0;
+	//image 1
+	for(int h=0; h<120; h++){
+		for(int w=0; w<159; w++){
+			int displayAddress  = w+(displayW*h)-1;
 
-// 			if(flipImgIdx1 == 1){
-// 				inputPixelAddress = w+(inputImgW* (intputImgH-h-1))-1;
+			if(flipImgIdx1 == 1){
+				inputPixelAddress = w+(inputImgW* (intputImgH-h-1))-1;
 
-// 			}else{
-// 				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
-// 			}
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
+			}
 
-// 			pixelValue = getPixelVal(0,0,inputPixelAddress,img1);
+			pixelValue = getPixelVal(inputPixelAddress,img1);
 
-// 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
-// 	    	//specific the value to be displayed
-// 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
-// 		}
-// 	}
-// 	// image 2
-// 	for(int h=0; h<120; h++){
-// 		for(int w=159; w<319; w++){
-// 			int displayAddress  = w+(displayW*h)-1;
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
+		}
+	}
+	// image 2
+	for(int h=0; h<120; h++){
+		for(int w=159; w<319; w++){
+			int displayAddress  = w+(displayW*h)-1;
 
-// 			if(flipImgIdx2 == 1){
-// 				inputPixelAddress = w+(inputImgW* (intputImgH-h-2))-1;
+			if(flipImgIdx2 == 1){
+				inputPixelAddress = w+(inputImgW* (intputImgH-h-2))-1;
 
-// 			}else{
-// 				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
-// 			}
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*h);
+			}
 
-// 			pixelValue = getPixelVal(0,0,inputPixelAddress,img2);
+			pixelValue = getPixelVal(inputPixelAddress,img2);
 
-// 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
-// 	    	//specific the value to be displayed
-// 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
-// 		}
-// 	}
-// 	// image 3
-// 	for(int h=120; h<240; h++){
-// 		for(int w=0; w<159; w++){
-// 			int displayAddress  = w+(displayW*h)-1;
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
+		}
+	}
+	// image 3
+	for(int h=120; h<240; h++){
+		for(int w=0; w<159; w++){
+			int displayAddress  = w+(displayW*h)-1;
 
-// 			if(flipImgIdx3 == 1){
-// 				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH) -2))-1;
+			if(flipImgIdx3 == 1){
+				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH) -2))-1;
 
-// 			}else{
-// 				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
-// 			}
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
+			}
 
-// 			pixelValue = getPixelVal(0,0,inputPixelAddress,img3);
+			pixelValue = getPixelVal(inputPixelAddress,img3);
 
-// 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
-// 	    	//specific the value to be displayed
-// 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
-// 		}
-// 	}
-// 	//image 4
-// 	for(int h=120; h<240; h++){
-// 		for(int w=159; w<319; w++){
-// 			int displayAddress  = w+(displayW*h)-1;
-// 			if(flipImgIdx4 == 1){
-// 				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH)-2))-1;
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
+		}
+	}
+	//image 4
+	for(int h=120; h<240; h++){
+		for(int w=159; w<319; w++){
+			int displayAddress  = w+(displayW*h)-1;
+			if(flipImgIdx4 == 1){
+				inputPixelAddress = w+(inputImgW*(intputImgH-(h-intputImgH)-2))-1;
 
-// 			}else{
-// 				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
-// 			}
-// 			pixelValue = getPixelVal(0,0,inputPixelAddress,img4);
+			}else{
+				inputPixelAddress = inputImgW-4-w+(inputImgW*(h-intputImgH));
+			}
+			pixelValue = getPixelVal(inputPixelAddress,img4);
 
-// 	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
-// 	    	//specific the value to be displayed
-// 	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
-// 		}
-// 	}
-
-
+	    	IOWR(PIXEL_ADDRESS_BASE_val, 0 , displayAddress);
+	    	//specific the value to be displayed
+	    	IOWR(PIXEL_DATA_BASE_val, 0, pixelValue);
+		}
+	}
 
 
 
-// }
+
+
+}
+
+uint16_t getPixelVal(int rawAddress, uint8_t* packedImgArr) {
+    packedImgArr = packedImgArr - 1;
+
+    int pairIndex = rawAddress / 2;
+    int byte_idx = pairIndex * 3;
+
+    uint8_t byte0 = packedImgArr[byte_idx];
+    uint8_t byte1 = packedImgArr[byte_idx + 1];
+    uint8_t byte2 = packedImgArr[byte_idx + 2];
+
+    uint8_t r, g, b;
+
+    if (rawAddress % 2 == 0) {
+        // Pixel 1 (even index)
+		r = byte1 & 0x0F;
+        g = (byte2 >> 4) & 0x0F;
+        b = byte2 & 0x0F;
+       
+    } else {
+        // Pixel 2 (odd index)
+	    r = (byte0 >> 4) & 0x0F;
+        g = byte0 & 0x0F;
+        b = (byte1 >> 4) & 0x0F;
+    }
+
+    // Pack as 12-bit RGB: RRRR GGGG BBBB
+    uint16_t pixelVal = (r << 8) | (g << 4) | b;
+    return pixelVal;
+}
+
 
 void display_single_image(int imgH, int imgW, const uint8_t *src, int flipImg) {
     int byte_idx = 0;
 
-    for (int h = 0; h < imgH; h++) {
-        for (int w = 0; w < imgW; w += 2) {
+    src = src - 1;
 
+    for (int h = 0; h < imgH; h++) {
+        // Use flipped row index if needed
+        int row;
+        if (flipImg == 1) {
+            row = imgH - 1 - h;
+        } else {
+            row = h;
+        }
+
+        for (int w = 0; w < imgW; w += 2) {
             // Read 3 bytes per 2 pixels
             uint8_t byte0 = src[byte_idx];
             uint8_t byte1 = src[byte_idx + 1];
             uint8_t byte2 = src[byte_idx + 2];
 
-            // Pixel 1: bits from byte0 and byte1
+            // Pixel 1 (RGB order)
             uint8_t r1 = (byte0 >> 4) & 0x0F;
             uint8_t g1 = byte0 & 0x0F;
             uint8_t b1 = (byte1 >> 4) & 0x0F;
 
-            // Pixel 2: bits from byte1 and byte2
+            // Pixel 2 (RGB order)
             uint8_t r2 = byte1 & 0x0F;
             uint8_t g2 = (byte2 >> 4) & 0x0F;
             uint8_t b2 = byte2 & 0x0F;
 
-            // Format as GBR: GGGG BBBB RRRR
-            uint16_t pixel1_val = (g1 << 8) | (b1 << 4) | r1;
-            uint16_t pixel2_val = (g2 << 8) | (b2 << 4) | r2;
+            // Format as RGB: RRRR GGGG BBBB 
+            uint16_t pixel1_val = (r1 << 8) | (g1 << 4) | b1;
+            uint16_t pixel2_val = (r2 << 8) | (g2 << 4) | b2;
 
             byte_idx += 3;
 
-            int pixelAddress1 = w + (imgW * h);
+            int pixelAddress1 = w + (imgW * row);
             int pixelAddress2 = pixelAddress1 + 1;
 
             IOWR(PIXEL_ADDRESS_BASE_val, 0, pixelAddress1);
-            IOWR(PIXEL_DATA_BASE_val, 0, pixel1_val);
+            IOWR(PIXEL_DATA_BASE_val, 0, pixel2_val);
 
             IOWR(PIXEL_ADDRESS_BASE_val, 0, pixelAddress2);
-            IOWR(PIXEL_DATA_BASE_val, 0, pixel2_val);
+            IOWR(PIXEL_DATA_BASE_val, 0, pixel1_val);
         }
     }
 }

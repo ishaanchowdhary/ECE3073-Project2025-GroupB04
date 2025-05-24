@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>21/05/2025 11:33:41 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1747834421752</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>24/05/2025 3:22:33 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1748064153282</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\Zach\ECE_3073\Project_Git\ECE3073-Project2025-GroupB04\Project_Files\software\RGB_Software_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\PROJECT_SYS_V2.sopcinfo</SopcDesignFile>
@@ -906,8 +906,8 @@
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>onchip_memory2_0</slaveDescriptor>
-                <addressRange>0x04020000 - 0x04023FFF</addressRange>
-                <addressSpan>16384</addressSpan>
+                <addressRange>0x04020000 - 0x0402BFFF</addressRange>
+                <addressSpan>49152</addressSpan>
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
