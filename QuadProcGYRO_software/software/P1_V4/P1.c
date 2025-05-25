@@ -91,7 +91,19 @@
 #include "altera_avalon_pio_regs.h"
 #include <stdio.h>
 
+/*
+ * Processor 1 (P1) is the main processor that handles the interface. 
+ * It is the second processor out of the four processors in the system.
+ * 
+ * Responsibilities:
+ * - Handles the double tap detection using the gyroscope
+ * - get image frames from SPI
+ * - Handles the interrupts from the keys/ double tap detection
+ * - handles the toggling of the different image processing modes
+ * - measures and displays the frame rate
+*/
 
+// -- our shared memeory address and shared flags --
 #define GYRO_INT_BASE 0x4001030
 #define GYRO_INT_IRQ 3
 #define GYRO_INT_IRQ_INTERRUPT_CONTROLLER_ID 0
@@ -121,7 +133,7 @@ int *needEdgeDetect = (int*)0x03200000;
 // SPI CHIP SELECT for Gyroscope
 #define CS_ACCEL 1
 
-// GYRO CONFIGURATION
+// -- GYRO CONFIGURATION --
 // Gyroscope Write Registers
 #define BW_RATE 0x2C
 #define POWER_CONTROL 0x2d
@@ -150,9 +162,9 @@ int *needEdgeDetect = (int*)0x03200000;
 #define CONFIG_LENGTH 16 * 2
 #define MAX_COUNT 500000
 // Gyroscope Read Axis Values
-#define READ_X_AXIS (0xc0 | X_LB)
-#define READ_Y_AXIS (0xc0 | Y_LB)
-#define READ_Z_AXIS (0xc0 | Z_LB)
+#define READ_X_AXIS (0xc0 | X_LB) 	// left right tilt
+#define READ_Y_AXIS (0xc0 | Y_LB)	// forward backward tilt
+#define READ_Z_AXIS (0xc0 | Z_LB)	// spin axis tilt
 
 // Functionality to initialise the accelerometer for double tap detection
 alt_u8 gyro_config[CONFIG_LENGTH] = {
@@ -174,6 +186,7 @@ alt_u8 gyro_config[CONFIG_LENGTH] = {
 	POWER_CONTROL, 0x08
 };
 
+//our interrupt flags
 //volatile uint8_t *rxArr = (uint8_t *)SHARED_BUFF_1_BASE;
 volatile int tap_flag = 0; // Global Variable for double tap interrupt
 volatile int key1_flag = 0; // Global Variable for key 1 interrupt
@@ -187,12 +200,14 @@ int received = 0;
 int valueFromP0 = 0;
 //uint8_t rxArr[38400];
 
+//function for key 1 interrupt
 void key1_isr(void* context, alt_u32 id) {
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(KEY10_BASE, 0);
 	IOWR(KEY10_BASE, 3, 0);
 	key1_flag = 1;
 }
 
+//function for generic key interrupt (PIO)
 void KEY_ISR(void *isr_context, alt_u32 id){
 
 //	valueFromP0 = IORD(P1_IN_BASE,0); // message from PIO
@@ -217,6 +232,7 @@ void GYRO_ISR(void * context) {
 	tap_flag = 1;
 }
 
+// Function to send message to P0 vuia the shared buffer
 void send_msg(int msg){
 
 //	altera_avalon_mutex_lock(mutex,1);
@@ -231,6 +247,7 @@ void send_msg(int msg){
 	printf("P1: sending msg %d to P0 \n",msg);
 }
 
+//displays the greysale image from the array buffer
 int display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
 	//FASTER FUNCTION FOR DISPLAY, DO NOT USE TILL M3
 //	int pixel_count = imgH*imgW;
@@ -275,13 +292,14 @@ int display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
 
 }
 
+/*
+ * this function will take in the difference after - before for the timer
+ * prints the run time, calculates FPS to 2 decimal places and prints FPS
+ * separates the 4 digits in FPS to ten, one, tenth, hundredth
+ * hex decoder to write a 7 digit binary value to the hex pio's
+ * make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
+*/
 void Run_Time_2_frame(uint32_t before, uint32_t after){
-
-	// this function will take in the difference after - before for the timer
-	// prints the run time, calculates FPS to 2 decimal places and prints FPS
-	// separates the 4 digits in FPS to ten, one, tenth, hundredth
-	// hex decoder to write a 7 digit binary value to the hex pio's
-	// make sure the 8th bit is set to 1 except the HEX_LOW[23:16] where HEX_LOW[23] is set to 0.
 
 	float frameTime = (after - before);  // calculates run time of the frame
 //	printf("The Run Time for the Frame is %.2f\n", frameTime);
@@ -332,6 +350,11 @@ void Run_Time_2_frame(uint32_t before, uint32_t after){
 
 }
 
+/*
+ * our main function for processor 1. 
+ * implements the main functionality of the processor
+ * allows the processor to handle the double tap detection and switch modes. 
+*/
 int main()
 { 
 	//setting up interrupt
@@ -385,36 +408,36 @@ int main()
 	alt_dcache_flush_all();  // After writing
 	uint32_t start = IORD(TIME_DISPLAY_BASE, 0);
 
-	  while (1){
-//		  printf("P1 running display ready is %d\n", *display1Ready);
+	//pooling loop (inf loop for P1)
+	while (1){
+	//printf("P1 running display ready is %d\n", *display1Ready);
 
 
-		  if(*display1Ready == 1){
-			  if(*bufferFlag1 == 0){
-				  writeBuffer1 = SHARED_BUFF_1_BASE;
-			  }else if(*bufferFlag1 == 1){
-				  writeBuffer1 = SHARED_BUFF_2_BASE;
-			  }
-			  *frame1Ready = 1;
-			  *display1Ready = 0;
+		if(*display1Ready == 1){
+			if(*bufferFlag1 == 0){
+				writeBuffer1 = SHARED_BUFF_1_BASE;
+			}else if(*bufferFlag1 == 1){
+				writeBuffer1 = SHARED_BUFF_2_BASE;
+			}
+			*frame1Ready = 1;
+			*display1Ready = 0;
 
-			  alt_dcache_flush_all();  // After writing
+			alt_dcache_flush_all();  // After writing
 
-			  if(*quadImgMode != 0){
-				  alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrSmall,9600,writeBuffer1,0); //SPI for full res
-			  }else{
-				  alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrFull,38400,writeBuffer1,0); //SPI for full res
-					// read gyro input
-					gyro_data_in = INT_SOURCE | 0x80;
-					alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
-				  usleep(29000);
-			  }
-			  *bufferFlag1 = !*bufferFlag1;
-			  uint32_t end = IORD(TIME_DISPLAY_BASE, 0);
-	  		  Run_Time_2_frame(start, end);
-	  		  start = IORD(TIME_DISPLAY_BASE, 0);
-
-		  }
+			if(*quadImgMode != 0){
+				alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrSmall,9600,writeBuffer1,0); //SPI for full res
+			}else{
+				alt_avalon_spi_command(SPI_0_BASE, 0 ,1,sendBuffPtrFull,38400,writeBuffer1,0); //SPI for full res
+				// read gyro input
+				gyro_data_in = INT_SOURCE | 0x80;
+				alt_avalon_spi_command(SPI_0_BASE, CS_ACCEL, 1, &gyro_data_in, 1, &regData, 0x0);
+				usleep(29000);
+			}
+			*bufferFlag1 = !*bufferFlag1;
+			uint32_t end = IORD(TIME_DISPLAY_BASE, 0);
+			Run_Time_2_frame(start, end);
+			start = IORD(TIME_DISPLAY_BASE, 0);
+		}
 
 		//*quadImgMode  = IORD(0x040010a0,0)&0x2;
 		if (key1_flag == 1) {
@@ -434,25 +457,23 @@ int main()
 			*needBlur = 0;
 			*needEdgeDetect = 0;
 			switch (counter) {
-			   case 0:
+			    case 0:
 				   //printf("Mode 0: All effects OFF\n");
-				   break;
+				    break;
 				   // TODO: create case for flipped image
-			   case 1:
+			    case 1:
 				   *needBlur = 1;
 				   //printf("Mode 1: Blur enabled\n");
-				   break;
-			   case 2:
+				    break;
+			    case 2:
 				   *needEdgeDetect = 1;
 				   //printf("Mode 3: Edge Detection enabled\n");
-				   break;
+				    break;
 			}
 		}
 
 		alt_dcache_flush_all();
 
-
-
-	  }
-	  return 0;
 	}
+	return 0;
+}
