@@ -11,6 +11,17 @@
 #include "altera_avalon_pio_regs.h"
 #include <stdio.h>
 
+/*
+ * Processor 2 (P2) is the third processor in the system.
+ * It is the third processor out of the four processors in the system.
+ * Responsibilities:
+ * - in charge for some image processing tasks
+ * - blur and edge detection
+ * - quad image display (not enabled but available if needed in this processor)
+ * * It is used to offload some of the image processing tasks from P0.
+*/
+
+// -- all our memory addresses and flags noted here --
 int *display1Ready = (int*)0x03600010;
 
 int *bufferFlag1 = (int*)0x03200020; //use as buffer idx
@@ -44,6 +55,10 @@ alt_mutex_dev* mutex;
 int received = 0;
 int valueFromP1 = 0;
 
+/*
+ * Function used for image blur processing.
+ * It takes an input image and applies a blur filter to it.
+*/
 int blurImg(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int startHeight, int endHeight,int outputPixelIdx){
 //	int outputPixelIdx = 0;
 	int pixelCount = 0;
@@ -53,11 +68,13 @@ int blurImg(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int 
 		for(int w=0; w<=width-1;w = w + 1){
 			int convResult = 0;
 			uint8_t currentPixelVal = 0;
-
+			
+			//calculate the pixel address in the input image
 			int pixelAddress1 = ((h-1)*width + (w)) / 2 ;
 			int pixelAddress2 = ((h)*width + (w)) / 2;
 			int pixelAddress3 = ((h+1)*width + (w)) / 2;
-
+			
+			// extract the pixel values from the input image
             uint8_t p1 = inputImg[pixelAddress1-1];
             uint8_t p2 = inputImg[pixelAddress1];
 
@@ -66,10 +83,12 @@ int blurImg(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int 
 
             uint8_t p5 = inputImg[pixelAddress3-1];
             uint8_t p6 = inputImg[pixelAddress3];
-
+			
+			//packing pixles 
             uint32_t packed1 = ((uint32_t)p1 << 16) | ((uint32_t)p2 << 8) | p3;
             uint32_t packed2 = ((uint32_t)p4 << 16) | ((uint32_t)p5 << 8) | p6;
-
+			
+			//bluring the pixels using custom instruction
             convResult  = __builtin_custom_inii(0, packed1, packed2);
 			pixelCount = pixelCount + 1;
 
@@ -92,6 +111,10 @@ int blurImg(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int 
 return outputPixelIdx;
 }
 
+/*
+* Function used for edge detection processing.
+* It takes an input image and applies a Sobel filter to it.
+*/
 int edgeDectect(uint8_t * inputImg, uint8_t * outputImg, int width, int height, int startHeight, int endHeight,int outputPixelIdx){
 //	int outputPixelIdx = 0;
 	int pixelCount = 0;
@@ -116,11 +139,10 @@ int edgeDectect(uint8_t * inputImg, uint8_t * outputImg, int width, int height, 
             int p5 = inputImg[pixelAddress3-1];
             int p6 = inputImg[pixelAddress3];
 
+			//extract pixel values from packed bytes
             int val1 = (p1&0x0F);
             int val2 =((p2&0xF0)>>4);
             int val3 = (p2&0x0F);
-
-
 
             int val4 = (p3&0x0F);
             int val5 =((p4&0xF0)>>4);
@@ -130,14 +152,13 @@ int edgeDectect(uint8_t * inputImg, uint8_t * outputImg, int width, int height, 
             int val8 =((p6&0xF0)>>4);
             int val9 = (p6&0x0F);
 
-
-
+			//compute the Sobel filter 
             int sobel1 = -1*val1+ 0*val2 + val3 + -2*val4 + 0*val5 + 2*val6 - val7+ 0*val8 + val9;
 			int sobel2 = -1*val1 + -2*val2 + -1*val3 + 0*val4 + 0*val5 + 0*val6 + 1*val7 + 2*val8 + 1*val9;
             convResult = sobel1+sobel2;
 
             if(convResult < threshold){
-            	convResult = 0;
+            	convResult = 0; // if there is a weak/ no edge, we set the pixel value to 0
             }
 
 
@@ -148,8 +169,7 @@ int edgeDectect(uint8_t * inputImg, uint8_t * outputImg, int width, int height, 
 				uint8_t pixel1 = ((uint8_t)convResiltBuff) << 4 |0x0F;
 				uint8_t pixel2 = (uint8_t)convResult;
 
-
-
+				//packing the pixel values together
 				uint8_t finalResult = (pixel2 | 0xF0) & pixel1;
 				outputImg[outputPixelIdx] = finalResult;
 
@@ -164,16 +184,18 @@ int edgeDectect(uint8_t * inputImg, uint8_t * outputImg, int width, int height, 
 return outputPixelIdx;
 }
 
-
+/*
+ * function is used to to display 4 smaller images in a 2x2 grid
+ * inputs:
+ * 	img1: pointer to image top left
+ * 	img2: pointer to image top right
+ * 	img3: pointer to image bottom left
+ * 	img4: pointer to image bottom right
+ * display_base: base address for display
+ * flipImgIdx: The image of which that need to be flipped (i.e if index is 1, top left image is flipped)
+*/
 void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4,uint32_t display_base ,int flipImgIdx){
-	//function to display 4 smaller image
-	//input
-	//	img1: pointer to image top left
-	//	img2: pointer to image top right
-	//	img3: pointer to image bottom left
-	//	img4: pointer to image bottom right
-	//	display_base: base address for display
-	//	flipImgIdx: The image of which that need to be flipped (i.e if index is 1, top left image is flipped)
+	
 	int displayW = 320;
 	int inputImgW = 160;
 	int intputImgH = 120;
@@ -256,7 +278,9 @@ void display_4_images(uint8_t *img1, uint8_t *img2, uint8_t *img3, uint8_t *img4
 	}
 }
 
-
+/*
+ * function used to decode a single pixel value from a packed array
+*/
 int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr){
 	//function to get pixel value from a packed array
 	int pixelOutput = 0;
@@ -278,7 +302,10 @@ int getPixelVal(int h, int w, int rawAddress, uint8_t* packedImgArr){
 	return pixelOutput;
 }
 
-
+/*
+ * Function decodes the image and writes pixel to display memory.
+ * updated and faster method to display image. (uses read write method)
+*/
 void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
 	//FASTER FUNCTION FOR DISPLAY, DO NOT USE TILL M3
 //	int pixel_count = imgH*imgW;
@@ -313,8 +340,6 @@ void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
 	    	IOWR(PIXEL_ADDRESS_BASE, 0 , pixelAddress+1);
 	    	IOWR(PIXEL_DATA_BASE, 0, unpackedValue2);
 
-
-
 		}
 	}
 	altera_avalon_mutex_unlock(mutex);
@@ -322,7 +347,10 @@ void display_image_from_array_v2(int imgH, int imgW, uint8_t *image_base) {
 
 }
 
-
+/* 
+ * function used for processor 2 main loop
+ * for blur and edge detection
+*/
 int main()
 {
 
@@ -404,12 +432,6 @@ int main()
 
 			 }
 		 }
-
-
-
-
-
-
 
 	}
 
