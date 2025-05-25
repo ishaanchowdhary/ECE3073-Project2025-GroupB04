@@ -10,6 +10,15 @@
 
 #include <stdio.h>
 
+/*
+* Processor 3 (P3) is the fourth processor in the system.
+ * It is the fourth processor out of the four processors in the system.
+ * Responsibilities:
+ * - a helper processor that can be used for debugging or other tasks.
+ * - currenly it is used to display the status of the system.
+*/
+
+// -- all our memory addresses and flags noted here --
 int *display1Ready = (int*)0x03600010;
 
 int *bufferFlag1 = (int*)0x03200020; //use as buffer idx
@@ -25,7 +34,12 @@ int *needBlur = (int*)0x03200070;
 int *quadImgMode = (int*)0x0320080;
 int *needEdgeDetect = (int*)0x03200000;
 
-
+/*
+ * our main function for P3
+ * it is used to display the status of the system.
+ * prints to the console the blur, quad image mode and edge detection status.
+ * It is a simple event loop that never exits.
+*/
 int main()
 { 
   alt_putstr("Hello from Nios II!\n");
