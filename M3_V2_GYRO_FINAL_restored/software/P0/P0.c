@@ -114,7 +114,7 @@ int *needEdgeDetect = (int*)0x03200000;
 
 int *sharedMsgBuff = (int*)0x03500000;
 
-//#define SHARED_BUFF_3_BASE  0x03100000
+//#define SHARED_BUFF_3_BASE  0x03200000
 //#define testBuff  0x00030000
 
 void *context;
