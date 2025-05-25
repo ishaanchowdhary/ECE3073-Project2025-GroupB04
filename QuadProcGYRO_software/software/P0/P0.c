@@ -97,7 +97,7 @@
  * Responsibilities:
  * - read and write to a shared image buffer
  * - display the image on the screen
- * - handling differnt image processing tasks (blur, edge detection, etc.)
+ * - handling differnt image processing tasks 
  * - respond to interrupts from P1
  * display fps and other information on the screen 
  * 
@@ -390,7 +390,8 @@ void convolve_v2(uint8_t * inputImg, uint8_t * outputImg, float h_kernel[3],floa
 }
 
 /*
-* the edge detection function?
+* function to combine the sobel filter results
+* takes in the sobelX and sobelY results and combines them into a single image
 */
 void combineSobelFilter(uint8_t *sobelX, uint8_t* sobelY, uint8_t*resultImg,int imgW, int imgH){
 
