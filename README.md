@@ -42,3 +42,13 @@ Or if using the zip folder:
 2. To switch between single and quadrant image modes, press KEY1.
 3. In single display mode, tapping the glass panel twice will cycle through the display modes (normal frame, flipped, blurred and edge detection), changing the display.
 5. In quadrant mode, tilting the FPGA board rearranges the order of the sub-displays (normal frame, flipped, blurred and edge detection) shown. 
+
+## Project Milestone 3:
+- Document: https://docs.google.com/document/d/1UHt_mTDDJ-c-szRTJvpwDJprSP09FdUSrpxADXiHWO4/edit?tab=t.0
+
+### Steps to Run the MileStone 3 Project
+1. Follow the same instructions to set up from Milestone 1 Project above. 
+2. After step 6 of M1 instructions, ensure when running the nios project to create a launch group within run configurations.
+3. To switch between single and quadrant displays use button marked as KEY_1 
+4. in Single display mode, tapping the glass panel twice on the FPGA board will cycle through the display modes (nomal frame, fliped, blurred and edge detection)
+5. in quadrant mode, switching switches rearranges the order of sub-displays (normal frame, flipped, blurred and edge detection) shown. 
